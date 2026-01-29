@@ -5,23 +5,23 @@
   --primary-red: #e74c3c;
   --primary-orange: #f39c12;
   --primary-purple: #9b59b6;
-  
+
   /* Convex Hull specific */
   --hull-edge: #2980b9;
   --hull-fill: rgba(52, 152, 219, 0.1);
   --current-point: #e74c3c;
   --processed-point: #7f8c8d;
-  
+
   /* Voronoi/Delaunay */
   --voronoi-edge: #3498db;
   --delaunay-edge: #e74c3c;
   --circumcircle: rgba(155, 89, 182, 0.3);
-  
+
   /* kd-tree */
   --vertical-split: #3498db;
   --horizontal-split: #e74c3c;
   --query-region: rgba(46, 204, 113, 0.2);
-  
+
   /* UI - Light Theme (Default) */
   --background: #ffffff;
   --background-secondary: #f8f9fa;
@@ -29,7 +29,16 @@
   --text-secondary: #7f8c8d;
   --border: #bdc3c7;
   --card-bg: #ffffff;
-  --shadow: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  /* Box Backgrounds */
+  --box-intuition-bg: #e8f4fd;
+  --box-methodology-bg: #f8f9fa;
+  --box-definition-bg: rgba(52, 152, 219, 0.1);
+  --box-theorem-bg: rgba(39, 174, 96, 0.1);
+  --box-warning-bg: rgba(231, 76, 60, 0.1);
+  --box-algorithm-bg: rgba(155, 89, 182, 0.05);
+  --box-math-bg: #f8f9fa;
 }
 
 [data-theme="dark"] {
@@ -39,7 +48,16 @@
   --text-secondary: #bdc3c7;
   --border: #2c3e50;
   --card-bg: #16213e;
-  --shadow: 0 4px 6px rgba(0,0,0,0.5);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
   --hull-fill: rgba(52, 152, 219, 0.2);
   --circumcircle: rgba(155, 89, 182, 0.4);
+
+  /* Box Backgrounds Dark */
+  --box-intuition-bg: #162447;
+  --box-methodology-bg: #1f4068;
+  --box-definition-bg: rgba(52, 152, 219, 0.2);
+  --box-theorem-bg: rgba(39, 174, 96, 0.2);
+  --box-warning-bg: rgba(231, 76, 60, 0.2);
+  --box-algorithm-bg: rgba(155, 89, 182, 0.15);
+  --box-math-bg: #16213e;
 }

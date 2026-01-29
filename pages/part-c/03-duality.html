@@ -16,38 +16,53 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-c">Μέρος Γ: Voronoi & Delaunay</a>
-                <span>Δυϊσμός</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-c">Μέρος Γ:
+                    Voronoi & Delaunay</a> <span>Δυϊσμός</span> </div>
             <h1>Δυϊσμός Delaunay & Voronoi</h1>
-
             <section class="content-box">
-                <h2>1. Η Σχέση του Δυϊσμού</h2>
-                <p>
-                    Η Τριγωνοποίηση Delaunay και το Διάγραμμα Voronoi είναι <strong>δυϊκοί γράφοι</strong> (dual
-                    graphs). Αυτό σημαίνει ότι υπάρχει μια αμφιμονοσήμαντη αντιστοιχία μεταξύ των στοιχείων τους.
-                </p>
-                <div class="definition-box">
-                    <strong>Αντιστοιχίες:</strong>
+                <h2>1. Η Ιδέα (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Το Voronoi και το Delaunay είναι σαν τα "Δίδυμα Αδέρφια" της Γεωμετρίας. Αν έχεις το ένα,
+                        μπορείς αυτόματα να βρεις το άλλο. </p>
+                    <p> Σκεφτείτε έναν χάρτη με πόλεις (Voronoi Regions). Αν ενώσετε με δρόμους (ακμές Delaunay) κάθε
+                        πόλη με τις "γειτονικές" της (αυτές που μοιράζονται σύνορα), θα φτιάξετε το Delaunay
+                        Triangulation. </p>
+                    <p> <strong>Η Σχέση Κάθετότητας:</strong> Κάθε δρόμος που φτιάχνετε (Delaunay Edge) περνάει ακριβώς
+                        κάθετα από το σύνορο (Voronoi Edge) που χωρίζει τις δύο πόλεις. Είναι σαν να έχετε δύο χάρτες,
+                        έναν "πολιτικό" (σύνορα) και έναν "οδικό" (δίκτυο), ο ένας πάνω στον άλλον. </p>
+                </div>
+                <p> Η Τριγωνοποίηση Delaunay και το Διάγραμμα Voronoi είναι <strong>δυϊκοί γράφοι</strong> (dual
+                    graphs). Αυτό σημαίνει ότι υπάρχει μια αμφιμονοσήμαντη αντιστοιχία μεταξύ των στοιχείων τους. </p>
+                <div class="definition-box"> <strong>Αντιστοιχίες:</strong>
                     <ul>
                         <li><strong>Κορυφή Delaunay</strong> $\iff$ <strong>Κελί Voronoi</strong> (περιοχή).</li>
                         <li><strong>Τρίγωνο Delaunay</strong> $\iff$ <strong>Κορυφή Voronoi</strong> (κέντρο περ.
@@ -56,60 +71,43 @@
                     </ul>
                 </div>
             </section>
-
             <section class="content-box">
                 <h2>2. Γεωμετρική Ιδιότητα</h2>
-                <p>
-                    Η ακμή Voronoi είναι μέρος της <strong>μεσοκαθέτου</strong> της αντίστοιχης ακμής Delaunay. Άρα,
-                    κάθε ακμή του ενός γράφου είναι κάθετη στην αντίστοιχη ακμή του άλλου.
-                </p>
-                <div class="theorem-box">
-                    <strong>Θεώρημα:</strong> Οι γραμμές του διαγράμματος Voronoi "περνούν" μέσα από τις πλευρές των
-                    τριγώνων Delaunay.
-                </div>
-            </section>
-
-            <!-- Simulator -->
+                <p> Η ακμή Voronoi είναι μέρος της <strong>μεσοκαθέτου</strong> της αντίστοιχης ακμής Delaunay. Άρα,
+                    κάθε ακμή του ενός γράφου είναι κάθετη στην αντίστοιχη ακμή του άλλου. </p>
+                <div class="theorem-box"> <strong>Θεώρημα:</strong> Οι γραμμές του διαγράμματος Voronoi "περνούν" μέσα
+                    από τις πλευρές των τριγώνων Delaunay. </div>
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="duality-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-exchange-alt"></i> Προσομοιωτής Δυϊσμού</h3>
                 </div>
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-                <div class="controls">
-                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-trash"></i> Καθαρισμός</button>
-                    <div class="toggle-group">
-                        <label><input type="checkbox" id="show-voronoi" checked onchange="sim.render()"> Show Voronoi
-                            (Red)</label>
-                        <label><input type="checkbox" id="show-delaunay" checked onchange="sim.render()"> Show Delaunay
-                            (Blue)</label>
-                    </div>
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
+                <div class="controls"> <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-trash"></i>
+                        Καθαρισμός</button>
+                    <div class="toggle-group"> <label><input type="checkbox" id="show-voronoi" checked
+                                onchange="sim.render()"> Show Voronoi (Red)</label> <label><input type="checkbox"
+                                id="show-delaunay" checked onchange="sim.render()"> Show Delaunay (Blue)</label> </div>
                 </div>
             </section>
-
-            <div class="page-nav">
-                <a href="02-delaunay.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Delaunay</a>
-                <a href="04-incircle.html" class="btn">Επόμενο: InCircle Predicate <i
-                        class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="02-delaunay.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> Delaunay</a> <a href="04-incircle.html" class="btn">Επόμενο:
+                    InCircle Predicate <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/delaunay.js"></script>
     <!-- Reuse logical base? Or dup? Reuse is clever but JS module scoping? Simply copy-paste with extend is safer for vanilla "student". -->
     <script src="../../assets/js/simulators/duality.js"></script>
     <script>
-        const sim = new DualitySimulator('sim-canvas');
-        sim.reset();
+        window.sim = new DualitySimulator('sim-canvas');
+        window.sim.reset();
     </script>
 </body>
 

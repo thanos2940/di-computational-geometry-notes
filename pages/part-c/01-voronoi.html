@@ -16,42 +16,56 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-c">Μέρος Γ: Voronoi & Delaunay</a>
-                <span>Διάγραμμα Voronoi</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-c">Μέρος Γ:
+                    Voronoi & Delaunay</a> <span>Διάγραμμα Voronoi</span> </div>
             <h1>Διάγραμμα Voronoi</h1>
-
             <section class="content-box">
-                <h2>1. Ορισμός</h2>
-                <p>
-                    Δεδομένου ενός συνόλου εστιών $P = \{p_1, \dots, p_n\}$ στο επίπεδο, το <strong>Διάγραμμα
-                        Voronoi</strong> διαιρεί το επίπεδο σε $n$ περιοχές (κελιά).
-                </p>
-                <div class="definition-box">
-                    <strong>Κελί Voronoi $V(p_i)$:</strong> Είναι το σύνολο των σημείων $q$ του επιπέδου που είναι πιο
-                    κοντά στο $p_i$ από οποιοδήποτε άλλο $p_j$.
-                    $$ V(p_i) = \{ q \in \mathbb{R}^2 \mid d(q, p_i) < d(q, p_j), \forall j \neq i \} $$ </div>
+                <h2>1. Ορισμός & Διαίσθηση</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Φανταστείτε ότι έχετε έναν χάρτη της πόλης με διάσπαρτα <strong>φαρμακεία</strong> (αυτές είναι
+                        οι "εστίες" ή σημεία $P$). </p>
+                    <p> Αν μένετε σε ένα συγκεκριμένο σημείο, θέλετε να πάτε στο πλησιέστερο φαρμακείο. Το
+                        <strong>Διάγραμμα Voronoi</strong> είναι ουσιαστικά ο χρωματισμός του χάρτη σε περιοχές. Όλοι οι
+                        κάτοικοι που μένουν μέσα στην "Περιοχή Α" έχουν πιο κοντινό φαρμακείο το Α.
+                    </p>
+                    <p> Τα σύνορα αυτών των περιοχών (οι γραμμές του διαγράμματος) είναι τα σημεία που ισαπέχουν από δύο
+                        ή περισσότερα φαρμακεία. Αν περάσετε τη γραμμή, αλλάζει το ποιο φαρμακείο σας εξυπηρετεί. </p>
+                </div>
+                <p> Δεδομένου ενός συνόλου εστιών $P = \{p_1, \dots, p_n\}$ στο επίπεδο, το <strong>Διάγραμμα
+                        Voronoi</strong> διαιρεί το επίπεδο σε $n$ περιοχές (κελιά). </p>
+                <div class="definition-box"> <strong>Κελί Voronoi $V(p_i)$:</strong> Είναι το σύνολο των σημείων $q$ του
+                    επιπέδου που είναι πιο κοντά στο $p_i$ από οποιοδήποτε άλλο $p_j$. $$ V(p_i) = \{ q \in \mathbb{R}^2
+                    \mid d(q, p_i) < d(q, p_j), \forall j \neq i \} $$ </div>
             </section>
-
             <section class="content-box">
                 <h2>2. Ιδιότητες</h2>
                 <ul>
@@ -61,45 +75,55 @@
                         εστιών.</li>
                 </ul>
             </section>
-
-            <!-- Simulator -->
+            </section>
+            <section class="content-box">
+                <h2>3. Μεθοδολογία Σχεδίασης "Στο Χαρτί"</h2>
+                <div class="methodology-box">
+                    <h3 style="margin-top: 0;">Βήματα Κατασκευής</h3>
+                    <p>Αν σας δοθούν λίγα σημεία (π.χ. 3-4) και ζητηθεί το Διάγραμμα Voronoi:</p>
+                    <ol>
+                        <li><strong>Τριγωνοποίηση (Delaunay):</strong> Συνδέστε τα σημεία μεταξύ τους σχηματίζοντας
+                            τρίγωνα (χωρίς να τέμνονται οι ακμές).</li>
+                        <li><strong>Μεσοκάθετοι:</strong> Για κάθε ακμή τριγώνου, βρείτε το μέσο της και σχεδιάστε την
+                            κάθετη ευθεία (μεσοκάθετος).</li>
+                        <li><strong>Κέντρα (Vertices):</strong> Οι μεσοκάθετοι των πλευρών ενός τριγώνου τέμνονται σε
+                            ένα σημείο. Αυτό είναι κόκκινη κορυφή του Voronoi.</li>
+                        <li><strong>Ακμές (Edges):</strong> Ενώστε τις κόκκινες κορυφές μεταξύ τους. <ul>
+                                <li><em>Προσοχή:</em> Οι ακμές του Voronoi είναι <strong>κάθετες</strong> στις ακμές του
+                                    Delaunay.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <div> "Το Voronoi είναι ο δυϊκός γράφος του Delaunay." </div>
+                </div>
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="voronoi-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-th-large"></i> Προσομοιωτής Voronoi</h3>
                 </div>
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-                <div class="controls">
-                    <button class="sim-btn" onclick="sim.generatePoints()"><i class="fas fa-random"></i> Νέα
-                        Σημεία</button>
-                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
-                        Υπολογισμός με βάση την απόσταση pixel προς pixel.
-                    </div>
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
+                <div class="controls"> <button class="sim-btn" onclick="sim.generatePoints()"><i
+                            class="fas fa-random"></i> Νέα Σημεία</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status"> Υπολογισμός με
+                        βάση την απόσταση pixel προς pixel. </div>
                 </div>
             </section>
-
-            <div class="page-nav">
-                <a href="07-complexity.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Μέρος Α:
-                    Σύγκριση</a>
-                <a href="02-delaunay.html" class="btn">Επόμενο: Τριγωνοποίηση Delaunay <i
-                        class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="07-complexity.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> Μέρος Α: Σύγκριση</a> <a href="02-delaunay.html"
+                    class="btn">Επόμενο: Τριγωνοποίηση Delaunay <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/voronoi.js"></script>
     <script>
-        const sim = new VoronoiSimulator('sim-canvas');
-        sim.generatePoints();
+        window.sim = new VoronoiSimulator('sim-canvas');
+        setTimeout(() => window.sim.generatePoints(), 50);
     </script>
 </body>
 

@@ -16,74 +16,87 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-b">Μέρος Β: 3D Γεωμετρία</a>
-                <span>Γραμμικός Προγραμματισμός</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-b">Μέρος Β: 3D
+                    Γεωμετρία</a> <span>Γραμμικός Προγραμματισμός</span> </div>
             <h1>Γραμμικός Προγραμματισμός (Seidel)</h1>
-
             <section class="content-box">
-                <h2>1. Το Πρόβλημα</h2>
-                <p>
-                    Θέλουμε να βελτιστοποιήσουμε (max/min) μια γραμμική συνάρτηση $f(x,y) = c_1 x + c_2 y$ υπό μια σειρά
-                    γραμμικών περιορισμών (ημιεπιπέδων).
-                    $$ H_i: a_i x + b_i y \le d_i $$
-                </p>
-                <div class="definition-box">
-                    <strong>Αυξητικός Αλγόριθμος (Seidel):</strong>
-                    Προσθέτουμε τους περιορισμούς έναν-έναν. Αν ο νέος περιορισμός παραβιάζεται από το τρέχον βέλτιστο,
-                    τότε το νέο βέλτιστο πρέπει να βρίσκεται πάνω στο σύνορο του νέου περιορισμού.
+                <h2>1. Το Πρόβλημα (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Ο Γραμμικός Προγραμματισμός ακούγεται τρομακτικός, αλλά είναι απλός: <strong>"Θέλω να πάω όσο
+                            πιο ψηλά γίνεται (να μεγιστοποιήσω το κέρδος), αλλά υπάρχουν τοίχοι που με εμποδίζουν
+                            (περιορισμοί)."</strong> </p>
+                    <p> Είστε σε ένα δωμάτιο και θέλετε να πάτε όσο πιο Βόρεια γίνεται. Κάθε περιορισμός είναι ένας νέος
+                        τοίχος που χτίζεται ξαφνικά. </p>
+                    <p> <strong>Η ιδέα του Seidel:</strong> Ξεκινάτε από το καλύτερο σημείο που ξέρετε. Κάθε φορά που
+                        μπαίνει ένας νέος τοίχος:
+                    <ul>
+                        <li>Αν είστε ήδη στη σωστή πλευρά του τοίχου, δεν κάνετε τίποτα! (Εύκολη περίπτωση)</li>
+                        <li>Αν ο νέος τοίχος σας κόβει τον δρόμο, τότε αναγκαστικά η νέα καλύτερη θέση θα είναι
+                            <strong>ακριβώς πάνω στον τοίχο</strong>. Οπότε περπατάτε πάνω στον τοίχο μέχρι να βρείτε το
+                            νέο καλύτερο σημείο.
+                        </li>
+                    </ul>
+                    </p>
                 </div>
+                <p> Θέλουμε να βελτιστοποιήσουμε (max/min) μια γραμμική συνάρτηση $f(x,y) = c_1 x + c_2 y$ υπό μια σειρά
+                    γραμμικών περιορισμών (ημιεπιπέδων). $$ H_i: a_i x + b_i y \le d_i $$ </p>
+                <div class="definition-box"> <strong>Αυξητικός Αλγόριθμος (Seidel):</strong> Προσθέτουμε τους
+                    περιορισμούς έναν-έναν. Αν ο νέος περιορισμός παραβιάζεται από το τρέχον βέλτιστο, τότε το νέο
+                    βέλτιστο πρέπει να βρίσκεται πάνω στο σύνορο του νέου περιορισμού. </div>
             </section>
-
             <section class="content-box">
                 <h2>2. Αναμενόμενη Πολυπλοκότητα</h2>
-                <p>
-                    Αν προσθέτουμε τους περιορισμούς με τυχαία σειρά, η αναμενόμενη πολυπλοκότητα είναι <strong>γραμμική
+                <p> Αν προσθέτουμε τους περιορισμούς με τυχαία σειρά, η αναμενόμενη πολυπλοκότητα είναι <strong>γραμμική
                         $\mathcal{O}(n)$</strong>, παρόλο που στη χείριστη περίπτωση είναι $\mathcal{O}(n^2)$ (ή
-                    $\mathcal{O}(n^d)$ σε $d$ διαστάσεις).
-                </p>
-
+                    $\mathcal{O}(n^d)$ σε $d$ διαστάσεις). </p>
                 <div class="algorithm-box">
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητικός Αλγόριθμος Γ.Π. (Seidel)</h3>
-                    <pre><code>Αυξητικός Αλγόριθμος ΓΠ
-Είσοδος: Περιορισμοί H = {H₁, ..., Hₙ}, Συνάρτηση f(x) = cᵀx.
+                    <pre><code>Αυξητικός Αλγόριθμος ΓΠ (Seidel)
+Είσοδος: Περιορισμοί H = {H₁, ..., Hₙ}, Συναρτήση f(x) = cᵀx.
 Έξοδος: Σημείο x* που ελαχιστοποιεί την f (ή "Ανέφικτο").
 
-1. Αρχικοποίηση: Βρες την βέλτιστη κορυφή x*_d+1 που ικανοποιεί τους d+1 πρώτους περιορισμούς.
+1. Αρχικοποίηση: 
+   Βρες τη βέλτιστη κορυφή x*_{d+1} που ικανοποιεί τους d+1 πρώτους περιορισμούς.
    Αν η τομή είναι κενή, επίστρεψε "Ανέφικτο".
 
 2. Για i = d+2 έως n:
-    α. Αν το x*ᵢ₋₁ ικανοποιεί τον περιορισμό Hᵢ (δηλ. Hᵢ(x*ᵢ₋₁) ≤ 0):
-        Τότε x*ᵢ = x*ᵢ₋₁ (το βέλτιστο δεν αλλάζει).
-    
-    β. Αλλιώς (αν το x*ᵢ₋₁ παραβιάζει τον Hᵢ):
-        Το νέο βέλτιστο x*ᵢ πρέπει να βρίσκεται πάνω στο υπερεπίπεδο Hᵢ = 0.
-        Το πρόβλημα ανάγεται σε ένα Γ.Π. με d-1 μεταβλητές πάνω στο Hᵢ.
-        Αναδρομική επίλυση στο (d-1)-διάστατο επίπεδο.
+   α. Αν το x*_{i-1} ικανοποιεί τον περιορισμό Hᵢ:
+      Τότε x*ᵢ = x*_{i-1} (το βέλτιστο δεν αλλάζει).
+   β. Αλλιώς (αν το x*_{i-1} παραβιάζει τον Hᵢ):
+      Το νέο βέλτιστο x*ᵢ πρέπει να βρίσκεται πάνω στο σύνορο Hᵢ = 0.
+      Επίλυση αναδρομικά σε d-1 διαστάσεις πάνω στον περιορισμό Hᵢ.
 
 3. Επίστρεψε το x*ₙ.</code></pre>
-
-                    <div class="algorithm-note">
-                        <strong>💡 Γεωμετρική Ερμηνεία:</strong>
+                    <div class="algorithm-note"> <strong>💡 Γεωμετρική Ερμηνεία:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li>Αν το παλιό βέλτιστο είναι "νόμιμο" για τον νέο περιορισμό, παραμένει βέλτιστο (γιατί ο
                                 χώρος λύσεων μικραίνει).</li>
@@ -93,45 +106,35 @@
                         </ul>
                     </div>
                 </div>
-            </section>
-
-            <!-- Simulator -->
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="lp-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-ruler-combined"></i> Προσομοιωτής LP</h3>
                 </div>
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-                <div class="controls">
-                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-sync"></i> Reset</button>
-                    <button class="sim-btn primary" onclick="sim.addConstraint()" id="btn-add"><i
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
+                <div class="controls"> <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-sync"></i>
+                        Reset</button> <button class="sim-btn primary" onclick="sim.addConstraint()" id="btn-add"><i
                             class="fas fa-plus"></i> Νέος Περιορισμός</button>
-                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
-                        Στόχος: Maximize Y (Πάνω).
-                    </div>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status"> Στόχος: Maximize Y
+                        (Πάνω). </div>
                 </div>
             </section>
-
-            <div class="page-nav">
-                <a href="03-first-face.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> First Face</a>
-                <a href="../../index.html#part-c" class="btn">Μέρος Γ <i class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="03-first-face.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> First Face</a> <a href="../../index.html#part-c"
+                    class="btn">Μέρος Γ <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/linear-prog.js"></script>
     <script>
-        const sim = new LPSimulator('sim-canvas');
-        sim.reset();
+        window.sim = new LPSimulator('sim-canvas');
+        setTimeout(() => window.sim.reset(), 50);
     </script>
 </body>
 

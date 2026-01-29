@@ -16,50 +16,62 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-c">Μέρος Γ: Voronoi & Delaunay</a>
-                <span>Delaunay</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-c">Μέρος Γ:
+                    Voronoi & Delaunay</a> <span>Delaunay</span> </div>
             <h1>Τριγωνοποίηση Delaunay</h1>
-
             <section class="content-box">
-                <h2>1. Ορισμός</h2>
-                <p>
-                    Η Τριγωνοποίηση Delaunay ενός συνόλου σημείων $P$ είναι μια τριγωνοποίηση τέτοια ώστε <strong>κανένα
-                        σημείο του $P$ να μην βρίσκεται στο εσωτερικό του περιγεγραμμένου κύκλου οποιουδήποτε
-                        τριγώνου</strong> της τριγωνοποίησης.
-                </p>
-                <div class="definition-box">
-                    <strong>Ιδιότητα Κενού Κύκλου:</strong> Για κάθε τρίγωνο $\triangle p_i p_j p_k$, ο κύκλος που
-                    διέρχεται από τις κορυφές του δεν περιέχει κανένα άλλο σημείο $p_m \in P$.
+                <h2>1. Ορισμός (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Φανταστείτε ότι θέλετε να συνδέσετε διάσπαρτα σημεία με τρίγωνα, αλλά θέλετε τα τρίγωνα να είναι
+                        όσο πιο "όμορφα" γίνεται. Τι σημαίνει "άσχημο" τρίγωνο; Ένα πολύ λεπτό και μακρόστενο τρίγωνο
+                        (σαν βελόνα). Τι σημαίνει "όμορφο" τρίγωνο; Ένα παχύ, σχεδόν ισόπλευρο τρίγωνο. </p>
+                    <p> Η <strong>Τριγωνοποίηση Delaunay</strong> είναι ο καλύτερος δυνατός τρόπος να συνδέσετε τα
+                        σημεία ώστε να αποφύγετε τα μακρόστενα τρίγωνα. Προσπαθεί να κάνει όλες τις γωνίες όσο πιο
+                        μεγάλες γίνεται ("Fat Triangles"). </p>
+                    <p> <strong>Το Κριτήριο του Κύκλου:</strong> Αν ζωγραφίσετε έναν κύκλο που να περνάει από τις 3
+                        κορυφές οποιουδήποτε τριγώνου, αυτός ο κύκλος πρέπει να είναι <strong>άδειος</strong>. Δεν
+                        επιτρέπεται να υπάρχει κανένα άλλο σημείο μέσα του. Αν είναι άδειος, το τρίγωνο είναι Delaunay!
+                    </p>
                 </div>
+                <p> Η Τριγωνοποίηση Delaunay ενός συνόλου σημείων $P$ είναι μια τριγωνοποίηση τέτοια ώστε <strong>κανένα
+                        σημείο του $P$ να μην βρίσκεται στο εσωτερικό του περιγεγραμμένου κύκλου οποιουδήποτε
+                        τριγώνου</strong> της τριγωνοποίησης. </p>
+                <div class="definition-box"> <strong>Ιδιότητα Κενού Κύκλου:</strong> Για κάθε τρίγωνο $\triangle p_i p_j
+                    p_k$, ο κύκλος που διέρχεται από τις κορυφές του δεν περιέχει κανένα άλλο σημείο $p_m \in P$. </div>
                 <p>Είναι ο δυϊκός γράφος του Διαγράμματος Voronoi.</p>
             </section>
-
             <section class="content-box">
                 <h2>2. Αυξητικός Αλγόριθμος (Incremental)</h2>
-                <p>
-                    Ο αλγόριθμος λειτουργεί προσθέτοντας σημεία ένα-ένα και διορθώνοντας τοπικά την τριγωνοποίηση.
-                </p>
-
+                <p> Ο αλγόριθμος λειτουργεί προσθέτοντας σημεία ένα-ένα και διορθώνοντας τοπικά την τριγωνοποίηση. </p>
                 <div class="algorithm-box">
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητική Τριγωνοποίηση Delaunay</h3>
                     <pre><code>Αλγόριθμος DelaunayIncremental(P)
@@ -67,34 +79,32 @@
 Έξοδος: Τριγωνοποίηση Delaunay.
 
 1. Εισήγαγε ένα μεγάλο "υπερ-τρίγωνο" που περιέχει όλα τα σημεία P.
-2. Αρχική τριγωνοποίηση T = {υπερ-τρίγωνο}.
+2. Τ ← {υπερ-τρίγωνο}.
 
 3. Για κάθε σημείο pᵣ από το P:
-    α. Εντόπισε το τρίγωνο (pᵢ, pⱼ, pₖ) που περιέχει το pᵣ.
-    β. Συνέδεσε το pᵣ με τις κορυφές, διαιρώντας το τρίγωνο σε 3 νέα:
-       (pᵢ, pⱼ, pᵣ), (pⱼ, pₖ, pᵣ), (pₖ, pᵢ, pᵣ).
-       (Αν το pᵣ πέσει σε ακμή, διαιρούνται τα 2 γειτονικά τρίγωνα σε 4).
-    γ. Για κάθε νέα ακμή (του αρχικού τριγώνου), κάλεσε την LEGAL_EDGE.
+   α. Εντόπισε το τρίγωνο (pᵢ, pⱼ, pₖ) που περιέχει το pᵣ.
+   β. Διαίρεσε το τρίγωνο σε 3 νέα:
+      (pᵢ, pⱼ, pᵣ), (pⱼ, pₖ, pᵣ), (pₖ, pᵢ, pᵣ).
+   γ. Για κάθε νέα ακμή του pᵣ (που ήταν πλευρά του αρχικού τριγώνου):
+      Κάλεσε την LEGAL_EDGE(pᵣ, ακμή, T).
 
 4. Αφαίρεσε το υπερ-τρίγωνο και τις ακμές που συνδέονται με αυτό.
-5. Επίστρεψε T.</code></pre>
-
+5. Επίστρεψε Τ.</code></pre>
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αλγόριθμος Έγκυρης Ακμής (Edge Flip)</h3>
                     <pre><code>Αλγόριθμος LEGAL_EDGE(pᵣ, ακμή e=(pᵢ, pⱼ), T)
 1. Έστω ότι η ακμή e ανήκει στο τρίγωνο (pᵢ, pⱼ, pᵣ) και στο γειτονικό (pᵢ, pⱼ, pₗ).
-2. Ελέγχουμε αν το pₗ είναι μέσα στον περιγεγραμμένο κύκλο του (pᵢ, pⱼ, pᵣ).
-   (Έλεγχος InCircle).
+2. Ελέγχουμε αν το pₗ είναι μέσα στον περιγεγραμμένο κύκλο του (pᵢ, pⱼ, pᵣ) (InCircle).
 
 3. Αν είναι μέσα (Illegal Edge):
-    α. Αντέστρεψε την ακμή (Flip): Αντικατάστησε την e=(pᵢ, pⱼ) με την (pᵣ, pₗ).
-    β. Αναδρομικά:
-       LEGAL_EDGE(pᵣ, (pᵢ, pₗ), T)
-       LEGAL_EDGE(pᵣ, (pⱼ, pₗ), T)
+   α. Αντέστρεψε την ακμή (Flip):
+      Αντικατάστησε την e=(pᵢ, pⱼ) με την (pᵣ, pₗ).
+   β. Αναδρομικά ελέγξτε τις νέες γειτονικές ακμές:
+      LEGAL_EDGE(pᵣ, (pᵢ, pₗ), T)
+      LEGAL_EDGE(pᵣ, (pⱼ, pₗ), T)
 
-4. Αλλιώς, η ακμή είναι έγκυρη (Legal).</code></pre>
-
-                    <div class="algorithm-note">
-                        <strong>💡 Σημασία Edge Flip:</strong>
+4. Αλλιώς:
+   Η ακμή είναι έγκυρη (Legal).</code></pre>
+                    <div class="algorithm-note"> <strong>💡 Σημασία Edge Flip:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li>Η διαδικασία Edge Flip διορθώνει τοπικά την τριγωνοποίηση ώστε να ικανοποιεί την
                                 ιδιότητα <strong>MaxMin Angle</strong>.</li>
@@ -103,43 +113,34 @@
                         </ul>
                     </div>
                 </div>
-            </section>
-
-            <!-- Simulator -->
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="delaunay-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-project-diagram"></i> Προσομοιωτής Delaunay</h3>
                 </div>
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-                <div class="controls">
-                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-trash"></i> Καθαρισμός</button>
-                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
-                        Κάνε κλικ στον καμβά για να προσθέσεις σημεία.
-                    </div>
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
+                <div class="controls"> <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-trash"></i>
+                        Καθαρισμός</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status"> Κάνε κλικ στον
+                        καμβά για να προσθέσεις σημεία. </div>
                 </div>
             </section>
-
-            <div class="page-nav">
-                <a href="01-voronoi.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Voronoi</a>
-                <a href="03-duality.html" class="btn">Επόμενο: Δυϊσμός <i class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="01-voronoi.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i>
+                    Voronoi</a> <a href="03-duality.html" class="btn">Επόμενο: Δυϊσμός <i
+                        class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/delaunay.js"></script>
     <script>
-        const sim = new DelaunaySimulator('sim-canvas');
-        sim.reset();
+        window.sim = new DelaunaySimulator('sim-canvas');
+        setTimeout(() => window.sim.reset(), 50);
     </script>
 </body>
 

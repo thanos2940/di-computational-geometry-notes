@@ -16,35 +16,51 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-a">Μέρος Α: Κυρτά Περιβλήματα</a>
-                <span>QuickHull</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-a">Μέρος Α:
+                    Κυρτά Περιβλήματα</a> <span>QuickHull</span> </div>
             <h1>QuickHull</h1>
-
             <section class="content-box">
-                <h2>1. Ο Αλγόριθμος</h2>
-                <p>
-                    Ο QuickHull είναι ανάλογος του QuickSort.
-                </p>
+                <h2>1. Η Ιδέα (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Φανταστείτε ξανά τις πρόκες στο ξύλο. Αντί να σαρώνετε γύρω-γύρω (όπως ο Graham Scan), κάνετε
+                        κάτι πιο "επιθετικό". </p>
+                    <p> Βρίσκετε την πιο αριστερή και την πιο δεξιά πρόκα και τεντώνετε ένα λάστιχο ανάμεσά τους. Τώρα
+                        ψάχνετε: <strong>Ποια πρόκα απέχει πιο πολύ από αυτό το λάστιχο;</strong> </p>
+                    <p> Μόλις τη βρείτε, "τραβάτε" το λάστιχο μέχρι εκείνη την πρόκα, σχηματίζοντας ένα τρίγωνο. Όλες οι
+                        πρόκες που μπήκαν μέσα στο τρίγωνο είναι πλέον άχρηστες (δεν θα είναι στο περίβλημα). Συνεχίζετε
+                        να τραβάτε το λάστιχο προς τα έξω στις νέες πλευρές, μέχρι να μην υπάρχει άλλη πρόκα να
+                        τραβήξετε. </p>
+                </div>
+                <p> Ο QuickHull είναι ανάλογος του QuickSort. </p>
                 <ol>
                     <li>Βρίσκουμε τα ακραία σημεία $min\_x$ και $max\_x$, τα οποία χωρίζουν το σύνολο σε "Άνω" και
                         "Κάτω" σύνολα.</li>
@@ -52,20 +68,17 @@
                     <li>Το $P_{max}$ σχηματίζει τρίγωνο με τα άκρα. Τα σημεία εντός του τριγώνου αγνοούνται.</li>
                     <li>Επαναλαμβάνουμε αναδρομικά για τις περιοχές έξω από τις ακμές του τριγώνου.</li>
                 </ol>
-
                 <div class="algorithm-box">
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας</h3>
-                    <pre><code>function QuickHull(A, B, S)
-  αν S = {A, B} τότε 
-    επίστρεψε AB
-  
-  αλλιώς:
-    C ← σημείο του S με μέγιστη απόσταση από την ευθεία AB.
-    M ← σημεία δεξιά της AC.
-    N ← σημεία δεξιά της CB.
-    επίστρεψε QuickHull(A, C, M) και QuickHull(C, B, N).</code></pre>
-                    <div class="algorithm-note">
-                        <strong>💡 Βασικές Παρατηρήσεις:</strong>
+                    <pre><code>Αλγόριθμος QuickHull(A, B, S)
+αν S = {A, B} τότε:
+   επίστρεψε την ακμή AB
+αλλιώς:
+   C ← σημείο του S με μέγιστη απόσταση από την AB.
+   M ← σημεία δεξιά της κατευθυνόμενης ακμής AC.
+   N ← σημεία δεξιά της κατευθυνόμενης ακμής CB.
+   επίστρεψε { QuickHull(A, C, M) ∪ QuickHull(C, B, N) }</code></pre>
+                    <div class="algorithm-note"> <strong>💡 Βασικές Παρατηρήσεις:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li><strong>Βασική ιδέα:</strong> Απορρίπτουμε σημεία εντός τριγώνου ABC</li>
                             <li><strong>Εύρεση C:</strong> Το πιο απομακρυσμένο σημείο από την ευθεία AB</li>
@@ -74,70 +87,47 @@
                         </ul>
                     </div>
                 </div>
-            </section>
-
-            <!-- Simulator -->
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="quickhull-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-bolt"></i> Προσομοιωτής QuickHull</h3>
-                    <div class="simulator-controls-top">
-                        <button class="sim-btn" onclick="sim.generatePoints()"><i class="fas fa-random"></i> Νέα
-                            Σημεία</button>
-                    </div>
+                    <div class="simulator-controls-top"> <button class="sim-btn" onclick="sim.generatePoints()"><i
+                                class="fas fa-random"></i> Νέα Σημεία</button> </div>
                 </div>
-
                 <div class="explanation-bar">
                     <p id="step-desc" class="step-description">Πατήστε Play.</p>
                 </div>
-
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
                 <div class="controls-toolbar">
-                    <div class="playback-controls">
-                        <button class="sim-btn icon-only" id="btn-prev" title="Προηγούμενο"><i
-                                class="fas fa-step-backward"></i></button>
-                        <button class="sim-btn primary" id="btn-play" title="Αναπαραγωγή/Παύση"><i
-                                class="fas fa-play"></i> Play</button>
-                        <button class="sim-btn icon-only" id="btn-next" title="Επόμενο"><i
-                                class="fas fa-step-forward"></i></button>
-                    </div>
-
-                    <div class="slider-container">
-                        <span class="label">Πρόοδος:</span>
-                        <input type="range" id="sim-slider" min="0" max="100" value="0" class="sim-slider">
-                        <span id="sim-status" class="status-text">-</span>
-                    </div>
-
-                    <div class="speed-container">
-                        <span class="label">Ταχύτητα:</span>
-                        <input type="range" id="sim-speed" min="1" max="10" value="5" class="speed-slider">
-                    </div>
+                    <div class="playback-controls"> <button class="sim-btn icon-only" id="btn-prev"
+                            title="Προηγούμενο"><i class="fas fa-step-backward"></i></button> <button
+                            class="sim-btn primary" id="btn-play" title="Αναπαραγωγή/Παύση"><i class="fas fa-play"></i>
+                            Play</button> <button class="sim-btn icon-only" id="btn-next" title="Επόμενο"><i
+                                class="fas fa-step-forward"></i></button> </div>
+                    <div class="slider-container"> <span class="label">Πρόοδος:</span> <input type="range"
+                            id="sim-slider" min="0" max="100" value="0" class="sim-slider"> <span id="sim-status"
+                            class="status-text">-</span> </div>
+                    <div class="speed-container"> <span class="label">Ταχύτητα:</span> <input type="range"
+                            id="sim-speed" min="1" max="10" value="5" class="speed-slider"> </div>
                 </div>
             </section>
-
-            <div class="page-nav">
-                <a href="04-divide-conquer.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Divide &
-                    Conquer</a>
-                <a href="06-coloring.html" class="btn">Επόμενο: Beneath-Beyond <i class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="04-divide-conquer.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> Divide & Conquer</a> <a href="06-coloring.html"
+                    class="btn">Επόμενο: Beneath-Beyond <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/base.js"></script>
     <script src="../../assets/js/simulators/quickhull.js"></script>
     <script>
-        const sim = new QuickHullSimulator('sim-canvas');
-        sim.generatePoints();
+        window.sim = new QuickHullSimulator('sim-canvas');
+        setTimeout(() => window.sim.generatePoints(), 50);
     </script>
 </body>
 

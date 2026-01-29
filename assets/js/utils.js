@@ -6,7 +6,8 @@
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    
+    updateThemeIcons(savedTheme);
+
     const toggleBtn = document.getElementById('theme-toggle');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
@@ -14,7 +15,23 @@ function initTheme() {
             const next = current === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
+            updateThemeIcons(next);
         });
+    }
+}
+
+function updateThemeIcons(theme) {
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+
+    if (lightIcon && darkIcon) {
+        if (theme === 'dark') {
+            lightIcon.classList.add('hidden');
+            darkIcon.classList.remove('hidden');
+        } else {
+            lightIcon.classList.remove('hidden');
+            darkIcon.classList.add('hidden');
+        }
     }
 }
 
@@ -40,10 +57,10 @@ function renderMath() {
     if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
             delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false},
-                {left: "\\(", right: "\\)", display: false},
-                {left: "\\[", right: "\\]", display: true}
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
             ]
         });
     }

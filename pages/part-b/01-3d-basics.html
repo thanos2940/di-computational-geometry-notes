@@ -16,38 +16,56 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-b">Μέρος Β: 3D Γεωμετρία</a>
-                <span>Βασικές Έννοιες</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-b">Μέρος Β: 3D
+                    Γεωμετρία</a> <span>Βασικές Έννοιες</span> </div>
             <h1>Βασικές Έννοιες 3D Γεωμετρίας</h1>
-
             <section class="content-box">
-                <h2>1. Κυρτό Πολύεδρο (Polytope)</h2>
-                <p>
-                    Στις 3 διαστάσεις, το Κυρτό Περίβλημα ενός συνόλου σημείων είναι ένα <strong>Κυρτό
-                        Πολύεδρο</strong>.
-                </p>
-                <div class="definition-box">
-                    <strong>Στοιχεία Πολυέδρου ($d=3$):</strong>
+                <h2>1. Κυρτό Πολύεδρο (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Στις 3 διαστάσεις, το Κυρτό Περίβλημα δεν είναι πια ένα λάστιχο, αλλά φανταστείτε ότι τυλίγετε
+                        μια πέτρα (τα σημεία) με <strong>πλαστική μεμβράνη</strong> ή συσκευασία δώρου. </p>
+                    <p> Το σχήμα που προκύπτει μοιάζει με κρύσταλλο ή ζάρι (με πολλές πλευρές). Αυτό το "Πολύεδρο"
+                        αποτελείται από:
+                    <ul>
+                        <li><strong>Κορυφές:</strong> Οι μυτερές γωνίες (τα εξωτερικά σημεία).</li>
+                        <li><strong>Ακμές:</strong> Οι γραμμές που ενώνουν τις γωνίες.</li>
+                        <li><strong>Έδρες:</strong> Οι επίπεδες επιφάνειες ανάμεσα στις γραμμές (συνήθως τρίγωνα εφόσον
+                            μιλάμε για τριγωνοποιήσεις, αλλά γενικά πολύγωνα).</li>
+                    </ul>
+                    </p>
+                </div>
+                <p> Στις 3 διαστάσεις, το Κυρτό Περίβλημα ενός συνόλου σημείων είναι ένα <strong>Κυρτό
+                        Πολύεδρο</strong>. </p>
+                <div class="definition-box"> <strong>Στοιχεία Πολυέδρου ($d=3$):</strong>
                     <ul>
                         <li><strong>Κορυφές (Vertices):</strong> Σημεία του αρχικού συνόλου. ($d-3=0$)</li>
                         <li><strong>Ακμές (Edges):</strong> Ευθύγραμμα τμήματα που συνδέουν κορυφές. ($d-2=1$)</li>
@@ -55,56 +73,41 @@
                     </ul>
                 </div>
             </section>
-
             <section class="content-box">
                 <h2>2. Τύπος Euler</h2>
-                <p>
-                    Για κάθε κυρτό πολύεδρο ισχύει: $$V - E + F = 2$$
-                    όπου $V, E, F$ το πλήθος κορυφών, ακμών και εδρών.
+                <p> Για κάθε κυρτό πολύεδρο ισχύει: $$V - E + F = 2$$ όπου $V, E, F$ το πλήθος κορυφών, ακμών και εδρών.
                 </p>
-                <p>
-                    Συνέπεια: Το πλήθος των εδρών είναι γραμμικό ως προς τις κορυφές ($\mathcal{O}(n)$). Αυτό σημαίνει
-                    ότι μπορούμε να υπολογίσουμε το 3D Hull γρήγορα!
-                </p>
-            </section>
-
-            <!-- Simulator -->
+                <p> Συνέπεια: Το πλήθος των εδρών είναι γραμμικό ως προς τις κορυφές ($\mathcal{O}(n)$). Αυτό σημαίνει
+                    ότι μπορούμε να υπολογίσουμε το 3D Hull γρήγορα! </p>
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="basics-3d-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-cube"></i> Προβολή 3D Πολυέδρου</h3>
                 </div>
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-                <div class="controls">
-                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-sync"></i> Επαναφορά</button>
-                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
-                        Σύρε με το ποντίκι για περιστροφή.
-                    </div>
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
+                <div class="controls"> <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-sync"></i>
+                        Επαναφορά</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status"> Σύρε με το ποντίκι
+                        για περιστροφή. </div>
                 </div>
             </section>
-
-            <div class="page-nav">
-                <a href="../../index.html#part-b" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Πίσω</a>
-                <a href="02-3d-incremental.html" class="btn">Επόμενο: Αυξητικός Αλγόριθμος 3D <i
-                        class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="../../index.html#part-b" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> Πίσω</a> <a href="02-3d-incremental.html" class="btn">Επόμενο:
+                    Αυξητικός Αλγόριθμος 3D <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/viewer3d.js"></script>
     <script>
-        const sim = new Viewer3D('sim-canvas');
-        sim.setCube(); // Demo shape
-        sim.render();
+        window.sim = new Viewer3D('sim-canvas');
+        window.sim.setCube(); // Demo shape
+        window.sim.render();
     </script>
 </body>
 

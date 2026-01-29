@@ -16,123 +16,110 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-c">Μέρος Γ</a>
-                <span>Κατηγόρημα InCircle</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-c">Μέρος Γ</a>
+                <span>Κατηγόρημα InCircle</span> </div>
             <h1>Κατηγόρημα InCircle (Κενός Κύκλος)</h1>
-
             <section class="content-box">
-                <h2>1. Το Πρόβλημα</h2>
-                <p>
-                    Στην Τριγωνοποίηση Delaunay, βασική προϋπόθεση είναι ότι για κάθε τρίγωνο της τριγωνοποίησης, ο
+                <h2>1. Το Πρόβλημα (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Το "Κατηγόρημα InCircle" είναι απλά μια φανταχτερή λέξη για την ερώτηση: <strong>"Είναι αυτός ο
+                            τύπος μέσα στον κύκλο μας;"</strong>. </p>
+                    <p> Φανταστείτε τρία άτομα ($A, B, C$) που κρατιούνται χέρι-χέρι και σχηματίζουν έναν κύκλο. Έρχεται
+                        ένα τέταρτο άτομο ($D$). Το ερώτημα είναι: Το $D$ στέκεται <strong>μέσα</strong> στον χώρο που
+                        ορίζει η παρέα, ή είναι <strong>έξω</strong>; </p>
+                    <p> Στη Γεωμετρία, αυτό είναι το μοναδικό εργαλείο που χρειαζόμαστε για να αποφασίσουμε ποια τρίγωνα
+                        είναι "Delaunay" (καλά) και ποια όχι. </p>
+                </div>
+                <p> Στην Τριγωνοποίηση Delaunay, βασική προϋπόθεση είναι ότι για κάθε τρίγωνο της τριγωνοποίησης, ο
                     περιγεγραμμένος κύκλος του δεν πρέπει να περιέχει κανένα άλλο σημείο του συνόλου στο εσωτερικό του.
                 </p>
-                <div class="definition-box">
-                    <strong>Κατηγόρημα InCircle:</strong> Δοθέντων τριών σημείων $p_1, p_2, p_3$ (που ορίζουν τρίγωνο)
-                    και ενός τέταρτου σημείου $q$, θέλουμε να ελέγξουμε αν το $q$ βρίσκεται <strong>εντός</strong>,
-                    <strong>εκτός</strong> ή <strong>πάνω</strong> στον περιγεγραμμένο κύκλο του τριγώνου.
-                </div>
+                <div class="definition-box"> <strong>Κατηγόρημα InCircle:</strong> Δοθέντων τριών σημείων $p_1, p_2,
+                    p_3$ (που ορίζουν τρίγωνο) και ενός τέταρτου σημείου $q$, θέλουμε να ελέγξουμε αν το $q$ βρίσκεται
+                    <strong>εντός</strong>, <strong>εκτός</strong> ή <strong>πάνω</strong> στον περιγεγραμμένο κύκλο του
+                    τριγώνου. </div>
             </section>
-
             <section class="content-box">
                 <h2>2. Ο Αλγεβρικός Τύπος</h2>
-                <p>
-                    Για τον έλεγχο χρησιμοποιούμε την ορίζουσα 4x4:
-                </p>
-                <div class="math-block" style="overflow-x: auto;">
-                    $$
-                    \Delta = \det \begin{bmatrix}
-                    p_{1x} & p_{1y} & p_{1x}^2 + p_{1y}^2 & 1 \\
-                    p_{2x} & p_{2y} & p_{2x}^2 + p_{2y}^2 & 1 \\
-                    p_{3x} & p_{3y} & p_{3x}^2 + p_{3y}^2 & 1 \\
-                    q_x & q_y & q_x^2 + q_y^2 & 1
-                    \end{bmatrix}
-                    $$
-                </div>
-
+                <p> Για τον έλεγχο χρησιμοποιούμε την ορίζουσα 4x4: </p>
+                <div class="math-block" style="overflow-x: auto;"> $$ \Delta = \det \begin{bmatrix} p_{1x} & p_{1y} &
+                    p_{1x}^2 + p_{1y}^2 & 1 \\ p_{2x} & p_{2y} & p_{2x}^2 + p_{2y}^2 & 1 \\ p_{3x} & p_{3y} & p_{3x}^2 +
+                    p_{3y}^2 & 1 \\ q_x & q_y & q_x^2 + q_y^2 & 1 \end{bmatrix} $$ </div>
                 <p>Υποθέτοντας ότι τα $p_1, p_2, p_3$ είναι διατεταγμένα <strong>αντιωρολογιακά (CCW)</strong>:</p>
                 <div class="theorem-box">
                     <ul>
-                        <li>Αν $\Delta > 0$: Το $q$ είναι <strong>ΕΝΤΟΣ</strong> του κύκλου.</li>
+                        <li>Αν $\Delta> 0$: Το $q$ είναι <strong>ΕΝΤΟΣ</strong> του κύκλου.</li>
                         <li>Αν $\Delta < 0$: Το $q$ είναι <strong>ΕΚΤΟΣ</strong> του κύκλου.</li>
                         <li>Αν $\Delta = 0$: Το $q$ είναι <strong>ΠΑΝΩ</strong> στον κύκλο (ομόκυκλα).</li>
                     </ul>
                 </div>
-                <div class="warning-box">
-                    <strong>Προσοχή:</strong> Αν τα σημεία είναι σε ωρολόγια φορά (CW), τα πρόσημα αντιστρέφονται. Ο
-                    προσομοιωτής παρακάτω ελέγχει αυτόματα τη φορά.
-                    <br>
-                    <em>Σημείωση: Στις σημειώσεις μαθήματος η σύμβαση μπορεί να διαφέρει ανάλογα με τον ορισμό της
-                        ορίζουσας, γι' αυτό πάντα ελέγχουμε τη γεωμετρική διαίσθηση.</em>
-                    (Στις σημειώσεις αναφέρει: Αν $p_1, p_2, p_3$ CW, τότε Det > 0 -> Εκτός).
-                </div>
-            </section>
-
-            <!-- Simulator -->
+                <div class="warning-box"> <strong>Προσοχή:</strong> Αν τα σημεία είναι σε ωρολόγια φορά (CW), τα πρόσημα
+                    αντιστρέφονται. Ο προσομοιωτής παρακάτω ελέγχει αυτόματα τη φορά. <br> <em>Σημείωση: Στις σημειώσεις
+                        μαθήματος η σύμβαση μπορεί να διαφέρει ανάλογα με τον ορισμό της ορίζουσας, γι' αυτό πάντα
+                        ελέγχουμε τη γεωμετρική διαίσθηση.</em> (Στις σημειώσεις αναφέρει: Αν $p_1, p_2, p_3$ CW, τότε
+                    Det> 0 -> Εκτός). </div>
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="incircle-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-dot-circle"></i> InCircle Tester</h3>
                 </div>
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-                <div class="controls">
-                    <button class="sim-btn" onclick="sim.resetPoints()"><i class="fas fa-sync"></i> Επαναφορά
-                        Θέσεων</button>
-                    <div class="status-bar" id="sim-status" style="flex-grow: 1;">
-                        Σύρε το σημείο Q (ή τα p1, p2, p3).
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
+                <div class="controls"> <button class="sim-btn" onclick="sim.resetPoints()"><i class="fas fa-sync"></i>
+                        Επαναφορά Θέσεων</button>
+                    <div class="status-bar" id="sim-status" style="flex-grow: 1;"> Σύρε το σημείο Q (ή τα p1, p2, p3).
                     </div>
                 </div>
             </section>
-
             <section class="content-box">
                 <h2>3. Εφαρμογή στο Edge Flip</h2>
-                <p>
-                    Αυτό το κατηγόρημα είναι η βάση για τον αλγόριθμο κατασκευής Delaunay. Αν έχουμε δύο γειτονικά
+                <p> Αυτό το κατηγόρημα είναι η βάση για τον αλγόριθμο κατασκευής Delaunay. Αν έχουμε δύο γειτονικά
                     τρίγωνα που σχηματίζουν ένα κυρτό τετράπλευρο, ελέγχουμε την κοινή ακμή. Αν η τέταρτη κορυφή είναι
                     "μέσα" στον κύκλο του απέναντι τριγώνου, τότε η ακμή είναι "παράνομη" (illegal) και πρέπει να γίνει
-                    <strong>Edge Flip</strong>.
-                </p>
+                    <strong>Edge Flip</strong>. </p>
             </section>
-
-            <div class="page-nav">
-                <a href="../part-b/01-3d-basics.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Μέρος
-                    Β</a>
-                <a href="05-legal-edge.html" class="btn">Επόμενο: Έγκυρες Ακμές <i class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="../part-b/01-3d-basics.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> Μέρος Β</a> <a href="05-legal-edge.html" class="btn">Επόμενο:
+                    Έγκυρες Ακμές <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/incircle.js"></script>
     <script>
-        const sim = new InCircleSimulator('sim-canvas');
+        window.sim = new InCircleSimulator('sim-canvas');
     </script>
 </body>
 

@@ -16,97 +16,117 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-c">Μέρος Γ: Voronoi & Delaunay</a>
-                <span>Legal Edge</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-c">Μέρος Γ:
+                    Voronoi & Delaunay</a> <span>Legal Edge</span> </div>
             <h1>Έγκυρη Ακμή & Edge Flip</h1>
-
             <section class="content-box">
-                <h2>1. Ορισμός Έγκυρης Ακμής (Legal Edge)</h2>
-                <p>
-                    Σε μια τριγωνοποίηση, θέλουμε να αποφύγουμε τα πολύ στενόμακρα τρίγωνα (μικρές γωνίες). Η
-                    Τριγωνοποίηση Delaunay είναι αυτή που <strong>μεγιστοποιεί την ελάχιστη γωνία</strong>.
-                </p>
-                <div class="definition-box">
-                    <strong>Έλεγχος Εγκυρότητας:</strong> Έστω δύο γειτονικά τρίγωνα $abd$ και $bcd$ που μοιράζονται την
-                    ακμή $bd$. Η ακμή $bd$ είναι <strong>έγκυρη (legal)</strong> αν το $c$ βρίσκεται <em>έξω</em> από
-                    τον περιγεγραμμένο κύκλο του τριγώνου $abd$.
-                    Αν είναι μέσα (παραβιάζεται η συνθήκη Delaunay), τότε η ακμή είναι <strong>μη-έγκυρη
-                        (illegal)</strong> και πρέπει να γίνει <strong>Edge Flip</strong>.
+                <h2>1. Ορισμός & Διαισθηση</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Όταν χωρίζουμε μια περιοχή σε τρίγωνα (τριγωνοποίηση), δεν είναι όλα τα τρίγωνα "καλά". Τα πολύ
+                        αδύνατα, μακρόστενα τρίγωνα (σαν βελόνες) είναι κακά για υπολογισμούς γραφικών και γεωμετρίας.
+                        Προτιμάμε τα "παχιά", ισόπλευρα τρίγωνα. </p>
+                    <p> <strong>Legal Edge:</strong> Μια ακμή ανάμεσα σε δύο τρίγωνα είναι "Νόμιμη" (Legal) αν τα
+                        τρίγωνα είναι όσο το δυνατόν πιο "παχιά". Αν σχηματίζουν ένα στενόμακρο σχήμα, τότε η ακμή είναι
+                        "Παράνομη" (Illegal) και πρέπει να την αλλάξουμε (Flip) με την άλλη διαγώνιο του τετραπλεύρου
+                        για να φτιάξουμε καλύτερα τρίγωνα. </p>
                 </div>
+                <p> Σε μια τριγωνοποίηση, θέλουμε να αποφύγουμε τα πολύ στενόμακρα τρίγωνα (μικρές γωνίες). Η
+                    Τριγωνοποίηση Delaunay είναι αυτή που <strong>μεγιστοποιεί την ελάχιστη γωνία</strong>. </p>
+                <div class="definition-box"> <strong>Έλεγχος Εγκυρότητας:</strong> Έστω δύο γειτονικά τρίγωνα $abd$ και
+                    $bcd$ που μοιράζονται την ακμή $bd$. Η ακμή $bd$ είναι <strong>έγκυρη (legal)</strong> αν το $c$
+                    βρίσκεται <em>έξω</em> από τον περιγεγραμμένο κύκλο του τριγώνου $abd$. Αν είναι μέσα (παραβιάζεται
+                    η συνθήκη Delaunay), τότε η ακμή είναι <strong>μη-έγκυρη (illegal)</strong> και πρέπει να γίνει
+                    <strong>Edge Flip</strong>. </div>
             </section>
-
             <section class="content-box">
                 <h2>2. Edge Flip</h2>
-                <p>
-                    Το <strong>Edge Flip</strong> είναι η διαδικασία αντικατάστασης της διαγωνίου $bd$ ενός κυρτού
-                    τετραπλεύρου $abcd$ με την άλλη διαγώνιο $ac$.
-                </p>
+                <p> Το <strong>Edge Flip</strong> είναι η διαδικασία αντικατάστασης της διαγωνίου $bd$ ενός κυρτού
+                    τετραπλεύρου $abcd$ με την άλλη διαγώνιο $ac$. </p>
                 <ul>
                     <li>Αν η $bd$ είναι illegal, τότε η $ac$ είναι legal.</li>
                     <li>Το Edge Flip αυξάνει το διάνυσμα των γωνιών λεξικογραφικά (βελτιώνει την τριγωνοποίηση).</li>
                 </ul>
-                <div class="math-block">
-                    $$ \text{Illegal}(bd) \iff InCircle(a, b, d, c) > 0 $$
+                <div class="math-block"> $$ \text{Illegal}(bd) \iff InCircle(a, b, d, c)> 0 $$ </div>
+            </section>
+            <section class="content-box">
+                <h2>3. Παράδειγμα Υπολογισμού InCircle "Στο Χαρτί"</h2>
+                <div class="methodology-box">
+                    <p> Έστω τρίγωνο $T = \{A(0,0), B(2,0), C(1,2)\}$ και σημείο ελέγχου $D(1,1)$. Ελέγχουμε αν το $D$
+                        είναι μέσα στον περιγεγραμμένο κύκλο του $ABC$. </p>
+                    <ol>
+                        <li> Βεβαιωνόμαστε ότι τα $A, B, C$ είναι σε <strong>Anti-Clockwise (CCW)</strong> σειρά. <br>
+                            $A \to B \to C$: $(2-0)(2-0) - (0-0)(1-0) = 4> 0$ (CCW, OK). </li>
+                        <li> Υπολογίζουμε τα $x^2 + y^2$ (lifted values) για την 4η στήλη: <ul>
+                                <li>$A: 0^2+0^2 = 0$</li>
+                                <li>$B: 2^2+0^2 = 4$</li>
+                                <li>$C: 1^2+2^2 = 5$</li>
+                                <li>$D: 1^2+1^2 = 2$</li>
+                            </ul>
+                        </li>
+                        <li> Στήνουμε την ορίζουσα 4x4 (ή ανάγουμε σε 3x3): $$ \det \begin{bmatrix} 0 & 0 & 0 & 1 \\ 2 &
+                            0 & 4 & 1 \\ 1 & 2 & 5 & 1 \\ 1 & 1 & 2 & 1 \end{bmatrix} $$ Αναπτύσσοντας ως προς την 1η
+                            γραμμή: $$ 1 \cdot (-1)^ {1+4} \cdot \det \begin{bmatrix} 2 & 0 & 4 \\ 1 & 2 & 5 \\ 1 & 1 &
+                            2 \end{bmatrix} $$ <em>(Υπολογισμός 3x3...)</em> $\rightarrow$ Αν αποτέλεσμα $> 0$, τότε $D$
+                            ΕΝΤΟΣ $\rightarrow$ <strong>Illegal Edge</strong>. </li>
+                    </ol>
                 </div>
             </section>
-
-            <!-- Simulator -->
             <section class="simulator-container" id="flip-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-sync"></i> Έλεγχος Ακμής & Flip</h3>
                 </div>
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-                <div class="controls">
-                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-undo"></i> Reset</button>
-                    <button class="sim-btn primary" onclick="sim.flip()" id="btn-flip"><i
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
+                <div class="controls"> <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-undo"></i>
+                        Reset</button> <button class="sim-btn primary" onclick="sim.flip()" id="btn-flip"><i
                             class="fas fa-exchange-alt"></i> Flip Edge</button>
-                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
-                        -
-                    </div>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status"> - </div>
                 </div>
             </section>
-
-            <div class="page-nav">
-                <a href="04-incircle.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> InCircle</a>
-                <a href="06-lifting.html" class="btn">Επόμενο: Lifting Map <i class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="04-incircle.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> InCircle</a> <a href="06-lifting.html" class="btn">Επόμενο:
+                    Lifting Map <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/legal-edge.js"></script>
     <script>
-        const sim = new LegalEdgeSimulator('sim-canvas');
-        sim.reset();
+        window.sim = new LegalEdgeSimulator('sim-canvas');
+        window.sim.reset();
     </script>
 </body>
 

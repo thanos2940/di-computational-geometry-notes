@@ -16,79 +16,89 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-c">Μέρος Γ</a>
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-c">Μέρος Γ</a>
                 <span>Lifting Map</span>
             </div>
-
             <h1>Απεικόνιση Ανύψωσης (Lifting Map)</h1>
-
             <section class="content-box">
-                <h2>1. Η Ιδέα</h2>
-                <p>
-                    Η μέθοδος ανύψωσης συνδέει το D-διάστατο Delaunay triangulation με το (D+1)-διάστατο Κυρτό
-                    Περίβλημα.
-                    Συγκεκριμένα, για το επίπεδο <strong>2D</strong>:
-                </p>
+                <h2>1. Η Ιδέα (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Αυτό είναι ίσως το πιο "μαγικό" κόλπο στη Γεωμετρία. </p>
+                    <p> Φανταστείτε ότι έχετε σημεία πάνω σε ένα επίπεδο τραπέζι (2D). Τώρα, φανταστείτε ότι το τραπέζι
+                        είναι ελαστικό και το πιέζουμε προς τα πάνω ώστε να γίνει σαν μια βαθιά κούπα (παραβολή). Τα
+                        σημεία "ανεβαίνουν" στον αέρα και δεν είναι πια στο ίδιο ύψος. </p>
+                    <p> Αν τώρα πάρουμε ένα σεντόνι και τυλίξουμε αυτά τα ιπτάμενα σημεία <strong>από κάτω</strong>
+                        (φτιάχνοντας το Κάτω Κυρτό Περίβλημα στις 3D), το σεντόνι θα σχηματίσει τριγωνικές έδρες. </p>
+                    <p> <strong>Το Μαγικό:</strong> Αν κοιτάξετε αυτή την 3D κατασκευή από ψηλά (κάθετα στο τραπέζι), οι
+                        γραμμές που βλέπετε είναι <strong>ακριβώς</strong> η Τριγωνοποίηση Delaunay! Δηλαδή, λύσαμε ένα
+                        δύσκολο πρόβλημα στο 2D (Delaunay) μετατρέποντάς το σε ένα εύκολο πρόβλημα στο 3D (Κυρτό
+                        Περίβλημα). </p>
+                </div>
+                <p> Η μέθοδος ανύψωσης συνδέει το D-διάστατο Delaunay triangulation με το (D+1)-διάστατο Κυρτό
+                    Περίβλημα. Συγκεκριμένα, για το επίπεδο <strong>2D</strong>: </p>
                 <ul>
                     <li>Κάθε σημείο $p = (x, y)$ ανυψώνεται στο παραβολοειδές $z = x^2 + y^2$.</li>
                     <li>Τα σημεία που σχηματίζουν το **Κάτω Κυρτό Περίβλημα** στο 3D αντιστοιχούν ακριβώς στην
                         τριγωνοποίηση Delaunay στο 2D!</li>
                 </ul>
-            </section>
-
-            <!-- Simulator -->
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="lifting-simulator">
                 <div class="simulator-header">
-                    <h3 class="simulator-title"><i class="fas fa-arrow-up"></i> 1D -> 2D Parabola Lifting</h3>
-                    <button class="sim-btn" onclick="sim.resetPoints()"><i class="fas fa-random"></i> Νέα
-                        Σημεία</button>
+                    <h3 class="simulator-title"><i class="fas fa-arrow-up"></i> 1D -> 2D Parabola Lifting</h3> <button
+                        class="sim-btn" onclick="sim.resetPoints()"><i class="fas fa-random"></i> Νέα Σημεία</button>
                 </div>
                 <div class="explanation-bar">
                     <p>Σύρετε τα κόκκινα σημεία στον άξονα Χ. Δείτε πώς το Κάτω Περίβλημα (Πράσινο) αντιστοιχεί στα
                         διαστήματα Delaunay.</p>
                 </div>
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
             </section>
-
-            <div class="page-nav">
-                <a href="05-legal-edge.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Legal Edge</a>
-                <a href="08-kd-tree.html" class="btn">Επόμενο: kd-Trees <i class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="05-legal-edge.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> Legal Edge</a> <a href="08-kd-tree.html" class="btn">Επόμενο:
+                    kd-Trees <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/lifting.js"></script>
     <script>
-        const sim = new LiftingSimulator('sim-canvas');
-        sim.resetPoints();
+        window.sim = new LiftingSimulator('sim-canvas');
+        window.sim.resetPoints();
+        window.sim.render();
     </script>
 </body>
 

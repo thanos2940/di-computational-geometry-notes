@@ -24,7 +24,21 @@
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -41,7 +55,26 @@
             <h1>Αυξητικός Αλγόριθμος & Χρωματισμός (Beneath-Beyond)</h1>
 
             <section class="content-box">
-                <h2>1. Η Θεωρία</h2>
+                <h2>1. Η Θεωρία (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p>
+                        Σκεφτείτε ότι έχετε χτίσει ένα <strong>σπίτι</strong> (το τρέχον Κυρτό Περίβλημα) και ξαφνικά
+                        εμφανίζεται ένας νέος χαρακτήρας, το σημείο $P$.
+                    </p>
+                    <ul>
+                        <li>Αν το $P$ είναι <strong>μέσα</strong> στο σπίτι, δεν αλλάζει τίποτα (το αγνοούμε).</li>
+                        <li>Αν το $P$ είναι <strong>έξω</strong> από το σπίτι, τότε "βλέπει" κάποιους τοίχους (τις
+                            κόκκινες έδρες) και κάποιους άλλους τους κρύβει ο όγκος του σπιτιού (οι μπλε έδρες).</li>
+                    </ul>
+                    <p>
+                        <strong>Τι κάνουμε;</strong>
+                        Γκρεμίζουμε τους τοίχους που "βλέπει" το $P$ (γιατί πλέον το $P$ θα είναι η νέα γωνία του
+                        σπιτιού) και χτίζουμε καινούργιους τοίχους που ενώνουν το $P$ με το υπόλοιπο σπίτι. Το σύνορο
+                        ανάμεσα σε αυτούς που βλέπει και αυτούς που δεν βλέπει λέγεται <strong>Ορίζοντας</strong>.
+                    </p>
+                </div>
+
                 <p>
                     Ο αυξητικός αλγόριθμος στις γενικές διαστάσεις (και στις 2D) βασίζεται στην προσθήκη ενός νέου
                     σημείου $p$ σε ένα ήδη υπάρχον κυρτό πολύτοπο.
@@ -106,10 +139,10 @@
 
 1. Δημιούργησε ένα αρχικό τρίγωνο (ή τετράεδρο στις 3D) από τα πρώτα σημεία.
 2. Για κάθε επόμενο σημείο p από το P:
-    α. Βρες τις "κόκκινες" (ορατές) έδρες του τρέχοντος πολυτόπου από το p.
-    β. Βρες τις ακμές του "ορίζοντα" (σύνορο μεταξύ ορατών και μη-ορατών εδρών).
-    γ. Διέγραψε τις ορατές έδρες.
-    δ. Δημιούργησε νέες έδρες συνδέοντας το p με τις ακμές του ορίζοντα.
+   α. Βρες τις "κόκκινες" (ορατές) έδρες του τρέχοντος πολυτόπου από το p.
+   β. Βρες τις ακμές του "ορίζοντα" (σύνορο μεταξύ ορατών και μη-ορατών εδρών).
+   γ. Διέγραψε τις ορατές έδρες.
+   δ. Δημιούργησε νέες έδρες συνδέοντας το p με τις ακμές του ορίζοντα.
 3. Επίστρεψε το τελικό πολύτοπο.</code></pre>
                     <div class="algorithm-note">
                         <strong>💡 Επεξήγηση Χρωματισμού:</strong>
@@ -133,17 +166,16 @@
                     Ζητείται να βρείτε ποιες ακμές/έδρες είναι ορατές.
                 </p>
 
-                <div class="methodology-box"
-                    style="background-color: #f8f9fa; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0;">
+                <div class="methodology-box">
                     <h3 style="margin-top: 0;">Βήμα 1: Ο Κανόνας της "Στροφής" (2D)</h3>
                     <p>
                         Για μια ακμή $e = (A, B)$ (με φορά CCW γύρω από το πολύγωνο):
                     </p>
                     <ul>
                         <li>Θεωρήστε τη διαδρομή $A \to B \to P$.</li>
-                        <li>Αν η στροφή είναι <strong>Δεξιά</strong> (Oρίζουσα $< 0$), τότε το $P$ είναι "απέξω" . <br>
-                                $\rightarrow$ Η ακμή είναι <strong>ΟΡΑΤΗ (Κόκκινη)</strong>.</li>
-                        <li>Αν η στροφή είναι <strong>Αριστερή</strong> (Ορίζουσα $\ge 0$), τότε το $P$ είναι "μέσα".
+                        <li>Αν η στροφή είναι <strong>Δεξιά</strong> (Oρίζουσα &lt; 0), τότε το $P$ είναι "απέξω" . <br>
+                            $\rightarrow$ Η ακμή είναι <strong>ΟΡΑΤΗ (Κόκκινη)</strong>.</li>
+                        <li>Αν η στροφή είναι <strong>Αριστερή</strong> (Ορίζουσα &ge; 0), τότε το $P$ είναι "μέσα".
                             <br>$\rightarrow$ Η ακμή είναι <strong>ΑΟΡΑΤΗ (Μπλε)</strong>.
                         </li>
                     </ul>
@@ -197,11 +229,13 @@
     <script src="../../assets/js/simulators/base.js"></script>
     <script src="../../assets/js/simulators/beneath-beyond.js"></script>
     <script>
-        const simAlgo = new BeneathBeyondAlgoSimulator('sim-canvas-algo', '-algo');
-        simAlgo.generatePoints();
+        window.simAlgo = new BeneathBeyondAlgoSimulator('sim-canvas-algo', '-algo');
+        window.simConcept = new BeneathBeyondInteractive('sim-canvas-concept');
 
-        const simConcept = new BeneathBeyondInteractive('sim-canvas-concept');
-        simConcept.reset();
+        setTimeout(() => {
+            window.simAlgo.generatePoints();
+            window.simConcept.reset();
+        }, 50);
     </script>
 </body>
 

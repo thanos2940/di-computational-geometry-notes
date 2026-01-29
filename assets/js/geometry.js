@@ -39,7 +39,10 @@ class Point {
  * @returns {number} - Θετικό: αριστερή στροφή, Αρνητικό: δεξιά, 0: συνευθειακά
  */
 function ccw(p, q, r) {
-    return (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x);
+    // Note: On HTML Canvas, Y-axis is inverted (increases downwards).
+    // To match standard geometric intuition (Left Turn = Positive),
+    // we invert the Y-axis terms: (r.y - p.y) becomes (p.y - r.y).
+    return (q.x - p.x) * (p.y - r.y) - (p.y - q.y) * (r.x - p.x);
 }
 
 /**

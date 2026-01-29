@@ -43,9 +43,9 @@ class QuickHullSimulator extends SimulatorBase {
         P.forEach((p, i) => {
             if (i === minIdx || i === maxIdx) return;
             const d = ccw(minP, maxP, p);
-            // In canvas (Y down), ccw < 0 is Upper, ccw > 0 is Lower
-            if (d < 0) s1.push({ pt: p, idx: i });
-            else if (d > 0) s2.push({ pt: p, idx: i });
+            // With fixed ccw (standard intuition): det > 0 is Visual Left (Upper Set)
+            if (d > 0) s1.push({ pt: p, idx: i });
+            else if (d < 0) s2.push({ pt: p, idx: i });
         });
 
         steps.push({
@@ -113,10 +113,10 @@ class QuickHullSimulator extends SimulatorBase {
             points.forEach(item => {
                 if (item.pt === maxPt) return;
                 // side of p1->maxPt. For recursive calls, we always want points outside the triangle.
-                // In QuickHull, those are to the "left" of segments p1->max and max->p2 relative to their orientation.
-                // In Canvas (y-down), Left is Negative.
-                if (ccw(p1, maxPt, item.pt) < -0.001) sA.push(item);
-                else if (ccw(maxPt, p2, item.pt) < -0.001) sB.push(item);
+                // Points to the "left" of segments p1 -> max and max -> p2 are "outside".
+                // Fixed ccw: Left (outside) is > 0.
+                if (ccw(p1, maxPt, item.pt) > 0.001) sA.push(item);
+                else if (ccw(maxPt, p2, item.pt) > 0.001) sB.push(item);
             });
 
             const discarded = points.length - 1 - sA.length - sB.length;

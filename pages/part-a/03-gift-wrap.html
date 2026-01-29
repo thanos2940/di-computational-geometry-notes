@@ -16,39 +16,53 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">
-                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
             </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../../index.html#part-a">Μέρος Α</a></li>
                     <li><a href="../../index.html#part-b">Μέρος Β</a></li>
                     <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
-                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="main-content">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="../../index.html">Αρχική</a>
-                <a href="../../index.html#part-a">Μέρος Α: Κυρτά Περιβλήματα</a>
-                <span>Gift Wrapping</span>
-            </div>
-
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-a">Μέρος Α:
+                    Κυρτά Περιβλήματα</a> <span>Gift Wrapping</span> </div>
             <h1>Αλγόριθμος Περιτυλίγματος (Jarvis March)</h1>
-
             <section class="content-box">
-                <h2>1. Η Θεωρία</h2>
-                <p>
-                    Ο αλγόριθμος **Gift Wrapping** (ή Jarvis March) ανακαλύπτει τα σημεία του περιβλήματος ένα προς ένα,
-                    όπως τυλίγουμε ένα δώρο με χαρτί.
-                    Ξεκινάμε από το χαμηλότερο αριστερό σημείο (που ανήκει σίγουρα στο ΚΠ) και σε κάθε βήμα βρίσκουμε το
-                    επόμενο σημείο που έχει τη μικρότερη πολική γωνία (ή τη μεγαλύτερη δεξιά στροφή) σε σχέση με το
-                    τρέχον.
-                </p>
+                <h2>1. Η Ιδέα (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Αυτός ο αλγόριθμος είναι ο πιο φυσικός τρόπος να τυλίξετε κάτι. </p>
+                    <p> Φανταστείτε ότι δένετε μια κλωστή στην πιο αριστερή πρόκα. Κρατάτε την κλωστή τεντωμένη προς τα
+                        πάνω και αρχίζετε να την περιστρέφετε <strong>δεξιόστροφα</strong> (σαν δείκτης ρολογιού) μέχρι
+                        να χτυπήσει την πρώτη πρόκα. </p>
+                    <p> Μόλις χτυπήσει, δένετε την κλωστή εκεί και επαναλαμβάνετε την περιστροφή από το νέο σημείο.
+                        Κάνετε το ίδιο μέχρι η κλωστή να γυρίσει πίσω στην αρχή. Είναι ακριβώς όπως τυλίγουμε ένα
+                        πακέτο! </p>
+                </div>
+                <p> Ο αλγόριθμος **Gift Wrapping** (ή Jarvis March) ανακαλύπτει τα σημεία του περιβλήματος ένα προς ένα,
+                    όπως τυλίγουμε ένα δώρο με χαρτί. Ξεκινάμε από το χαμηλότερο αριστερό σημείο (που ανήκει σίγουρα στο
+                    ΚΠ) και σε κάθε βήμα βρίσκουμε το επόμενο σημείο που έχει τη μικρότερη πολική γωνία (ή τη μεγαλύτερη
+                    δεξιά στροφή) σε σχέση με το τρέχον. </p>
                 <div class="algorithm-steps">
                     <h3>Βήματα Αλγορίθμου</h3>
                     <ol>
@@ -60,19 +74,22 @@
                         <li>Επαναλαμβάνουμε μέχρι να επιστρέψουμε στο $p_0$.</li>
                     </ol>
                 </div>
-
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-lightbulb"></i> Βασική Ιδέα</h3>
-                    <p>
-                        <strong>Χρησιμοποιούμε την τρέχουσα κορυφή για να βρούμε την επόμενη</strong>, επιλέγοντας το
-                        σημείο
-                        που "φαίνεται" πιο δεξιά από όλα. Το σημείο $r$ είναι το επόμενο στο περίβλημα αν όλα τα άλλα
-                        σημεία
-                        βρίσκονται στο ημιεπίπεδο που ορίζεται από την κατευθυντή ευθεία από την τρέχουσα κορυφή προς το
-                        $r$.
-                    </p>
-                    <div class="algorithm-note">
-                        <strong>💡 Παρατηρήσεις:</strong>
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Jarvis March (Gift Wrapping)</h3>
+                    <pre><code>Αλγόριθμος GiftWrapping(P)
+Είσοδος: Σύνολο σημείων P.
+Έξοδος: Κυρτό Περίβλημα CH.
+
+1. p ← το σημείο με την ελάχιστη x-συντεταγμένη.
+2. Επανάλαβε:
+   α. Πρόσθεσε το p στο CH.
+   β. q ← ένα τυχαίο επόμενο σημείο στο P.
+   γ. Για κάθε άλλο σημείο r στο P:
+      Αν CCW(p, q, r) == Δεξιά Στροφή:
+         q ← r  // Το r είναι πιο "εξωτερικό" από το q
+   δ. p ← q
+3. Μέχρι p == αρχικό σημείο.</code></pre>
+                    <div class="algorithm-note"> <strong>💡 Παρατηρήσεις:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li><strong>Πολυπλοκότητα:</strong> $\mathcal{O}(nh)$, όπου $h$ το πλήθος κορυφών του ΚΠ
                             </li>
@@ -83,80 +100,53 @@
                         </ul>
                     </div>
                 </div>
-            </section>
-
-            <!-- Simulator -->
+            </section> <!-- Simulator -->
             <section class="simulator-container" id="gift-wrapper-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-box-open"></i> Προσομοιωτής Gift Wrapping</h3>
-                    <div class="simulator-controls-top">
-                        <button class="sim-btn" onclick="sim.generatePoints()"><i class="fas fa-random"></i> Νέα
-                            Σημεία</button>
-                    </div>
+                    <div class="simulator-controls-top"> <button class="sim-btn" onclick="sim.generatePoints()"><i
+                                class="fas fa-random"></i> Νέα Σημεία</button> </div>
                 </div>
-
                 <div class="explanation-bar">
                     <p id="step-desc" class="step-description">Πατήστε Play για εκκίνηση.</p>
                 </div>
-
-                <div class="canvas-wrapper">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-
+                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
                 <div class="controls-toolbar">
-                    <div class="playback-controls">
-                        <button class="sim-btn icon-only" id="btn-prev" title="Προηγούμενο"><i
-                                class="fas fa-step-backward"></i></button>
-                        <button class="sim-btn primary" id="btn-play" title="Αναπαραγωγή/Παύση"><i
-                                class="fas fa-play"></i> Play</button>
-                        <button class="sim-btn icon-only" id="btn-next" title="Επόμενο"><i
-                                class="fas fa-step-forward"></i></button>
-                    </div>
-
-                    <div class="slider-container">
-                        <span class="label">Πρόοδος:</span>
-                        <input type="range" id="sim-slider" min="0" max="100" value="0" class="sim-slider">
-                        <span id="sim-status" class="status-text">-</span>
-                    </div>
-
-                    <div class="speed-container">
-                        <span class="label">Ταχύτητα:</span>
-                        <input type="range" id="sim-speed" min="1" max="10" value="5" class="speed-slider">
-                    </div>
+                    <div class="playback-controls"> <button class="sim-btn icon-only" id="btn-prev"
+                            title="Προηγούμενο"><i class="fas fa-step-backward"></i></button> <button
+                            class="sim-btn primary" id="btn-play" title="Αναπαραγωγή/Παύση"><i class="fas fa-play"></i>
+                            Play</button> <button class="sim-btn icon-only" id="btn-next" title="Επόμενο"><i
+                                class="fas fa-step-forward"></i></button> </div>
+                    <div class="slider-container"> <span class="label">Πρόοδος:</span> <input type="range"
+                            id="sim-slider" min="0" max="100" value="0" class="sim-slider"> <span id="sim-status"
+                            class="status-text">-</span> </div>
+                    <div class="speed-container"> <span class="label">Ταχύτητα:</span> <input type="range"
+                            id="sim-speed" min="1" max="10" value="5" class="speed-slider"> </div>
                 </div>
             </section>
-
             <section class="content-box">
                 <h2>2. Ανάλυση Πολυπλοκότητας</h2>
-                <p>
-                    Σε κάθε βήμα προσθέτουμε 1 κορυφή στο ΚΠ. Για να βρούμε την επόμενη, ελέγχουμε όλα τα $n$ σημεία.
-                    Αν $h$ είναι το πλήθος των κορυφών του περιβλήματος, η πολυπλοκότητα είναι $\mathcal{O}(n \cdot h)$.
-                    Στη χειρότερη περίπτωση ($h=n$), είναι $\mathcal{O}(n^2)$.
-                </p>
+                <p> Σε κάθε βήμα προσθέτουμε 1 κορυφή στο ΚΠ. Για να βρούμε την επόμενη, ελέγχουμε όλα τα $n$ σημεία. Αν
+                    $h$ είναι το πλήθος των κορυφών του περιβλήματος, η πολυπλοκότητα είναι $\mathcal{O}(n \cdot h)$.
+                    Στη χειρότερη περίπτωση ($h=n$), είναι $\mathcal{O}(n^2)$. </p>
             </section>
-
-            <div class="page-nav">
-                <a href="02-graham-scan.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Graham
-                    Scan</a>
-                <a href="04-divide-conquer.html" class="btn">Επόμενο: Divide & Conquer <i
-                        class="fas fa-arrow-right"></i></a>
-            </div>
+            <div class="page-nav"> <a href="02-graham-scan.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> Graham Scan</a> <a href="04-divide-conquer.html"
+                    class="btn">Επόμενο: Divide & Conquer <i class="fas fa-arrow-right"></i></a> </div>
         </div>
     </main>
-
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
         </div>
     </footer>
-
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/base.js"></script>
     <script src="../../assets/js/simulators/gift-wrapping.js"></script>
     <script>
-        const sim = new GiftWrappingSimulator('sim-canvas');
-        sim.generatePoints();
+        window.sim = new GiftWrappingSimulator('sim-canvas');
+        setTimeout(() => window.sim.generatePoints(), 50);
     </script>
 </body>
 

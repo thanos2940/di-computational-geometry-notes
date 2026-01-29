@@ -21,8 +21,12 @@ class SimulatorBase {
         // UI Elements
         this.initUI();
 
+        // Perform initial resize immediately to get correct dimensions
+        this.resize();
+
         // Resize Listener
         window.addEventListener('resize', () => this.resize());
+        // Extra check after layout stabilizes
         setTimeout(() => this.resize(), 100);
     }
 

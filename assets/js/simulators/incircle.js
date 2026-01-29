@@ -64,55 +64,25 @@ class InCircleSimulator {
 
     // Calculate 4x4 determinant
     inCircleDet(p1, p2, p3, q) {
-        // Lifting map: (x, y) -> (x, y, x^2+y^2)
-        const lift = (p) => p.x ** 2 + p.y ** 2;
-
-        const m00 = p1.x; const m01 = p1.y; const m02 = lift(p1); const m03 = 1;
-        const m10 = p2.x; const m11 = p2.y; const m12 = lift(p2); const m13 = 1;
-        const m20 = p3.x; const m21 = p3.y; const m22 = lift(p3); const m23 = 1;
-        const m30 = q.x; const m31 = q.y; const m32 = lift(q); const m33 = 1;
-
-        // Determinant utilizing basic expansion
-        // Or simpler: translate q to origin, then 3x3
-        // Det 4x4 is translation invariant.
-
-        // Let's implement full 4x4 or simplified geometric check
-        // Notes formula:
-        /*
-        | p1x p1y p1x^2+p1y^2 1 |
-        | p2x p2y ...         1 |
-        ...
-        */
+        // To match algorithm theory (where Y increases upwards), 
+        // we conceptually negate all Y coordinates before calculating.
+        const lift = (p) => p.x ** 2 + (-p.y) ** 2;
 
         // Function to calc 3x3 det
-        const det3 = (a1, a2, a3, b1, b2, b3, c1, c2, c3) => {
-            return a1 * (b2 * c3 - b3 * c2) - a2 * (b1 * c3 - b3 * c1) + a3 * (b1 * c2 - b2 * c1);
+        const det3Arr = (a, b, c) => {
+            return a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0]) + a[2] * (b[0] * c[1] - b[1] * c[0]);
         };
 
-        // Expansion along last column (1,1,1,1)
-        // +1 * det3(row1,2,3) - 1 * det3(row0,2,3) + 1 * det3(...)
+        const r1 = [p1.x, -p1.y, lift(p1)];
+        const r2 = [p2.x, -p2.y, lift(p2)];
+        const r3 = [p3.x, -p3.y, lift(p3)];
+        const rq = [q.x, -q.y, lift(q)];
 
-        // Actually, let's use the property that CCW(A,B,C) matters.
-        // Let's rely on the geometric circumcenter for visualization, and formula for text.
-
-        // Determinant Calculation:
-        const A = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x); // CCW check (2x2 det)
-
-        // For exact 4x4 value, we can use a library or expansion.
-        // Expansion:
-        const sub3 = (r1, r2, r3) => {
-            return det3(
-                r1.x, r1.y, lift(r1),
-                r2.x, r2.y, lift(r2),
-                r3.x, r3.y, lift(r3)
-            );
-        };
-
-        const det =
-            -1 * sub3(p2, p3, q) +
-            1 * sub3(p1, p3, q) -
-            1 * sub3(p1, p2, q) +
-            1 * sub3(p1, p2, p3);
+        // Expansions for 4x4 det with last column 1s.
+        const det = 1 * det3Arr(r1, r2, r3)
+            - 1 * det3Arr(r2, r3, rq)
+            + 1 * det3Arr(r1, r3, rq)
+            - 1 * det3Arr(r1, r2, rq);
 
         return det;
     }

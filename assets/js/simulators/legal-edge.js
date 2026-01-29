@@ -105,6 +105,8 @@ class LegalEdgeSimulator {
     render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        if (this.points.length < 4) return;
+
         const [a, b, c, d] = this.points;
         // Quad boundary: A-B-C-D-A
         this.ctx.beginPath();
@@ -222,15 +224,12 @@ class LegalEdgeSimulator {
 
     checkInCircle(a, b, c, d) {
         // 4x4 Determinant for InCircle
-        // | ax ay ax^2+ay^2 1 |
-        // | bx by ...       1 |
-        // | cx cy ...       1 |
-        // | dx dy ...       1 |
+        // Adjusted for Screen Coordinates (Y inverted).
+        // We conceptually flip Y (-y) to map to standard Cartesian before calc.
 
-        // Simplified relative to A (at origin)
-        const adx = a.x - d.x; const ady = a.y - d.y;
-        const bdx = b.x - d.x; const bdy = b.y - d.y;
-        const cdx = c.x - d.x; const cdy = c.y - d.y;
+        const adx = a.x - d.x; const ady = -(a.y - d.y);
+        const bdx = b.x - d.x; const bdy = -(b.y - d.y);
+        const cdx = c.x - d.x; const cdy = -(c.y - d.y);
 
         const abdet = adx * bdy - bdx * ady;
         const bcdet = bdx * cdy - cdx * bdy;
