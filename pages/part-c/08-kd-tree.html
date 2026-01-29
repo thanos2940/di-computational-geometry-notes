@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kd-Trees & Γεωμετρική Αναζήτηση | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-c">Μέρος Γ</a>
+                <span>kd-Trees</span>
+            </div>
+
+            <h1>Γεωμετρική Αναζήτηση με kd-Trees</h1>
+
+            <section class="content-box">
+                <h2>1. Εισαγωγή</h2>
+                <p>
+                    Το <strong>kd-tree</strong> (k-dimensional tree) είναι μια δομή δεδομένων που γενικεύει τα δυαδικά
+                    δέντρα αναζήτησης σε <em>k</em> διαστάσεις. Στις 2 διαστάσεις ($k=2$), το χρησιμοποιούμε για να
+                    υποδιαιρέσουμε το επίπεδο και να εκτελέσουμε γρήγορα ερωτήματα, όπως η <strong>ορθογώνια
+                        αναζήτηση</strong> (range search).
+                </p>
+                <div class="definition-box">
+                    <strong>Βασική Ιδέα:</strong> Σε κάθε επίπεδο του δέντρου, χωρίζουμε τον χώρο με μια ευθεία κάθετη
+                    σε έναν από τους άξονες, εναλλάξ:
+                    <ul>
+                        <li>Βάθος άρτιο (0, 2, ...): Κάθετη τομή (x-axis)</li>
+                        <li>Βάθος περιττό (1, 3, ...): Οριζόντια τομή (y-axis)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Αλγόριθμος Κατασκευής</h2>
+                <p>Ο αλγόριθμος είναι αναδρομικός και χωρίζει τα σημεία βάσει της διαμέσου, εναλλάξ στους άξονες.</p>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Κατασκευή kd-δέντρου</h3>
+                    <pre><code>Αλγόριθμος BUILD-KD-TREE(P, βάθος d)
+Είσοδος: Σύνολο σημείων P, τρέχον βάθος d.
+Έξοδος: Ρίζα του (υπο)δέντρου.
+
+1. Αν P περιέχει ένα σημείο:
+    Επίστρεψε φύλλο που αποθηκεύει αυτό το σημείο.
+
+2. Αν το d είναι άρτιο (d % 2 == 0):
+    Διάσπαση καθέτως στον άξονα x.
+    l ← διάμεσος των x-συντεταγμένων των σημείων P.
+    Χώρισε το P σε P_left (≤ l) και P_right (> l).
+   Αλλιώς (d περιττό):
+    Διάσπαση οριζοντίως στον άξονα y.
+    l ← διάμεσος των y-συντεταγμένων.
+    Χώρισε το P σε P_below (≤ l) και P_above (> l).
+
+3. v ← δημιούργησε κόμβο που αποθηκεύει την ευθεία διάσπασης l.
+4. v.left ← BUILD-KD-TREE(P_left, d + 1)
+5. v.right ← BUILD-KD-TREE(P_right, d + 1)
+6. Επίστρεψε v.</code></pre>
+                    <div class="algorithm-note">
+                        <strong>💡 Παρατηρήσεις:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+                            <li>Η <strong>διάμεσος</strong> επιλέγεται ώστε το δέντρο να είναι ισορροπημένο (περίπου
+                                μισά σημεία αριστερά, μισά δεξιά).</li>
+                            <li>Ο χρόνος κατασκευής είναι <strong>O(n log n)</strong> αν χρησιμοποιηθεί αλγόριθμος
+                                επιλογής διαμέσου σε O(n).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="definition-box">
+                    <strong>Πολυπλοκότητα:</strong>
+                    <ul>
+                        <li>Κατασκευή: $\mathcal{O}(n \log n)$</li>
+                        <li>Χώρος: $\mathcal{O}(n)$</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αλγόριθμος Διερεύνησης (Range Search)</h3>
+                    <pre><code>Αλγόριθμος SEARCH-KD-TREE(v, R)
+Είσοδος: Κόμβος v, Ορθογώνιο αναζήτησης R.
+Έξοδος: Σημεία μέσα στο R.
+
+1. Αν ο v είναι φύλλο:
+    Αν το σημείο που αποθηκεύει είναι μέσα στο R, ανάφερέ το.
+    
+2. Αλλιώς (εσωτερικός κόμβος):
+    Έστω REGION(v) η περιοχή του επιπέδου που αντιστοιχεί στον κόμβο v.
+    
+    α. Αν REGION(v) ⊆ R (πλήρως μέσα):
+        Ανάφερε όλα τα σημεία στο υποδέντρο του v (REPORT_SUBTREE).
+        
+    β. Αλλιώς, αν REGION(v) ∩ R ≠ ∅ (τέμνονται):
+        Έλεγξε αναδρομικά τα παιδιά:
+        - Αν το R τέμνει την περιοχή του v.left: SEARCH-KD-TREE(v.left, R).
+        - Αν το R τέμνει την περιοχή του v.right: SEARCH-KD-TREE(v.right, R).</code></pre>
+                </div>
+            </section>
+
+            <!-- Simulator -->
+            <section class="simulator-container" id="kdtree-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-project-diagram"></i> Κατασκευή kd-Tree (Υποδιαίρεση
+                        Επιπέδου)</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button class="sim-btn" onclick="sim.generatePoints()"><i class="fas fa-random"></i> Νέα
+                        Σημεία</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
+                        -
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>3. Ορθογώνια Αναζήτηση (Range Query)</h2>
+                <p>
+                    Για να βρούμε ποια σημεία περιέχονται σε ένα ορθογώνιο $R=[x_{min}, x_{max}] \times [y_{min},
+                    y_{max}]$, ξεκινάμε από τη ρίζα:
+                </p>
+                <ul>
+                    <li>Αν είμαστε σε φύλλο, ελέγχουμε αν το σημείο είναι στο $R$.</li>
+                    <li>Αν η περιοχή που καλύπτει ο τρέχων κόμβος είναι <strong>πλήρως μέσα</strong> στο $R$, αναφέρουμε
+                        όλα τα σημεία του υποδέντρου.</li>
+                    <li>Αν η περιοχή είναι <strong>πλήρως έξω</strong>, σταματάμε.</li>
+                    <li>Αλλιώς, συνεχίζουμε αναδρομικά στα παιδιά που τέμνουν το $R$.</li>
+                </ul>
+            </section>
+
+            <div class="page-nav">
+                <a href="06-lifting.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Προηγούμενο</a>
+                <a href="09-range-tree.html" class="btn">Επόμενο: Range Trees <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/kdtree.js"></script>
+    <script>
+        const sim = new KdTreeSimulator('sim-canvas');
+        sim.generatePoints();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Αυξητικός Αλγόριθμος (Graham Scan) | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-a">Μέρος Α: Κυρτά Περιβλήματα</a>
+                <span>Graham Scan</span>
+            </div>
+
+            <h1>Αυξητικός Αλγόριθμος (Graham Scan)</h1>
+
+            <section class="content-box">
+                <h2>1. Η Θεωρία</h2>
+                <p>
+                    Ο αλγόριθμος Graham Scan κατασκευάζει το Κυρτό Περίβλημα σε χρόνο $\mathcal{O}(n \log n)$.
+                    Η βασική ιδέα είναι η ταξινόμηση των σημείων και η σταδιακή προσθήκη τους,
+                    διατηρώντας τη ιδιότητα της κυρτότητας αφαιρώντας σημεία που δημιουργούν "εσωτερικές γωνίες".
+                </p>
+                <div class="algorithm-steps">
+                    <h3>Βήματα Αλγορίθμου</h3>
+                    <ol>
+                        <li>Ταξινομούμε τα σημεία ως προς τη συντεταγμένη $x$.</li>
+                        <li><strong>Άνω Περίβλημα:</strong> Εξετάζουμε τα σημεία από αριστερά προς τα δεξιά. Για κάθε
+                            νέο σημείο, ελέγχουμε αν η στροφή των τελευταίων 3 σημείων είναι Δεξιά. Αν είναι Αριστερή (ή
+                            ευθεία), αφαιρούμε το μεσαίο σημείο.</li>
+                        <li><strong>Κάτω Περίβλημα:</strong> Επαναλαμβάνουμε τη διαδικασία από τα δεξιά προς τα
+                            αριστερά.</li>
+                        <li>Ενώνουμε τα δύο περιβλήματα.</li>
+                    </ol>
+                </div>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας</h3>
+                    <pre><code>Αλγόριθμος: Αυξητικός αλγόριθμος
+Είσοδος: Σύνολο P σε γενική θέση.
+Έξοδος: Κατάλογος κορυφών L σε ωρολόγια διάταξη.
+
+1. Ταξινόμηση p₁, …, pₙ λεξικογραφικά.
+
+2. L_άνω ← {p₁, p₂}.
+
+3. για i ← 3 έως n:
+4.   Πρόσθεσε pᵢ στο L_άνω.
+5.   Όσο |L_άνω| > 2 και στροφή τελευταίων τριών όχι δεξιά:
+6.     Αφαίρεσε το μεσαίο από τα τρία τελευταία.
+
+7. L_κάτω ← {pₙ, pₙ₋₁}.
+
+8. για i ← n-2 προς 1:
+9.   Πρόσθεσε pᵢ στο L_κάτω.
+10.  Όσο |L_κάτω| > 2 και στροφή τελευταίων τριών όχι δεξιά:
+11.    Αφαίρεσε το μεσαίο από τα τρία τελευταία.
+
+12. Αφαίρεσε 1ο και τελευταίο του L_κάτω (για αποφυγή διπλότυπων).
+
+13. L ← L_άνω ∪ L_κάτω.
+
+14. Επιστροφή L.</code></pre>
+                    <div class="algorithm-note">
+                        <strong>💡 Βασικές Παρατηρήσεις:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+                            <li><strong>Στροφή "όχι δεξιά"</strong> = αριστερόστροφη ή ευθεία (CCW ≥ 0)</li>
+                            <li>Η <strong>λεξικογραφική ταξινόμηση</strong> σημαίνει: πρώτα κατά x, μετά κατά y</li>
+                            <li><strong>Πολυπλοκότητα:</strong> O(n log n) λόγω της ταξινόμησης</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Μεθοδολογία Επίλυσης "Στο Χαρτί"</h2>
+                <p>
+                    Όταν λύνετε ασκήσεις Graham Scan στις εξετάσεις, ακολουθήστε αυτά τα τυποποιημένα βήματα:
+                </p>
+                <div class="methodology-box"
+                    style="background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 15px; margin: 20px 0;">
+                    <h3 style="margin-top: 0;">Βήμα 1: Ταξινόμηση Σημείων</h3>
+                    <p>
+                        Ταξινομήστε τα σημεία $P$ λεξικογραφικά: πρώτα αυξανόμενα ως προς $x$. Αν τα $x$ είναι ίσα, τότε
+                        αυξανόμενα ως προς $y$.
+                        <br>
+                        <em>Παράδειγμα:</em> $(1, 3)$ έρχεται πριν από $(2, 2)$. Το $(2, 2)$ έρχεται πριν από $(2, 5)$.
+                    </p>
+
+                    <h3>Βήμα 2: Κατασκευή Άνω Περιβλήματος ($L_{upper}$)</h3>
+                    <ul>
+                        <li>Αρχικοποιήστε τη λίστα $L_{upper}$ με τα δύο πρώτα σημεία: $L = [p_1, p_2]$.</li>
+                        <li>Για κάθε επόμενο σημείο $p_i$ (από $p_3$ έως $p_n$):
+                            <ul>
+                                <li>Προσθέστε το $p_i$ στο τέλος της λίστας.</li>
+                                <li><strong>Ελεγχος Στροφής:</strong> Ελέγξτε τα 3 τελευταία σημεία της λίστας (έστω $A,
+                                    B, C$).</li>
+                                <li>Υπολογίστε την ορίζουσα $D = \det(A, B, C)$.</li>
+                                <li><strong>Κανόνας Διαγραφής:</strong> Αν $D \ge 0$ (Αριστερή στροφή ή ευθεία), τότε το
+                                    μεσαίο σημείο $B$ <strong>διαγράφεται</strong>.</li>
+                                <li>Επαναλάβετε τον έλεγχο μέχρι τα 3 τελευταία να κάνουν Δεξιά στροφή ($D < 0$) ή να
+                                        μείνουν λιγότερα από 3 σημεία.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3>Βήμα 3: Κατασκευή Κάτω Περιβλήματος ($L_{lower}$)</h3>
+                    <p>
+                        Επαναλάβετε την ίδια διαδικασία, αλλά εξετάζοντας τα σημεία αντίστροφα (από $p_n$ έως $p_1$).
+                    </p>
+                </div>
+
+                <h3>📝 Λυμένο Παράδειγμα</h3>
+                <p><strong>Δεδομένα:</strong> $P = \{ A(0,0), B(4,4), C(1,1), D(3,0), E(2,2) \}$</p>
+
+                <div class="example-execution">
+                    <h4>1. Ταξινόμηση</h4>
+                    <p>
+                        $p_1=A(0,0), \quad p_2=C(1,1), \quad p_3=E(2,2), \quad p_4=D(3,0), \quad p_5=B(4,4)$
+                    </p>
+
+                    <h4>2. Άνω Περίβλημα ($L_{upper}$)</h4>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Βήμα</th>
+                                <th>Λίστα $L$</th>
+                                <th>Έλεγχος (3 τελευταία)</th>
+                                <th>Στροφή (Ορίζουσα)</th>
+                                <th>Δράση</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Αρχή</td>
+                                <td>$[A, C]$</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Προσθήκη $E$</td>
+                                <td>$[A, C, E]$</td>
+                                <td>$A, C, E$</td>
+                                <td>$\det(A,C,E) = 0$ (Ευθεία)</td>
+                                <td><strong>Διαγραφή C</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Μετά τη διαγραφή</td>
+                                <td>$[A, E]$</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Προσθήκη $D$</td>
+                                <td>$[A, E, D]$</td>
+                                <td>$A, E, D$</td>
+                                <td>$\det(A,E,D) < 0$ (Δεξιά)</td>
+                                <td>OK</td>
+                            </tr>
+                            <tr>
+                                <td>Προσθήκη $B$</td>
+                                <td>$[A, E, D, B]$</td>
+                                <td>$E, D, B$</td>
+                                <td>$\det(E,D,B) > 0$ (Αριστερή)</td>
+                                <td><strong>Διαγραφή D</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Έλεγχος πάλι</td>
+                                <td>$[A, E, B]$</td>
+                                <td>$A, E, B$</td>
+                                <td>$\det(A,E,B) = 0$ (Ευθεία)</td>
+                                <td><strong>Διαγραφή E</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Τελικό $L_{upper}$</td>
+                                <td>$[A, B]$</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="simulator-container" id="graham-scan-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-play-circle"></i> Προσομοιωτής Graham Scan</h3>
+                    <div class="simulator-controls-top">
+                        <button class="sim-btn" onclick="sim.generatePoints()"><i class="fas fa-random"></i> Νέα
+                            Σημεία</button>
+                    </div>
+                </div>
+
+                <div class="explanation-bar">
+                    <p id="step-desc" class="step-description">Πατήστε Play για να δείτε την εκτέλεση.</p>
+                </div>
+
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+
+                <div class="controls-toolbar">
+                    <div class="playback-controls">
+                        <button class="sim-btn icon-only" id="btn-prev" title="Προηγούμενο"><i
+                                class="fas fa-step-backward"></i></button>
+                        <button class="sim-btn primary" id="btn-play" title="Αναπαραγωγή/Παύση"><i
+                                class="fas fa-play"></i> Play</button>
+                        <button class="sim-btn icon-only" id="btn-next" title="Επόμενο"><i
+                                class="fas fa-step-forward"></i></button>
+                    </div>
+
+                    <div class="slider-container">
+                        <span class="label">Πρόοδος:</span>
+                        <input type="range" id="sim-slider" min="0" max="100" value="0" class="sim-slider">
+                        <span id="sim-status" class="status-text">-</span>
+                    </div>
+
+                    <div class="speed-container">
+                        <span class="label">Ταχύτητα:</span>
+                        <input type="range" id="sim-speed" min="1" max="10" value="5" class="speed-slider"
+                            title="Ταχύτητα Αναπαραγωγής">
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Ανάλυση Πολυπλοκότητας</h2>
+                <p>
+                    <strong>Ταξινόμηση:</strong> $\mathcal{O}(n \log n)$<br>
+                    <strong>Σάρωση:</strong> Κάθε σημείο προστίθεται μία φορά και αφαιρείται το πολύ μία φορά. Άρα
+                    $\mathcal{O}(n)$.<br>
+                    <strong>Σύνολο:</strong> $\mathcal{O}(n \log n)$.
+                </p>
+            </section>
+
+            <div class="page-nav">
+                <a href="01-basics.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Βασικές Έννοιες</a>
+                <a href="03-gift-wrap.html" class="btn">Επόμενο: Gift Wrapping <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/base.js"></script>
+    <script src="../../assets/js/simulators/graham-scan.js"></script>
+    <script>
+        // Init
+        const sim = new GrahamScanSimulator('sim-canvas');
+        sim.generatePoints();
+    </script>
+</body>
+
+</html>

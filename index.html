@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Υπολογιστική Γεωμετρία | Εκπαιδευτική Πλατφόρμα</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#part-a">Μέρος Α: Κυρτό Περίβλημα</a></li>
+                    <li><a href="#part-b">Μέρος Β: 3D & Γραμμ. Προγρ.</a></li>
+                    <li><a href="#part-c">Μέρος Γ: Voronoi & Delaunay</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <div class="content-box text-center" style="padding: 4rem 2rem;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Διαδραστικές Σημειώσεις & Προσομοιωτές</h1>
+                <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 2rem;">
+                    Μια πλήρης εκπαιδευτική πλατφόρμα για την κατανόηση αλγορίθμων Υπολογιστικής Γεωμετρίας.
+                    Εξερευνήστε τις έννοιες μέσα από διαδραστικά παραδείγματα και βήμα-προς-βήμα εκτέλεση.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <a href="pages/part-a/01-basics.html" class="btn" style="padding: 1rem 2rem; font-size: 1.2rem;">Ξεκινήστε Εδώ</a>
+                    <a href="reference/formulas.html" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.2rem;">Τυπολόγιο</a>
+                </div>
+            </div>
+
+            <!-- Course Structure -->
+            <h2 class="text-center" style="margin: 3rem 0;">Δομή Μαθήματος</h2>
+            
+            <div class="grid-layout" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                
+                <!-- Part A -->
+                <div id="part-a" class="content-box">
+                    <h3><i class="fas fa-vector-square"></i> ΜΕΡΟΣ Α: Κυρτό Περίβλημα 2D</h3>
+                    <p>Βασικές έννοιες και αλγόριθμοι κατασκευής κυρτού περιβλήματος στο επίπεδο.</p>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li class="mb-1"><a href="pages/part-a/01-basics.html"><i class="fas fa-play-circle"></i> Βασικές Έννοιες & Κατηγορήματα</a></li>
+                        <li class="mb-1"><a href="pages/part-a/02-graham-scan.html"><i class="fas fa-play-circle"></i> Αυξητικός Αλγόριθμος (Graham Scan)</a></li>
+                        <li class="mb-1"><a href="pages/part-a/03-gift-wrap.html"><i class="fas fa-play-circle"></i> Αλγόριθμος Περιτυλίγματος</a></li>
+                        <li class="mb-1"><a href="pages/part-a/04-divide-conquer.html"><i class="fas fa-play-circle"></i> Διαίρει & Βασίλευε</a></li>
+                        <li class="mb-1"><a href="pages/part-a/05-quickhull.html"><i class="fas fa-play-circle"></i> QuickHull</a></li>
+                        <li class="mb-1"><a href="pages/part-a/06-coloring.html"><i class="fas fa-play-circle"></i> Beneath-Beyond (Χρωματισμός)</a></li>
+                        <li class="mb-1"><a href="pages/part-a/07-complexity.html"><i class="fas fa-chart-bar"></i> Σύγκριση Πολυπλοκοτήτων</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part B -->
+                <div id="part-b" class="content-box">
+                    <h3><i class="fas fa-cube"></i> ΜΕΡΟΣ Β: 3D & Γραμμικός Προγρ.</h3>
+                    <p>Επέκταση στις 3 διαστάσεις και αλγόριθμοι βελτιστοποίησης.</p>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li class="mb-1"><a href="pages/part-b/01-3d-basics.html"><i class="fas fa-play-circle"></i> Γεωμετρία 3D & Επίπεδα</a></li>
+                        <li class="mb-1"><a href="pages/part-b/02-3d-incremental.html"><i class="fas fa-play-circle"></i> Αυξητικός ΚΠ 3D</a></li>
+                        <li class="mb-1"><a href="pages/part-b/03-first-face.html"><i class="fas fa-play-circle"></i> Εύρεση Πρώτης Έδρας</a></li>
+                        <li class="mb-1"><a href="pages/part-b/05-linear-prog.html"><i class="fas fa-play-circle"></i> Γραμμικός Προγραμματισμός (Seidel)</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part C -->
+                <div id="part-c" class="content-box">
+                    <h3><i class="fas fa-project-diagram"></i> ΜΕΡΟΣ Γ: Advanced Topics</h3>
+                    <p>Διαγράμματα Voronoi, Τριγωνοποίηση Delaunay και Γεωμετρική Αναζήτηση.</p>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li class="mb-1"><a href="pages/part-c/01-voronoi.html"><i class="fas fa-play-circle"></i> Διάγραμμα Voronoi</a></li>
+                        <li class="mb-1"><a href="pages/part-c/02-delaunay.html"><i class="fas fa-play-circle"></i> Τριγωνοποίηση Delaunay</a></li>
+                        <li class="mb-1"><a href="pages/part-c/03-duality.html"><i class="fas fa-play-circle"></i> Δυϊσμός Voronoi-Delaunay</a></li>
+                        <li class="mb-1"><a href="pages/part-c/04-incircle.html"><i class="fas fa-play-circle"></i> Κατηγόρημα InCircle</a></li>
+                        <li class="mb-1"><a href="pages/part-c/05-legal-edge.html"><i class="fas fa-play-circle"></i> Έγκυρες Ακμές & Edge Flip</a></li>
+                        <li class="mb-1"><a href="pages/part-c/06-lifting.html"><i class="fas fa-play-circle"></i> Μέθοδος Ανύψωσης</a></li>
+                        <li class="mb-1"><a href="pages/part-c/08-kd-tree.html"><i class="fas fa-play-circle"></i> kd-Δέντρα</a></li>
+                        <li class="mb-1"><a href="pages/part-c/09-range-tree.html"><i class="fas fa-play-circle"></i> Εκτασιακά Δέντρα</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία - Πανεπιστημιακές Σημειώσεις</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/utils.js"></script>
+</body>
+</html>

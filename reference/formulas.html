@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Τυπολόγιο | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../index.html">Αρχική</a>
+                <a href="../index.html">Αναφορές</a>
+                <span>Τυπολόγιο</span>
+            </div>
+
+            <h1>Τυπολόγιο Μαθήματος</h1>
+
+            <section class="content-box">
+                <h2>1. Βασικά Στοιχεία 2D</h2>
+
+                <h3>Απόσταση Ευκλείδεια</h3>
+                <div class="math-block">
+                    $$ d(p, q) = \sqrt{(q_x - p_x)^2 + (q_y - p_y)^2} $$
+                </div>
+
+                <h3>Προσημασμένο Εμβαδόν & CCW (Ορίζουσα 2x2)</h3>
+                <p>Δίνονται τρία σημεία $p, q, r$.</p>
+                <div class="math-block">
+                    $$ \det(p, q, r) = \det \begin{bmatrix} 1 & p_x & p_y \\ 1 & q_x & q_y \\ 1 & r_x & r_y
+                    \end{bmatrix} = (q_x - p_x)(r_y - p_y) - (q_y - p_y)(r_x - p_x) $$
+                </div>
+                <ul>
+                    <li>$ > 0 \Rightarrow$ Αριστερόστροφα (Left/CCW)</li>
+                    <li>$ < 0 \Rightarrow$ Δεξιόστροφα (Right/CW)</li>
+                    <li>$ = 0 \Rightarrow$ Συνευθειακά</li>
+                </ul>
+
+                <h3>Εμβαδόν Πολυγώνου (Shoelace Formula)</h3>
+                <div class="math-block">
+                    $$ Area = \frac{1}{2} \left| \sum_{i=1}^{n} (x_i y_{i+1} - x_{i+1} y_i) \right| $$
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Κυρτό Περίβλημα & 3D</h2>
+
+                <h3>Έλεγχος Κυρτότητας (Γωνίες)</h3>
+                <p>Σε ένα κυρτό πολύγωνο (CCW), κάθε διαδοχική τριάδα κορυφών πρέπει να σχηματίζει <strong>Αριστερή
+                        Στροφή</strong>.</p>
+
+                <h3>Όγκος Τετραέδρου (Ορίζουσα 3x3/4x4)</h3>
+                <div class="math-block">
+                    $$ Vol = \frac{1}{6} \left| \det \begin{bmatrix} p_x & p_y & p_z & 1 \\ q_x & q_y & q_z & 1 \\ r_x &
+                    r_y & r_z & 1 \\ s_x & s_y & s_z & 1 \end{bmatrix} \right| $$
+                </div>
+                <p>Χρησιμοποιείται για τον έλεγχο προσανατολισμού στο 3D (πάνω/κάτω από επίπεδο).</p>
+            </section>
+
+            <section class="content-box">
+                <h2>3. Voronoi & Delaunay</h2>
+
+                <h3>Κατηγόρημα InCircle (Κενός Κύκλος)</h3>
+                <p>Ελέγχουμε αν το $q$ είναι εντός του κύκλου των $p_1, p_2, p_3$.</p>
+                <div class="math-block" style="overflow-x: auto;">
+                    $$ H(p_1, p_2, p_3, q) = \det \begin{bmatrix} p_{1x} & p_{1y} & p_{1x}^2 + p_{1y}^2 & 1 \\ p_{2x} &
+                    p_{2y} & p_{2x}^2 + p_{2y}^2 & 1 \\ p_{3x} & p_{3y} & p_{3x}^2 + p_{3y}^2 & 1 \\ q_x & q_y & q_x^2 +
+                    q_y^2 & 1 \end{bmatrix} $$
+                </div>
+
+                <h3>Ανύψωση σε Παραβολοειδές (Lifting Map)</h3>
+                <p>Απεικόνιση 2D σημείου στο 3D:</p>
+                <div class="math-block">
+                    $$ \hat{p} = (x, y, x^2 + y^2) $$
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="../index.html" class="btn">Πίσω στην Αρχική</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/utils.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Βασικές Έννοιες | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-a">Μέρος Α: Κυρτό Περίβλημα</a>
+                <span>Βασικές Έννοιες</span>
+            </div>
+
+            <h1>Βασικές Έννοιες & Κατηγορήματα</h1>
+
+            <section class="content-box">
+                <h2>1. Εισαγωγή στο Κυρτό Περίβλημα</h2>
+                <p>
+                    Η Υπολογιστική Γεωμετρία μελετά αλγορίθμους για την επίλυση γεωμετρικών προβλημάτων. Ένα από τα πιο
+                    θεμελιώδη προβλήματα είναι η εύρεση του <strong>Κυρτού Περιβλήματος</strong> (Convex Hull).
+                </p>
+                <p>
+                    Φανταστείτε ένα σύνολο από καρφιά καρφωμένα σε έναν ξύλινο πίνακα. Αν πάρετε ένα λαστιχάκι, το
+                    τεντώσετε γύρω από όλα τα καρφιά και το αφήσετε ελεύθερο, αυτό θα πάρει ένα σχήμα που περιβάλλει όλα
+                    τα καρφιά. Το πολύγωνο που σχηματίζει το λαστιχάκι είναι το **Κυρτό Περίβλημα**.
+                </p>
+
+                <div class="definition-box">
+                    <span class="definition-title">Ορισμός (Κυρτό Σύνολο):</span>
+                    Ένα υποσύνολο $S$ του επιπέδου λέγεται <strong>κυρτό</strong> αν και μόνο αν για κάθε ζεύγος σημείων
+                    $p, q$ του $S$, το ευθύγραμμο τμήμα $\overline{pq}$ περιέχεται πλήρως στο $S$.
+                </div>
+
+                <div class="definition-box">
+                    <span class="definition-title">Ορισμός (Κυρτό Περίβλημα):</span>
+                    Το Κυρτό Περίβλημα $K\Pi(S)$ ενός συνόλου $S$ είναι το <strong>μικρότερο</strong> (ως προς το
+                    εμβαδόν/περίμετρο) κυρτό σύνολο που περιέχει το $S$. Είναι το μοναδικό κυρτό πολύγωνο του οποίου οι
+                    κορυφές προέρχονται από το $S$.
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Κατηγορήματα Προσανατολισμού (Orientation Predicates)</h2>
+                <p>
+                    Στους γεωμετρικούς αλγορίθμους, σπάνια χρησιμοποιούμε άμεσες συντεταγμένες ή γωνίες, καθώς αυτές
+                    οδηγούν σε σφάλματα κινητής υποδιαστολής (floating point errors). Αντίθετα, χρησιμοποιούμε
+                    <strong>κατηγορήματα</strong> (predicates), δηλαδή συναρτήσεις που απαντούν σε ερωτήσεις ΝΑΙ/ΟΧΙ ή
+                    παίρνουν διακριτές τιμές.
+                </p>
+
+                <h3>Η Αριστερή Στροφή (CCW)</h3>
+                <p>
+                    Το πιο σημαντικό εργαλείο μας είναι ο έλεγχος προσανατολισμού τριών σημείων $p, q, r$.
+                </p>
+                <ul>
+                    <li>Αν στρίψουμε από το $p$ στο $q$ και μετά στο $r$, κάνουμε <strong>Αριστερή Στροφή</strong>
+                        (Counter-Clockwise / CCW);</li>
+                    <li>Ή κάνουμε <strong>Δεξιά Στροφή</strong> (Clockwise / CW);</li>
+                    <li>Ή τα σημεία είναι <strong>Συνευθειακά</strong>;</li>
+                </ul>
+
+                <p>Αυτό υπολογίζεται μέσω της <strong>Ορίζουσας 2x2</strong>:</p>
+
+                <div class="math-block"
+                    style="background:#f8f9fa; padding:1rem; border-left:4px solid #bdc3c7; margin:1rem 0;">
+                    $$ \det(p, q, r) = (q_x - p_x)(r_y - p_y) - (q_y - p_y)(r_x - p_x) $$
+                </div>
+
+                <ul>
+                    <li>Αν $\det > 0$: <strong>Αριστερή Στροφή (CCW)</strong></li>
+                    <li>Αν $\det < 0$: <strong>Δεξιά Στροφή (CW)</strong></li>
+                    <li>Αν $\det = 0$: <strong>Συνευθειακά Σημεία</strong></li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>Σημαντικό:</strong> Η γεωμετρική ερμηνεία της ορίζουσας είναι το <strong>προσημασμένο
+                        διπλάσιο εμβαδόν</strong> του τριγώνου $pqr$.
+                </div>
+            </section>
+
+            <!-- Interactive Simulator -->
+            <section class="simulator-container" id="ccw-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-mouse-pointer"></i> CCW Calculator (Προσομοιωτής
+                        Ορίζουσας)</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <div class="control-group">
+                        <button class="sim-btn" id="btn-reset"><i class="fas fa-undo"></i> Επαναφορά</button>
+                    </div>
+                    <div class="status-bar" id="sim-status" style="flex-grow: 1; text-align: center;">
+                        Σύρε τα σημεία P, Q, R για να δεις τον προσανατολισμό.
+                    </div>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="../../index.html" class="btn btn-secondary">Πίσω στα Περιεχόμενα</a>
+                <a href="02-graham-scan.html" class="btn">Επόμενο: Graham Scan <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/tooltip.js"></script>
+
+    <!-- Simulator Script Inline for MVP, or separate file -->
+    <script>
+        // CCW Simulator Logic
+        const canvas = document.getElementById('sim-canvas');
+        const ctx = canvas.getContext('2d');
+        const statusEl = document.getElementById('sim-status');
+
+        let p = new Point(100, 300);
+        let q = new Point(300, 300);
+        let r = new Point(200, 100);
+
+        let dragging = null;
+
+        function resize() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            render();
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw axes (optional grid)
+            ctx.strokeStyle = '#eee';
+            ctx.beginPath();
+            for (let i = 0; i < canvas.width; i += 50) { ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); }
+            for (let i = 0; i < canvas.height; i += 50) { ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); }
+            ctx.stroke();
+
+            // Draw lines P->Q->R
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#7f8c8d';
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(q.x, q.y);
+            ctx.lineTo(r.x, r.y);
+            // Color Q->R based on turn
+            const det = ccw(p, q, r);
+            if (det > 0) ctx.strokeStyle = '#27ae60'; // CCW - Green
+            else if (det < 0) ctx.strokeStyle = '#e74c3c'; // CW - Red
+            else ctx.strokeStyle = '#f39c12'; // Collinear - Orange
+            ctx.stroke();
+
+            // Draw points
+            drawPoint(p, 'P', '#2c3e50');
+            drawPoint(q, 'Q', '#2c3e50');
+            drawPoint(r, 'R', '#2c3e50');
+
+            updateStatus(det);
+        }
+
+        function drawPoint(pt, label, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText(label, pt.x + 10, pt.y - 10);
+        }
+
+        function updateStatus(det) {
+            let msg = `Determinant: ${det.toFixed(0)} `;
+            if (det > 0) msg += "→ <strong>Αριστερή Στροφή (CCW)</strong>";
+            else if (det < 0) msg += "→ <strong>Δεξιά Στροφή (CW)</strong>";
+            else msg += "→ <strong>Συνευθειακά</strong>";
+            statusEl.innerHTML = msg;
+        }
+
+        // Interaction
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return new Point(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const m = getMousePos(e);
+            if (m.dist(p) < 15) dragging = p;
+            else if (m.dist(q) < 15) dragging = q;
+            else if (m.dist(r) < 15) dragging = r;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (dragging) {
+                const m = getMousePos(e);
+                dragging.x = m.x;
+                dragging.y = m.y;
+                render();
+            }
+        });
+
+        window.addEventListener('mouseup', () => dragging = null);
+        window.addEventListener('resize', resize);
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            p = new Point(100, 300);
+            q = new Point(300, 300);
+            r = new Point(200, 100);
+            render();
+        });
+
+        resize();
+
+    </script>
+</body>
+
+</html>

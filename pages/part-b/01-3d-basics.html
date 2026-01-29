@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Κυρτό Περίβλημα & Πολύεδρα | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-b">Μέρος Β: 3D Γεωμετρία</a>
+                <span>Βασικές Έννοιες</span>
+            </div>
+
+            <h1>Βασικές Έννοιες 3D Γεωμετρίας</h1>
+
+            <section class="content-box">
+                <h2>1. Κυρτό Πολύεδρο (Polytope)</h2>
+                <p>
+                    Στις 3 διαστάσεις, το Κυρτό Περίβλημα ενός συνόλου σημείων είναι ένα <strong>Κυρτό
+                        Πολύεδρο</strong>.
+                </p>
+                <div class="definition-box">
+                    <strong>Στοιχεία Πολυέδρου ($d=3$):</strong>
+                    <ul>
+                        <li><strong>Κορυφές (Vertices):</strong> Σημεία του αρχικού συνόλου. ($d-3=0$)</li>
+                        <li><strong>Ακμές (Edges):</strong> Ευθύγραμμα τμήματα που συνδέουν κορυφές. ($d-2=1$)</li>
+                        <li><strong>Έδρες (Facets):</strong> Επίπεδα πολύγωνα που ορίζουν το σύνορο. ($d-1=2$)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Τύπος Euler</h2>
+                <p>
+                    Για κάθε κυρτό πολύεδρο ισχύει: $$V - E + F = 2$$
+                    όπου $V, E, F$ το πλήθος κορυφών, ακμών και εδρών.
+                </p>
+                <p>
+                    Συνέπεια: Το πλήθος των εδρών είναι γραμμικό ως προς τις κορυφές ($\mathcal{O}(n)$). Αυτό σημαίνει
+                    ότι μπορούμε να υπολογίσουμε το 3D Hull γρήγορα!
+                </p>
+            </section>
+
+            <!-- Simulator -->
+            <section class="simulator-container" id="basics-3d-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-cube"></i> Προβολή 3D Πολυέδρου</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-sync"></i> Επαναφορά</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
+                        Σύρε με το ποντίκι για περιστροφή.
+                    </div>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="../../index.html#part-b" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Πίσω</a>
+                <a href="02-3d-incremental.html" class="btn">Επόμενο: Αυξητικός Αλγόριθμος 3D <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/viewer3d.js"></script>
+    <script>
+        const sim = new Viewer3D('sim-canvas');
+        sim.setCube(); // Demo shape
+        sim.render();
+    </script>
+</body>
+
+</html>

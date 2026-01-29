@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Αλγόριθμος Περιτυλίγματος (Gift Wrapping) | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-a">Μέρος Α: Κυρτά Περιβλήματα</a>
+                <span>Gift Wrapping</span>
+            </div>
+
+            <h1>Αλγόριθμος Περιτυλίγματος (Jarvis March)</h1>
+
+            <section class="content-box">
+                <h2>1. Η Θεωρία</h2>
+                <p>
+                    Ο αλγόριθμος **Gift Wrapping** (ή Jarvis March) ανακαλύπτει τα σημεία του περιβλήματος ένα προς ένα,
+                    όπως τυλίγουμε ένα δώρο με χαρτί.
+                    Ξεκινάμε από το χαμηλότερο αριστερό σημείο (που ανήκει σίγουρα στο ΚΠ) και σε κάθε βήμα βρίσκουμε το
+                    επόμενο σημείο που έχει τη μικρότερη πολική γωνία (ή τη μεγαλύτερη δεξιά στροφή) σε σχέση με το
+                    τρέχον.
+                </p>
+                <div class="algorithm-steps">
+                    <h3>Βήματα Αλγορίθμου</h3>
+                    <ol>
+                        <li>Βρίσκουμε το αρχικό σημείο $p_0$ με τη μικρότερη τετμημένη (και ελάχιστο $y$).</li>
+                        <li>Το $p_0$ είναι το τελευταίο σημείο στο περίβλημα.</li>
+                        <li>Για κάθε σημείο $q$ στο σύνολο, ελέγχουμε αν είναι "πιο δεξιά" από όλα τα άλλα ως προς το
+                            τελευταίο σημείο.</li>
+                        <li>Το "πιο δεξιό" σημείο προστίθεται στο περίβλημα και γίνεται το νέο τελευταίο.</li>
+                        <li>Επαναλαμβάνουμε μέχρι να επιστρέψουμε στο $p_0$.</li>
+                    </ol>
+                </div>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-lightbulb"></i> Βασική Ιδέα</h3>
+                    <p>
+                        <strong>Χρησιμοποιούμε την τρέχουσα κορυφή για να βρούμε την επόμενη</strong>, επιλέγοντας το
+                        σημείο
+                        που "φαίνεται" πιο δεξιά από όλα. Το σημείο $r$ είναι το επόμενο στο περίβλημα αν όλα τα άλλα
+                        σημεία
+                        βρίσκονται στο ημιεπίπεδο που ορίζεται από την κατευθυντή ευθεία από την τρέχουσα κορυφή προς το
+                        $r$.
+                    </p>
+                    <div class="algorithm-note">
+                        <strong>💡 Παρατηρήσεις:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+                            <li><strong>Πολυπλοκότητα:</strong> $\mathcal{O}(nh)$, όπου $h$ το πλήθος κορυφών του ΚΠ
+                            </li>
+                            <li><strong>Χειρότερη περίπτωση:</strong> $\mathcal{O}(n^2)$ όταν όλα τα σημεία είναι στο ΚΠ
+                            </li>
+                            <li><strong>Πλεονέκτημα:</strong> Αποδοτικός όταν $h \ll n$ (λίγες κορυφές στο περίβλημα)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Simulator -->
+            <section class="simulator-container" id="gift-wrapper-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-box-open"></i> Προσομοιωτής Gift Wrapping</h3>
+                    <div class="simulator-controls-top">
+                        <button class="sim-btn" onclick="sim.generatePoints()"><i class="fas fa-random"></i> Νέα
+                            Σημεία</button>
+                    </div>
+                </div>
+
+                <div class="explanation-bar">
+                    <p id="step-desc" class="step-description">Πατήστε Play για εκκίνηση.</p>
+                </div>
+
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+
+                <div class="controls-toolbar">
+                    <div class="playback-controls">
+                        <button class="sim-btn icon-only" id="btn-prev" title="Προηγούμενο"><i
+                                class="fas fa-step-backward"></i></button>
+                        <button class="sim-btn primary" id="btn-play" title="Αναπαραγωγή/Παύση"><i
+                                class="fas fa-play"></i> Play</button>
+                        <button class="sim-btn icon-only" id="btn-next" title="Επόμενο"><i
+                                class="fas fa-step-forward"></i></button>
+                    </div>
+
+                    <div class="slider-container">
+                        <span class="label">Πρόοδος:</span>
+                        <input type="range" id="sim-slider" min="0" max="100" value="0" class="sim-slider">
+                        <span id="sim-status" class="status-text">-</span>
+                    </div>
+
+                    <div class="speed-container">
+                        <span class="label">Ταχύτητα:</span>
+                        <input type="range" id="sim-speed" min="1" max="10" value="5" class="speed-slider">
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Ανάλυση Πολυπλοκότητας</h2>
+                <p>
+                    Σε κάθε βήμα προσθέτουμε 1 κορυφή στο ΚΠ. Για να βρούμε την επόμενη, ελέγχουμε όλα τα $n$ σημεία.
+                    Αν $h$ είναι το πλήθος των κορυφών του περιβλήματος, η πολυπλοκότητα είναι $\mathcal{O}(n \cdot h)$.
+                    Στη χειρότερη περίπτωση ($h=n$), είναι $\mathcal{O}(n^2)$.
+                </p>
+            </section>
+
+            <div class="page-nav">
+                <a href="02-graham-scan.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Graham
+                    Scan</a>
+                <a href="04-divide-conquer.html" class="btn">Επόμενο: Divide & Conquer <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/base.js"></script>
+    <script src="../../assets/js/simulators/gift-wrapping.js"></script>
+    <script>
+        const sim = new GiftWrappingSimulator('sim-canvas');
+        sim.generatePoints();
+    </script>
+</body>
+
+</html>

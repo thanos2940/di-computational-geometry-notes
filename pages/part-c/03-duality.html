@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Δυϊσμός Delaunay-Voronoi | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-c">Μέρος Γ: Voronoi & Delaunay</a>
+                <span>Δυϊσμός</span>
+            </div>
+
+            <h1>Δυϊσμός Delaunay & Voronoi</h1>
+
+            <section class="content-box">
+                <h2>1. Η Σχέση του Δυϊσμού</h2>
+                <p>
+                    Η Τριγωνοποίηση Delaunay και το Διάγραμμα Voronoi είναι <strong>δυϊκοί γράφοι</strong> (dual
+                    graphs). Αυτό σημαίνει ότι υπάρχει μια αμφιμονοσήμαντη αντιστοιχία μεταξύ των στοιχείων τους.
+                </p>
+                <div class="definition-box">
+                    <strong>Αντιστοιχίες:</strong>
+                    <ul>
+                        <li><strong>Κορυφή Delaunay</strong> $\iff$ <strong>Κελί Voronoi</strong> (περιοχή).</li>
+                        <li><strong>Τρίγωνο Delaunay</strong> $\iff$ <strong>Κορυφή Voronoi</strong> (κέντρο περ.
+                            κύκλου).</li>
+                        <li><strong>Ακμή Delaunay</strong> $\iff$ <strong>Ακμή Voronoi</strong>.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Γεωμετρική Ιδιότητα</h2>
+                <p>
+                    Η ακμή Voronoi είναι μέρος της <strong>μεσοκαθέτου</strong> της αντίστοιχης ακμής Delaunay. Άρα,
+                    κάθε ακμή του ενός γράφου είναι κάθετη στην αντίστοιχη ακμή του άλλου.
+                </p>
+                <div class="theorem-box">
+                    <strong>Θεώρημα:</strong> Οι γραμμές του διαγράμματος Voronoi "περνούν" μέσα από τις πλευρές των
+                    τριγώνων Delaunay.
+                </div>
+            </section>
+
+            <!-- Simulator -->
+            <section class="simulator-container" id="duality-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-exchange-alt"></i> Προσομοιωτής Δυϊσμού</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-trash"></i> Καθαρισμός</button>
+                    <div class="toggle-group">
+                        <label><input type="checkbox" id="show-voronoi" checked onchange="sim.render()"> Show Voronoi
+                            (Red)</label>
+                        <label><input type="checkbox" id="show-delaunay" checked onchange="sim.render()"> Show Delaunay
+                            (Blue)</label>
+                    </div>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="02-delaunay.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Delaunay</a>
+                <a href="04-incircle.html" class="btn">Επόμενο: InCircle Predicate <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/delaunay.js"></script>
+    <!-- Reuse logical base? Or dup? Reuse is clever but JS module scoping? Simply copy-paste with extend is safer for vanilla "student". -->
+    <script src="../../assets/js/simulators/duality.js"></script>
+    <script>
+        const sim = new DualitySimulator('sim-canvas');
+        sim.reset();
+    </script>
+</body>
+
+</html>

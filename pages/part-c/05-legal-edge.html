@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Έγκυρη Ακμή & Edge Flip | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-c">Μέρος Γ: Voronoi & Delaunay</a>
+                <span>Legal Edge</span>
+            </div>
+
+            <h1>Έγκυρη Ακμή & Edge Flip</h1>
+
+            <section class="content-box">
+                <h2>1. Ορισμός Έγκυρης Ακμής (Legal Edge)</h2>
+                <p>
+                    Σε μια τριγωνοποίηση, θέλουμε να αποφύγουμε τα πολύ στενόμακρα τρίγωνα (μικρές γωνίες). Η
+                    Τριγωνοποίηση Delaunay είναι αυτή που <strong>μεγιστοποιεί την ελάχιστη γωνία</strong>.
+                </p>
+                <div class="definition-box">
+                    <strong>Έλεγχος Εγκυρότητας:</strong> Έστω δύο γειτονικά τρίγωνα $abd$ και $bcd$ που μοιράζονται την
+                    ακμή $bd$. Η ακμή $bd$ είναι <strong>έγκυρη (legal)</strong> αν το $c$ βρίσκεται <em>έξω</em> από
+                    τον περιγεγραμμένο κύκλο του τριγώνου $abd$.
+                    Αν είναι μέσα (παραβιάζεται η συνθήκη Delaunay), τότε η ακμή είναι <strong>μη-έγκυρη
+                        (illegal)</strong> και πρέπει να γίνει <strong>Edge Flip</strong>.
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Edge Flip</h2>
+                <p>
+                    Το <strong>Edge Flip</strong> είναι η διαδικασία αντικατάστασης της διαγωνίου $bd$ ενός κυρτού
+                    τετραπλεύρου $abcd$ με την άλλη διαγώνιο $ac$.
+                </p>
+                <ul>
+                    <li>Αν η $bd$ είναι illegal, τότε η $ac$ είναι legal.</li>
+                    <li>Το Edge Flip αυξάνει το διάνυσμα των γωνιών λεξικογραφικά (βελτιώνει την τριγωνοποίηση).</li>
+                </ul>
+                <div class="math-block">
+                    $$ \text{Illegal}(bd) \iff InCircle(a, b, d, c) > 0 $$
+                </div>
+            </section>
+
+            <!-- Simulator -->
+            <section class="simulator-container" id="flip-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-sync"></i> Έλεγχος Ακμής & Flip</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-undo"></i> Reset</button>
+                    <button class="sim-btn primary" onclick="sim.flip()" id="btn-flip"><i
+                            class="fas fa-exchange-alt"></i> Flip Edge</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
+                        -
+                    </div>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="04-incircle.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> InCircle</a>
+                <a href="06-lifting.html" class="btn">Επόμενο: Lifting Map <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/legal-edge.js"></script>
+    <script>
+        const sim = new LegalEdgeSimulator('sim-canvas');
+        sim.reset();
+    </script>
+</body>
+
+</html>

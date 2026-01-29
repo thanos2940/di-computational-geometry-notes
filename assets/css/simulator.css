@@ -1,0 +1,185 @@
+/* Simulator CSS */
+
+.simulator-container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 2rem 0;
+    box-shadow: var(--shadow);
+}
+
+.simulator-header {
+    padding: 0.75rem 1rem;
+    background-color: var(--background-secondary);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.simulator-title {
+    font-weight: 600;
+    margin: 0;
+}
+
+.canvas-wrapper {
+    position: relative;
+    background-color: #fff;
+    /* Canvas always white background unless verified otherwise, but maybe dark mode needs adjustment? */
+    width: 100%;
+    height: 400px;
+    cursor: crosshair;
+    overflow: hidden;
+}
+
+/* In dark mode, canvas might need to be dark or keep it light?
+   Usually geometry diagrams are easier on white.
+   But let's respect theme if possible, or force white if colors are hardcoded.
+   The plan says "Canvas Area", let's assume transparent logic or handled by JS.
+   For now, we'll let JS set the clear color.
+*/
+[data-theme="dark"] .canvas-wrapper {
+    background-color: #222;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.controls-toolbar {
+    padding: 0.75rem 1rem;
+    background-color: var(--background-secondary);
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.playback-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.slider-container,
+.speed-container {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-grow: 1;
+}
+
+.speed-container {
+    flex-grow: 0;
+    min-width: 150px;
+}
+
+.status-text {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.explanation-bar {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--background-secondary);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Legacy .controls support for older sims */
+.controls {
+    padding: 1rem;
+    background-color: var(--background-secondary);
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-bar {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-blue);
+    color: white;
+    font-size: 0.9rem;
+}
+
+.sim-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background-color: var(--card-bg);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.sim-btn:hover {
+    background-color: var(--border);
+}
+
+.sim-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.sim-btn.primary {
+    background-color: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
+.sim-btn.primary:hover {
+    background-color: #2980b9;
+}
+
+input[type="range"] {
+    width: 100px;
+}
+
+/* Tooltip */
+.geo-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 1000;
+    max-width: 200px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .simulator-container.dual-view {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .simulator-container.dual-view .canvas-wrapper {
+        border-right: 1px solid var(--border);
+    }
+
+    .simulator-container.dual-view .controls {
+        grid-column: 1 / -1;
+    }
+}

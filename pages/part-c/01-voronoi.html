@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Διάγραμμα Voronoi | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-c">Μέρος Γ: Voronoi & Delaunay</a>
+                <span>Διάγραμμα Voronoi</span>
+            </div>
+
+            <h1>Διάγραμμα Voronoi</h1>
+
+            <section class="content-box">
+                <h2>1. Ορισμός</h2>
+                <p>
+                    Δεδομένου ενός συνόλου εστιών $P = \{p_1, \dots, p_n\}$ στο επίπεδο, το <strong>Διάγραμμα
+                        Voronoi</strong> διαιρεί το επίπεδο σε $n$ περιοχές (κελιά).
+                </p>
+                <div class="definition-box">
+                    <strong>Κελί Voronoi $V(p_i)$:</strong> Είναι το σύνολο των σημείων $q$ του επιπέδου που είναι πιο
+                    κοντά στο $p_i$ από οποιοδήποτε άλλο $p_j$.
+                    $$ V(p_i) = \{ q \in \mathbb{R}^2 \mid d(q, p_i) < d(q, p_j), \forall j \neq i \} $$ </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Ιδιότητες</h2>
+                <ul>
+                    <li>Κάθε περιοχή $V(p_i)$ είναι ένα <strong>κυρτό πολύγωνο</strong> (τομή ημιεπιπέδων).</li>
+                    <li>Οι ακμές του διαγράμματος είναι τμήματα των μεσοκαθέτων των ευθύγραμμων τμημάτων $p_i p_j$.</li>
+                    <li>Οι κορυφές του διαγράμματος είναι τα κέντρα των περιγεγραμμένων κύκλων 3 (ή περισσότερων)
+                        εστιών.</li>
+                </ul>
+            </section>
+
+            <!-- Simulator -->
+            <section class="simulator-container" id="voronoi-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-th-large"></i> Προσομοιωτής Voronoi</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button class="sim-btn" onclick="sim.generatePoints()"><i class="fas fa-random"></i> Νέα
+                        Σημεία</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
+                        Υπολογισμός με βάση την απόσταση pixel προς pixel.
+                    </div>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="07-complexity.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Μέρος Α:
+                    Σύγκριση</a>
+                <a href="02-delaunay.html" class="btn">Επόμενο: Τριγωνοποίηση Delaunay <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/voronoi.js"></script>
+    <script>
+        const sim = new VoronoiSimulator('sim-canvas');
+        sim.generatePoints();
+    </script>
+</body>
+
+</html>

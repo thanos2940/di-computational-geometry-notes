@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Αυξητικός Αλγόριθμος 3D | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-b">Μέρος Β: 3D Γεωμετρία</a>
+                <span>Αυξητικός 3D</span>
+            </div>
+
+            <h1>Αυξητικός Αλγόριθμος 3D (Beneath-Beyond)</h1>
+
+            <section class="content-box">
+                <h2>1. Η Διαδικασία (Βήμα-Βήμα)</h2>
+                <p>
+                    Ξεκινάμε με ένα αρχικό τετράεδρο. Για κάθε νέο σημείο $P_{k}$:
+                </p>
+                <ol>
+                    <li>Εντοπίζουμε τις <strong>Ορατές ('Κόκκινες') Έδρες</strong> από το $P_{k}$. Αυτές είναι οι έδρες
+                        που "βλέπει" το σημείο.</li>
+                    <li>Οι κοινές ακμές μεταξύ ορατών και μη-ορατών εδρών σχηματίζουν τον <strong>Ορίζοντα</strong>.
+                    </li>
+                    <li>Διαγράφουμε τις ορατές έδρες.</li>
+                    <li>Δημιουργούμε νέες έδρες συνδέοντας το $P_{k}$ με τις ακμές του Ορίζοντα.</li>
+                </ol>
+                <div class="math-block">
+                    $$ \det(p_1, p_2, p_3, P_k) > 0 \implies \text{Ορατή Έδρα} $$
+                </div>
+            </section>
+
+            <!-- Simulator -->
+            <section class="content-box">
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητικός Αλγόριθμος για το ΚΠ3</h3>
+                    <pre><code>Αυξητικός Αλγόριθμος ΚΠ3(P)
+Είσοδος: n σημεία στον R³ σε γενική θέση.
+Έξοδος: Το κυρτό περίβλημα (πολύεδρο).
+
+1. Διάταξε τα σημεία λεξικογραφικά κατά φθίνουσα συντεταγμένη x (p₁, ..., pₙ).
+
+2. Αρχικοποίηση: Τρέχον πολύεδρο ← τετράεδρο 4 δεξιότερων σημείων.
+
+3. Για k = 5 έως n (για κάθε επόμενο σημείο pₖ):
+    
+    α. Εντοπισμός: Εξέτασε τις έδρες που προσπίπτουν στην pₖ₋₁ μέχρι να βρεις κόκκινη έδρα.
+    
+    β. Χρωματισμός: Ξεκινώντας από μια κόκκινη έδρα, βρες όλες τις κόκκινες έδρες (ορατές) 
+       και όλες τις βυσσινί ακμές (ορίζοντας).
+       
+    γ. Διαγραφή: Διέγραψε από το τρέχον πολύεδρο τις κόκκινες έδρες, ακμές, κορυφές.
+    
+    δ. Κατασκευή: Εισήγαγε νέες έδρες (ακμές) που ορίζονται από το pₖ και 
+       τις βυσσινί ακμές (κορυφές).
+
+4. Επίστρεψε το τρέχον πολύεδρο.</code></pre>
+                    <div class="algorithm-note">
+                        <strong>💡 Σημειώσεις:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+                            <li><strong>Ορατή Έδρα (Κόκκινη):</strong> Το σημείο pₖ βρίσκεται στον θετικό ημιχώρο της
+                                έδρας (την "βλέπει").</li>
+                            <li><strong>Βυσσινί Ακμή (Ορίζοντας):</strong> Ακμή που διαχωρίζει μια κόκκινη από μια μπλε
+                                έδρα.</li>
+                            <li><strong>Πολυπλοκότητα:</strong> O(n²) στη χειρότερη περίπτωση.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Μεθοδολογία Επίλυσης "Στο Χαρτί"</h2>
+                <p>
+                    Στις εξετάσεις, δεν θα κληθείτε να εκτελέσετε τον αλγόριθμο για πολλά σημεία (λόγω πολυπλοκότητας).
+                    Συνήθως δίνεται ένα αρχικό <strong>Τετράεδρο</strong> και ένα <strong>Νέο Σημείο $P$</strong>.
+                </p>
+
+                <div class="methodology-box"
+                    style="background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 15px; margin: 20px 0;">
+                    <h3 style="margin-top: 0;">Βήμα 1: Εύρεση Ορατών Εδρών</h3>
+                    <p>
+                        Για κάθε έδρα $f = (A, B, C)$ του τετραέδρου:
+                    </p>
+                    <ol>
+                        <li>Σχηματίστε την ορίζουσα $4 \times 4$ (ή $3 \times 3$ με αναγωγή) των σημείων $A, B, C$ και
+                            $P$.</li>
+                        <li><strong>Πρόσημο:</strong>
+                            <ul>
+                                <li>Αν $\det(A, B, C, P) > 0$: Η έδρα είναι <strong>ΚΟΚΚΙΝΗ</strong> (Ορατή).</li>
+                                <li>Αν $\det(A, B, C, P) < 0$: Η έδρα είναι <strong>ΜΠΛΕ</strong> (Αόρατη).</li>
+                            </ul>
+                        </li>
+                        <li><em>SOS: Προσοχή στη σειρά των σημείων! Πρέπει τα $A, B, C$ να είναι σε αριστερόστροφη φορά
+                                (CCW) όπως φαίνονται από το εξωτερικό.</em></li>
+                    </ol>
+
+                    <h3>Βήμα 2: Εύρεση Ορίζοντα</h3>
+                    <p>
+                        Ο "Ορίζοντας" αποτελείται από τις ακμές που διαχωρίζουν μια Κόκκινη από μια Μπλε έδρα.
+                    </p>
+                    <ul>
+                        <li>Κοιτάξτε όλες τις ακμές του τετραέδρου.</li>
+                        <li>Αν μια ακμή ανήκει σε <strong>μία Ορατή</strong> και <strong>μία Αόρατη</strong> έδρα, τότε
+                            είναι ακμή του Ορίζοντα.</li>
+                    </ul>
+
+                    <h3>Βήμα 3: Νέες Έδρες</h3>
+                    <ul>
+                        <li>Διαγράψτε τις Κόκκινες έδρες.</li>
+                        <li>Για κάθε ακμή του Ορίζοντα $(u, v)$, φτιάξτε μια νέα έδρα $(u, v, P)$.</li>
+                    </ul>
+                </div>
+
+                <h3>📝 Λυμένο Παράδειγμα (Μικρό)</h3>
+                <p>
+                    <strong>Δεδομένα:</strong> Τετράεδρο $ABCD$ και σημείο $P$.
+                    <br> Έστω ότι μετά τους ελέγχους οριζουσών βρήκαμε:
+                </p>
+                <ul>
+                    <li>Έδρα $ABC$: <span style="color:red">Ορατή (Κόκκινη)</span></li>
+                    <li>Έδρα $ABD$: <span style="color:blue">Αόρατη (Μπλε)</span></li>
+                    <li>Έδρα $ACD$: <span style="color:blue">Αόρατη (Μπλε)</span></li>
+                    <li>Έδρα $BCD$: <span style="color:red">Ορατή (Κόκκινη)</span></li>
+                </ul>
+
+                <p><strong>Ανάλυση Ακμών:</strong></p>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Ακμή</th>
+                            <th>Γειτονικές Έδρες</th>
+                            <th>Χρώματα</th>
+                            <th>Συμπέρασμα</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>$AB$</td>
+                            <td>$ABC, ABD$</td>
+                            <td><span style="color:red">Κόκκινη</span> - <span style="color:blue">Μπλε</span></td>
+                            <td><strong>ΟΡΙΖΟΝΤΑΣ</strong></td>
+                        </tr>
+                        <tr>
+                            <td>$AC$</td>
+                            <td>$ABC, ACD$</td>
+                            <td><span style="color:red">Κόκκινη</span> - <span style="color:blue">Μπλε</span></td>
+                            <td><strong>ΟΡΙΖΟΝΤΑΣ</strong></td>
+                        </tr>
+                        <tr>
+                            <td>$BC$</td>
+                            <td>$ABC, BCD$</td>
+                            <td><span style="color:red">Κόκκινη</span> - <span style="color:red">Κόκκινη</span></td>
+                            <td>Εσωτερική (Διαγράφεται)</td>
+                        </tr>
+                        <tr>
+                            <td>$BD$</td>
+                            <td>$ABD, BCD$</td>
+                            <td><span style="color:blue">Μπλε</span> - <span style="color:red">Κόκκινη</span></td>
+                            <td><strong>ΟΡΙΖΟΝΤΑΣ</strong></td>
+                        </tr>
+                        <tr>
+                            <td>$CD$</td>
+                            <td>$ACD, BCD$</td>
+                            <td><span style="color:blue">Μπλε</span> - <span style="color:red">Κόκκινη</span></td>
+                            <td><strong>ΟΡΙΖΟΝΤΑΣ</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <strong>Αποτέλεσμα:</strong> Διαγράφουμε $ABC, BCD$. Νέες έδρες: $(A,B,P), (A,C,P), (B,D,P),
+                    (C,D,P)$.
+                </p>
+            </section>
+
+            <section class="simulator-container" id="inc-3d-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-cubes"></i> Αυξητική Κατασκευή</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-undo"></i> Reset</button>
+                    <button class="sim-btn primary" onclick="sim.addPoint()" id="btn-add"><i
+                            class="fas fa-plus-circle"></i> Προσθήκη Σημείου</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
+                        -
+                    </div>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="01-3d-basics.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Βασικές
+                    Έννοιες</a>
+                <a href="03-first-face.html" class="btn">Επόμενο: First Face / Gift Wrapping <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/viewer3d.js"></script>
+    <script src="../../assets/js/simulators/incremental-3d.js"></script>
+    <script>
+        const sim = new Incremental3DSimulator('sim-canvas');
+        sim.reset();
+    </script>
+</body>
+
+</html>

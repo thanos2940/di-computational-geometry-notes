@@ -1,0 +1,273 @@
+/* Main CSS */
+@import 'themes.css';
+
+/* Reset & Base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    background-color: var(--background);
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--primary-purple);
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.main-header {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.main-content {
+    padding: 2rem 0;
+    min-height: calc(100vh - 160px);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb a::after {
+    content: "/";
+    margin: 0 0.5rem;
+    color: var(--border);
+}
+
+.breadcrumb a:last-child::after {
+    content: "";
+}
+
+/* Typography & Content */
+.content-box {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.definition-box {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-left: 4px solid var(--primary-blue);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+}
+
+.definition-title {
+    font-weight: bold;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.theorem-box {
+    background-color: rgba(39, 174, 96, 0.1);
+    border-left: 4px solid var(--primary-green);
+    padding: 1rem;
+    margin: 1.5rem 0;
+}
+
+.warning-box {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-left: 4px solid var(--primary-red);
+    padding: 1rem;
+    margin: 1.5rem 0;
+}
+
+/* Code Blocks */
+pre {
+    background-color: var(--background-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    margin: 1.5rem 0;
+}
+
+/* Algorithm Box */
+.algorithm-box {
+    background-color: rgba(155, 89, 182, 0.05);
+    border-left: 4px solid var(--primary-purple);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.algorithm-box h3 {
+    color: var(--primary-purple);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.algorithm-box pre {
+    background-color: var(--background);
+    margin-top: 1rem;
+}
+
+.algorithm-note {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: rgba(155, 89, 182, 0.08);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.algorithm-steps {
+    margin: 1.5rem 0;
+}
+
+.algorithm-steps h3 {
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+}
+
+.algorithm-steps ol {
+    padding-left: 1.5rem;
+}
+
+.algorithm-steps li {
+    margin-bottom: 0.75rem;
+}
+
+/* Footer */
+.main-footer {
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    margin-top: auto;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--background-secondary);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--border);
+    color: var(--text);
+}
+
+/* Page Navigation */
+.page-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+/* Utility */
+.text-center {
+    text-align: center;
+}
+
+.mb-1 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+.mt-2 {
+    margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .main-nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

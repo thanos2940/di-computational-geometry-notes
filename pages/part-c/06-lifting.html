@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifting Map | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-c">Μέρος Γ</a>
+                <span>Lifting Map</span>
+            </div>
+
+            <h1>Απεικόνιση Ανύψωσης (Lifting Map)</h1>
+
+            <section class="content-box">
+                <h2>1. Η Ιδέα</h2>
+                <p>
+                    Η μέθοδος ανύψωσης συνδέει το D-διάστατο Delaunay triangulation με το (D+1)-διάστατο Κυρτό
+                    Περίβλημα.
+                    Συγκεκριμένα, για το επίπεδο <strong>2D</strong>:
+                </p>
+                <ul>
+                    <li>Κάθε σημείο $p = (x, y)$ ανυψώνεται στο παραβολοειδές $z = x^2 + y^2$.</li>
+                    <li>Τα σημεία που σχηματίζουν το **Κάτω Κυρτό Περίβλημα** στο 3D αντιστοιχούν ακριβώς στην
+                        τριγωνοποίηση Delaunay στο 2D!</li>
+                </ul>
+            </section>
+
+            <!-- Simulator -->
+            <section class="simulator-container" id="lifting-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-arrow-up"></i> 1D -> 2D Parabola Lifting</h3>
+                    <button class="sim-btn" onclick="sim.resetPoints()"><i class="fas fa-random"></i> Νέα
+                        Σημεία</button>
+                </div>
+                <div class="explanation-bar">
+                    <p>Σύρετε τα κόκκινα σημεία στον άξονα Χ. Δείτε πώς το Κάτω Περίβλημα (Πράσινο) αντιστοιχεί στα
+                        διαστήματα Delaunay.</p>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="05-legal-edge.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Legal Edge</a>
+                <a href="08-kd-tree.html" class="btn">Επόμενο: kd-Trees <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/lifting.js"></script>
+    <script>
+        const sim = new LiftingSimulator('sim-canvas');
+        sim.resetPoints();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Range Trees | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-c">Μέρος Γ: Voronoi & Delaunay</a>
+                <span>Range Trees</span>
+            </div>
+
+            <h1>Range Trees (Δέντρα Εύρους)</h1>
+
+            <section class="content-box">
+                <h2>1. Εισαγωγή</h2>
+                <p>
+                    Τα <strong>kd-trees</strong> είναι αποδοτικά για γενική αναζήτηση, αλλά για **ορθογώνια αναζήτηση
+                    εύρους** (orthogonal range search) σε 2 διαστάσεις, η πολυπλοκότητα είναι $\mathcal{O}(\sqrt{n} +
+                    k)$.
+                    Τα <strong>Range Trees</strong> προσφέρουν ταχύτερη αναζήτηση $\mathcal{O}(\log^2 n + k)$ με το
+                    κόστος περισσότερου χώρου μνήμης ($\mathcal{O}(n \log n)$).
+                </p>
+                <div class="definition-box">
+                    <strong>Δομή Range Tree (2D):</strong>
+                    <ul>
+                        <li>Ένα πρωτεύον ισοζυγισμένο δυαδικό δέντρο στο $x$ (όπως το 1D tree).</li>
+                        <li>Σε κάθε κόμβο $u$ του πρωτεύοντος δέντρου, υπάρχει ένα δείκτης σε ένα <strong>δευτερεύον
+                                δέντρο</strong> (associative structure).</li>
+                        <li>Το δευτερεύον δέντρο περιέχει όλα τα σημεία του υποδέντρου του $u$, ταξινομημένα ως προς
+                            $y$.</li>
+                    </ul>
+                </div>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Κατασκευή 2D Range Tree</h3>
+                    <pre><code>Αλγόριθμος BUILD-2D-RANGE-TREE(P)
+Είσοδος: Σύνολο σημείων P, ταξινομημένο ως προς x.
+Έξοδος: Ρίζα δέντρου εύρους.
+
+1. Κατασκεύασε ένα ισοζυγισμένο δυαδικό δέντρο T_assoc στο P με βάση τα y.
+2. Αν |P| = 1, επίστρεψε φύλλο με T_assoc.
+
+3. x_mid ← διάμεσος χ.
+4. P_left ← σημεία με x ≤ x_mid.
+5. P_right ← σημεία με x > x_mid.
+
+6. v_left ← BUILD-2D-RANGE-TREE(P_left)
+7. v_right ← BUILD-2D-RANGE-TREE(P_right)
+
+8. Δημιούργησε κόμβο v με τιμή x_mid.
+9. v.left = v_left, v.right = v_right
+10. v.assoc = T_assoc (σύνδεσμος με την βοηθητική δομή y).
+11. Επίστρεψε v.</code></pre>
+                </div>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αναζήτηση Εύρους (Range Query)</h3>
+                    <pre><code>Αλγόριθμος RECT-QUERY(v, [x1, x2] x [y1, y2])
+1. Βρες τον κόμβο διαχωρισμού v_split για το διάστημα [x1, x2].
+2. Για κάθε κόμβο u στο μονοπάτι από v_split προς x1:
+    α. Αν πάμε αριστερά, το δεξί παιδί είναι εντός εύρους x.
+    β. Στο δεξί παιδί, κάνε 1D-RANGE-QUERY στο y-δέντρο του (v.right.assoc) με [y1, y2].
+
+3. Για κάθε κόμβο w στο μονοπάτι από v_split προς x2:
+    α. Αν πάμε δεξιά, το αριστερό παιδί είναι εντός εύρους x.
+    β. Στο αριστερό παιδί, κάνε 1D-RANGE-QUERY στο y-δέντρο του (w.left.assoc) με [y1, y2].
+
+4. Έλεγξε τα φύλλα στα οποία καταλήγουν τα μονοπάτια.</code></pre>
+                    <div class="algorithm-note">
+                        <strong>💡 Πολυπλοκότητα:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+                            <li>Χρόνος: <strong>O(log² n + k)</strong></li>
+                            <li>Χώρος: <strong>O(n log n)</strong> (γιατί κάθε σημείο αποθηκεύεται σε log n βοηθητικά
+                                δέντρα).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Fractional Cascading</h2>
+                <p>
+                    Με την τεχνική του **Fractional Cascading**, μπορούμε να βελτιώσουμε τον χρόνο αναζήτησης σε
+                    $\mathcal{O}(\log n + k)$, αποφεύγοντας τις επαναλαμβανόμενες δυαδικές αναζητήσεις στα δευτερεύοντα
+                    δέντρα.
+                </p>
+            </section>
+
+            <div class="page-nav">
+                <a href="08-kd-tree.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> kd-Trees</a>
+                <a href="../../index.html" class="btn">Τέλος <i class="fas fa-check"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+        // No Simulator for Theory Page
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Αυξητικός Αλγόριθμος (Beneath-Beyond) | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-a">Μέρος Α: Κυρτά Περιβλήματα</a>
+                <span>Beneath-Beyond</span>
+            </div>
+
+            <h1>Αυξητικός Αλγόριθμος & Χρωματισμός (Beneath-Beyond)</h1>
+
+            <section class="content-box">
+                <h2>1. Η Θεωρία</h2>
+                <p>
+                    Ο αυξητικός αλγόριθμος στις γενικές διαστάσεις (και στις 2D) βασίζεται στην προσθήκη ενός νέου
+                    σημείου $p$ σε ένα ήδη υπάρχον κυρτό πολύτοπο.
+                    Το κρίσιμο ερώτημα είναι: **Ποιες έδρες (ακμές στο 2D) είναι ορατές από το $p$;**
+                    Οι ορατές έδρες διαγράφονται και αντικαθίστανται από νέες που συνδέουν το $p$ με τον "ορίζοντα".
+                </p>
+            </section>
+
+            <!-- Full Algo Simulator -->
+            <section class="simulator-container" id="bb-algo-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-plus-square"></i> Πλήρης Αυξητικός Αλγόριθμος</h3>
+                    <div class="simulator-controls-top">
+                        <button class="sim-btn" onclick="simAlgo.generatePoints()"><i class="fas fa-random"></i> Νέα
+                            Σημεία</button>
+                    </div>
+                </div>
+
+                <div class="explanation-bar">
+                    <p id="step-desc-algo" class="step-description">Πατήστε Play.</p>
+                </div>
+
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas-algo"></canvas>
+                </div>
+
+                <div class="controls-toolbar">
+                    <div class="playback-controls">
+                        <button class="sim-btn icon-only" id="btn-prev-algo"><i
+                                class="fas fa-step-backward"></i></button>
+                        <button class="sim-btn primary" id="btn-play-algo"><i class="fas fa-play"></i> Play</button>
+                        <button class="sim-btn icon-only" id="btn-next-algo"><i
+                                class="fas fa-step-forward"></i></button>
+                    </div>
+
+                    <div class="slider-container">
+                        <span class="label">Πρόοδος:</span>
+                        <input type="range" id="sim-slider-algo" min="0" max="100" value="0" class="sim-slider">
+                        <span id="sim-status-algo" class="status-text">-</span>
+                    </div>
+
+                    <div class="speed-container">
+                        <span class="label">Ταχύτητα:</span>
+                        <input type="range" id="sim-speed-algo" min="1" max="10" value="5" class="speed-slider">
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Έλεγχος Ορατότητας (Coloring)</h2>
+                <p>
+                    Μια ακμή είναι **ορατή (Κόκκινη)** αν το σημείο $p$ βρίσκεται "δεξιά" από αυτήν (εξωτερικά).
+                    Είναι **αόρατη (Μπλε)** αν το $p$ βρίσκεται "αριστερά" (εσωτερικά).
+                    Ενδιάμεσες είναι οι ακμές του ορίζοντα.
+                </p>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητικός Αλγόριθμος (Beneath-Beyond)</h3>
+                    <pre><code>Αλγόριθμος Beneath-Beyond
+Είσοδος: Σύνολο σημείων P.
+Έξοδος: Κυρτό περίβλημα CH.
+
+1. Δημιούργησε ένα αρχικό τρίγωνο (ή τετράεδρο στις 3D) από τα πρώτα σημεία.
+2. Για κάθε επόμενο σημείο p από το P:
+    α. Βρες τις "κόκκινες" (ορατές) έδρες του τρέχοντος πολυτόπου από το p.
+    β. Βρες τις ακμές του "ορίζοντα" (σύνορο μεταξύ ορατών και μη-ορατών εδρών).
+    γ. Διέγραψε τις ορατές έδρες.
+    δ. Δημιούργησε νέες έδρες συνδέοντας το p με τις ακμές του ορίζοντα.
+3. Επίστρεψε το τελικό πολύτοπο.</code></pre>
+                    <div class="algorithm-note">
+                        <strong>💡 Επεξήγηση Χρωματισμού:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+                            <li><span style="color:#e74c3c"><strong>Κόκκινη Ακμή/Έδρα:</strong></span> Ορατή από το
+                                σημείο p (πρέπει να αφαιρεθεί).</li>
+                            <li><span style="color:#3498db"><strong>Μπλε Ακμή/Έδρα:</strong></span> Μη ορατή (κρυμμένη)
+                                από το p (παραμένει ως έχει).</li>
+                            <li><span style="color:#8e44ad"><strong>Βυσσινί Κορυφή (Ορίζοντας):</strong></span> Ανήκει
+                                σε μια κόκκινη και μια μπλε ακμή. Από αυτές τις κορυφές χαράσσονται οι νέες ακμές προς
+                                το p.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>3. Μεθοδολογία Ορατότητας "Στο Χαρτί"</h2>
+                <p>
+                    Στις εξετάσεις, συχνά δίνεται ένα κυρτό πολύγωνο (ή πολύεδρο) και ένα νέο σημείο $P$.
+                    Ζητείται να βρείτε ποιες ακμές/έδρες είναι ορατές.
+                </p>
+
+                <div class="methodology-box"
+                    style="background-color: #f8f9fa; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0;">
+                    <h3 style="margin-top: 0;">Βήμα 1: Ο Κανόνας της "Στροφής" (2D)</h3>
+                    <p>
+                        Για μια ακμή $e = (A, B)$ (με φορά CCW γύρω από το πολύγωνο):
+                    </p>
+                    <ul>
+                        <li>Θεωρήστε τη διαδρομή $A \to B \to P$.</li>
+                        <li>Αν η στροφή είναι <strong>Δεξιά</strong> (Oρίζουσα $< 0$), τότε το $P$ είναι "απέξω" . <br>
+                                $\rightarrow$ Η ακμή είναι <strong>ΟΡΑΤΗ (Κόκκινη)</strong>.</li>
+                        <li>Αν η στροφή είναι <strong>Αριστερή</strong> (Ορίζουσα $\ge 0$), τότε το $P$ είναι "μέσα".
+                            <br>$\rightarrow$ Η ακμή είναι <strong>ΑΟΡΑΤΗ (Μπλε)</strong>.
+                        </li>
+                    </ul>
+
+                    <h3>Βήμα 2: Σχεδίαση της Ενημέρωσης</h3>
+                    <p>
+                        Μην προσπαθείτε να θυμάστε πολυπλοκότητες απ' έξω. Σχεδιάστε το!
+                    </p>
+                    <ol>
+                        <li><strong>Ζωγραφίστε</strong> το αρχικό πολύγωνο και το σημείο $P$.</li>
+                        <li>Τραβήξτε νοητές γραμμές από το $P$ εφαπτομενικά στο πολύγωνο.</li>
+                        <li>Οι ακμές που είναι "προς τη μεριά" του $P$ (ανάμεσα στις εφαπτόμενες) είναι οι Κόκκινες.
+                        </li>
+                        <li>Σβήστε τις Κόκκινες ακμές (αλλά κρατήστε τις κορυφές των άκρων τους - τον "Ορίζοντα").</li>
+                        <li>Συνδέστε το $P$ με τις δύο ακραίες κορυφές του Ορίζοντα.</li>
+                    </ol>
+                </div>
+            </section>
+            <section class="simulator-container" id="bb-concept-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-eye"></i> Διαδραστική Ορατότητα</h3>
+                    <div class="simulator-controls-top">
+                        <button class="sim-btn" onclick="simConcept.reset()"><i class="fas fa-sync"></i> Reset</button>
+                    </div>
+                </div>
+                <div class="explanation-bar">
+                    <p>Σύρετε το σημείο $P$ γύρω από το πολύγωνο. <span style="color:#e74c3c">Κόκκινες</span> = Ορατές,
+                        <span style="color:#3498db">Μπλε</span> = Αόρατες.
+                    </p>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas-concept"></canvas>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="05-quickhull.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> QuickHull</a>
+                <a href="07-complexity.html" class="btn">Επόμενο: Πολυπλοκότητα <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/base.js"></script>
+    <script src="../../assets/js/simulators/beneath-beyond.js"></script>
+    <script>
+        const simAlgo = new BeneathBeyondAlgoSimulator('sim-canvas-algo', '-algo');
+        simAlgo.generatePoints();
+
+        const simConcept = new BeneathBeyondInteractive('sim-canvas-concept');
+        simConcept.reset();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Γραμμικός Προγραμματισμός | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-b">Μέρος Β: 3D Γεωμετρία</a>
+                <span>Γραμμικός Προγραμματισμός</span>
+            </div>
+
+            <h1>Γραμμικός Προγραμματισμός (Seidel)</h1>
+
+            <section class="content-box">
+                <h2>1. Το Πρόβλημα</h2>
+                <p>
+                    Θέλουμε να βελτιστοποιήσουμε (max/min) μια γραμμική συνάρτηση $f(x,y) = c_1 x + c_2 y$ υπό μια σειρά
+                    γραμμικών περιορισμών (ημιεπιπέδων).
+                    $$ H_i: a_i x + b_i y \le d_i $$
+                </p>
+                <div class="definition-box">
+                    <strong>Αυξητικός Αλγόριθμος (Seidel):</strong>
+                    Προσθέτουμε τους περιορισμούς έναν-έναν. Αν ο νέος περιορισμός παραβιάζεται από το τρέχον βέλτιστο,
+                    τότε το νέο βέλτιστο πρέπει να βρίσκεται πάνω στο σύνορο του νέου περιορισμού.
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Αναμενόμενη Πολυπλοκότητα</h2>
+                <p>
+                    Αν προσθέτουμε τους περιορισμούς με τυχαία σειρά, η αναμενόμενη πολυπλοκότητα είναι <strong>γραμμική
+                        $\mathcal{O}(n)$</strong>, παρόλο που στη χείριστη περίπτωση είναι $\mathcal{O}(n^2)$ (ή
+                    $\mathcal{O}(n^d)$ σε $d$ διαστάσεις).
+                </p>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητικός Αλγόριθμος Γ.Π. (Seidel)</h3>
+                    <pre><code>Αυξητικός Αλγόριθμος ΓΠ
+Είσοδος: Περιορισμοί H = {H₁, ..., Hₙ}, Συνάρτηση f(x) = cᵀx.
+Έξοδος: Σημείο x* που ελαχιστοποιεί την f (ή "Ανέφικτο").
+
+1. Αρχικοποίηση: Βρες την βέλτιστη κορυφή x*_d+1 που ικανοποιεί τους d+1 πρώτους περιορισμούς.
+   Αν η τομή είναι κενή, επίστρεψε "Ανέφικτο".
+
+2. Για i = d+2 έως n:
+    α. Αν το x*ᵢ₋₁ ικανοποιεί τον περιορισμό Hᵢ (δηλ. Hᵢ(x*ᵢ₋₁) ≤ 0):
+        Τότε x*ᵢ = x*ᵢ₋₁ (το βέλτιστο δεν αλλάζει).
+    
+    β. Αλλιώς (αν το x*ᵢ₋₁ παραβιάζει τον Hᵢ):
+        Το νέο βέλτιστο x*ᵢ πρέπει να βρίσκεται πάνω στο υπερεπίπεδο Hᵢ = 0.
+        Το πρόβλημα ανάγεται σε ένα Γ.Π. με d-1 μεταβλητές πάνω στο Hᵢ.
+        Αναδρομική επίλυση στο (d-1)-διάστατο επίπεδο.
+
+3. Επίστρεψε το x*ₙ.</code></pre>
+
+                    <div class="algorithm-note">
+                        <strong>💡 Γεωμετρική Ερμηνεία:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+                            <li>Αν το παλιό βέλτιστο είναι "νόμιμο" για τον νέο περιορισμό, παραμένει βέλτιστο (γιατί ο
+                                χώρος λύσεων μικραίνει).</li>
+                            <li>Αν "παραβιάζει" τον νέο περιορισμό, το νέο βέλτιστο "σπρώχνεται" μέχρι να ακουμπήσει τον
+                                νέο τοίχο ($H_i$).</li>
+                            <li>Η αναδρομή μειώνει τις διαστάσεις $d \to d-1$ μέχρι να φτάσουμε σε 1D πρόβλημα.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Simulator -->
+            <section class="simulator-container" id="lp-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-ruler-combined"></i> Προσομοιωτής LP</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-sync"></i> Reset</button>
+                    <button class="sim-btn primary" onclick="sim.addConstraint()" id="btn-add"><i
+                            class="fas fa-plus"></i> Νέος Περιορισμός</button>
+                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status">
+                        Στόχος: Maximize Y (Πάνω).
+                    </div>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="03-first-face.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> First Face</a>
+                <a href="../../index.html#part-c" class="btn">Μέρος Γ <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/linear-prog.js"></script>
+    <script>
+        const sim = new LPSimulator('sim-canvas');
+        sim.reset();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Διαίρει και Βασίλευε (Divide & Conquer) | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/simulator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li><button id="theme-toggle" class="btn-secondary"><i class="fas fa-adjust"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-a">Μέρος Α: Κυρτά Περιβλήματα</a>
+                <span>Divide & Conquer</span>
+            </div>
+
+            <h1>Διαίρει και Βασίλευε (Divide & Conquer)</h1>
+
+            <section class="content-box">
+                <h2>1. Ο Αλγόριθμος</h2>
+                <p>
+                    Ο αλγόριθμος λειτουργεί αναδρομικά:
+                </p>
+                <ol>
+                    <li><strong>Διαίρεση:</strong> Χωρίζουμε τα σημεία σε δύο ισάριθμα υποσύνολα $A$ (αριστερά) και $B$
+                        (δεξιά) με βάση την τετμημένη $x$.</li>
+                    <li><strong>Αναδρομή:</strong> Υπολογίζουμε τα κυρτά περιβλήματα $CH(A)$ και $CH(B)$.</li>
+                    <li><strong>Συγχώνευση (Merge):</strong> Βρίσκουμε την **Άνω Γέφυρα** και την **Κάτω Γέφυρα**
+                        (εφαπτόμενες) που ενώνουν τα δύο περιβλήματα και διαγράφουμε τις εσωτερικές ακμές.</li>
+                </ol>
+            </section>
+
+            <!-- Full Simulator -->
+            <section class="simulator-container" id="dc-full-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-layer-group"></i> Πλήρης Εκτέλεση (Αναδρομή)</h3>
+                    <div class="simulator-controls-top">
+                        <button class="sim-btn" onclick="simFull.generatePoints()"><i class="fas fa-random"></i> Νέα
+                            Σημεία</button>
+                    </div>
+                </div>
+
+                <div class="explanation-bar">
+                    <p id="step-desc-full" class="step-description">Πατήστε Play.</p>
+                </div>
+
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas-full"></canvas>
+                </div>
+
+                <div class="controls-toolbar">
+                    <div class="playback-controls">
+                        <button class="sim-btn icon-only" id="btn-prev-full"><i
+                                class="fas fa-step-backward"></i></button>
+                        <button class="sim-btn primary" id="btn-play-full"><i class="fas fa-play"></i> Play</button>
+                        <button class="sim-btn icon-only" id="btn-next-full"><i
+                                class="fas fa-step-forward"></i></button>
+                    </div>
+
+                    <div class="slider-container">
+                        <span class="label">Πρόοδος:</span>
+                        <input type="range" id="sim-slider-full" min="0" max="100" value="0" class="sim-slider">
+                        <span id="sim-status-full" class="status-text">-</span>
+                    </div>
+
+                    <div class="speed-container">
+                        <span class="label">Ταχύτητα:</span>
+                        <input type="range" id="sim-speed-full" min="1" max="10" value="5" class="speed-slider">
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Εύρεση Γέφυρας (Merge Step)</h2>
+                <p>
+                    Το κρίσιμο βήμα είναι η εύρεση των γεφυρών. Ξεκινάμε από το δεξιότερο σημείο του Αριστερού
+                    Περιβλήματος και το αριστερότερο του Δεξιού.
+                    Ανεβαίνουμε διαδοχικά (zig-zag) μέχρι να βρούμε την εφαπτόμενη.
+                </p>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Προσδιορισμός Άνω Γέφυρας</h3>
+                    <pre><code>Αλγόριθμος FIND_UPPER_BRIDGE(A, B)
+Είσοδος: Πολύγωνο A (Αριστερό), Πολύγωνο B (Δεξιό).
+Έξοδος: Ζεύγος δεικτών (i, j) που ορίζουν την άνω γέφυρα.
+
+1. i ← δείκτης του δεξιότερου σημείου του A (max x).
+2. j ← δείκτης του αριστερότερου σημείου του B (min x).
+
+3. Επανάλαβε:
+    bool changed = false
+    
+    // Έλεγχος αν το A[i+1] είναι "πιο πάνω" από την ευθεία A[i]-B[j]
+    Όσο CCW(B[j], A[i], A[i+1]) είναι Αριστερόστροφη (>0):
+        i ← (i + 1) mod |A|
+        changed = true
+        
+    // Έλεγχος αν το B[j-1] είναι "πιο πάνω" από την ευθεία A[i]-B[j]
+    Όσο CCW(A[i], B[j], B[j-1]) είναι Δεξιόστροφη (<0):
+        j ← (j - 1) mod |B|
+        changed = true
+        
+4. Μέχρι changed == false.
+
+5. Επίστρεψε (i, j).</code></pre>
+                    <div class="algorithm-note">
+                        <strong>💡 Διαισθητική εξήγηση:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+                            <li>Φανταστείτε μια ευθεία να ακουμπάει στις κορυφές των δύο πολυγώνων.</li>
+                            <li>Αν η γέφυρα τέμνει το πολύγωνο A (επόμενο σημείο πιο "ψηλά"), ανεβάζουμε το άκρο στο A.
+                            </li>
+                            <li>Αν τέμνει το πολύγωνο B (προηγούμενο σημείο πιο "ψηλά"), ανεβάζουμε το άκρο στο B.</li>
+                            <li>Σταματάμε όταν η ευθεία αφήνει και τα δύο πολύγωνα "κάτω" της (εφαπτόμενη).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bridge Concept Simulator -->
+            <section class="simulator-container" id="dc-bridge-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title"><i class="fas fa-project-diagram"></i> Interactive Merge (Concept)</h3>
+                    <div class="simulator-controls-top">
+                        <button class="sim-btn" onclick="simBridge.generateHulls()"><i class="fas fa-random"></i> Νέα
+                            Περιβλήματα</button>
+                    </div>
+                </div>
+                <div class="explanation-bar">
+                    <p>Σέρνετε το ποντίκι ανάμεσα στα δύο περιβλήματα για να δείτε τις εφαπτόμενες.</p>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="sim-canvas-bridge"></canvas>
+                </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="03-gift-wrap.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Gift
+                    Wrapping</a>
+                <a href="05-quickhull.html" class="btn">Επόμενο: QuickHull <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/geometry.js"></script>
+    <script src="../../assets/js/simulators/base.js"></script>
+    <script src="../../assets/js/simulators/divide-conquer.js"></script>
+    <script>
+        // Use custom IDs for Full Simulator
+        // We need to patch Base class or manual init if we have 2 simulators on page
+        // Actually Base assumes fixed IDs. Problem.
+        // I will override the UI binding in a subclass or pass IDs to constructor.
+
+        // Let's modify Base to accept ID options or use specific class wrapper.
+        // Or simpler: pass "suffix" to constructor.
+
+        const simFull = new DivideConquerFullSimulator('sim-canvas-full', '-full');
+        simFull.generatePoints();
+
+        // Bridge simulator (Interaction only, no playback)
+        const simBridge = new DivideConquerBridgeSimulator('sim-canvas-bridge');
+        simBridge.generateHulls();
+    </script>
+</body>
+
+</html>
