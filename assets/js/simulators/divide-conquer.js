@@ -318,29 +318,49 @@ class DivideConquerBridgeSimulator {
     findBridge(poly1, poly2, isUpper) {
         if (poly1.length === 0 || poly2.length === 0) return null;
 
-        let bestEdge = null;
+        // Αρχικοποίηση: Δεξιότερο σημείο του αριστερού (poly1) και αριστερότερο του δεξιού (poly2)
+        // Σύμφωνα με την computeHull, το poly1[0] είναι το αριστερότερο. 
+        // Πρέπει να βρούμε το δεξιότερο του poly1 και το αριστερότερο του poly2.
+        let i = 0;
+        for (let k = 1; k < poly1.length; k++) if (poly1[k].x > poly1[i].x) i = k;
+        let j = 0;
+        for (let k = 1; k < poly2.length; k++) if (poly2[k].x < poly2[j].x) j = k;
 
-        for (let p1 of poly1) {
-            for (let p2 of poly2) {
-                let ok = true;
+        let changed = true;
+        const n1 = poly1.length;
+        const n2 = poly2.length;
 
-                if (isUpper) {
-                    for (let k of poly1) if (ccw(p1, p2, k) > 0.001) ok = false;
-                    for (let k of poly2) if (ccw(p1, p2, k) > 0.001) ok = false;
-                } else {
-                    for (let k of poly1) if (ccw(p1, p2, k) < -0.001) ok = false;
-                    for (let k of poly2) if (ccw(p1, p2, k) < -0.001) ok = false;
+        while (changed) {
+            changed = false;
+
+            if (isUpper) {
+                // Άνω γέφυρα: Ανεβαίνουμε στο poly1 (CCW)
+                // Ελέγχουμε αν το επόμενο σημείο poly1[i+1] είναι "πάνω" από τη γραμμή poly1[i]-poly2[j]
+                // Χρησιμοποιούμε την ccw(B, A, Anext) > 0 όπως στον ψευδοκώδικα
+                while (ccw(poly2[j], poly1[i], poly1[(i + 1) % n1]) > 0.001) {
+                    i = (i + 1) % n1;
+                    changed = true;
                 }
-
-                if (ok) {
-                    bestEdge = [p1, p2];
-                    break;
+                // Ανεβαίνουμε στο poly2 (CW)
+                while (ccw(poly1[i], poly2[j], poly2[(j - 1 + n2) % n2]) < -0.001) {
+                    j = (j - 1 + n2) % n2;
+                    changed = true;
+                }
+            } else {
+                // Κάτω γέφυρα: Κατεβαίνουμε στο poly1 (CW)
+                while (ccw(poly2[j], poly1[i], poly1[(i - 1 + n1) % n1]) < -0.001) {
+                    i = (i - 1 + n1) % n1;
+                    changed = true;
+                }
+                // Κατεβαίνουμε στο poly2 (CCW)
+                while (ccw(poly1[i], poly2[j], poly2[(j + 1) % n2]) > 0.001) {
+                    j = (j + 1) % n2;
+                    changed = true;
                 }
             }
-            if (bestEdge) break;
         }
 
-        return bestEdge;
+        return [poly1[i], poly2[j]];
     }
 
     drawBridge(edge, color, label) {

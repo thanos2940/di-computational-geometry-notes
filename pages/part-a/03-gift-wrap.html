@@ -75,20 +75,43 @@
                     </ol>
                 </div>
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Jarvis March (Gift Wrapping)</h3>
-                    <pre><code>Αλγόριθμος GiftWrapping(P)
-Είσοδος: Σύνολο σημείων P.
-Έξοδος: Κυρτό Περίβλημα CH.
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Περιτυλίγματος για το ΚΠ</h3>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Σύνολο $S$ αποτελούμενο από $n$ σημεία στο επίπεδο.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Η αλυσίδα των ακμών και κορυφών του
+                                κυρτού περιβλήματος.</li>
+                        </ul>
 
-1. p ← το σημείο με την ελάχιστη x-συντεταγμένη.
-2. Επανάλαβε:
-   α. Πρόσθεσε το p στο CH.
-   β. q ← ένα τυχαίο επόμενο σημείο στο P.
-   γ. Για κάθε άλλο σημείο r στο P:
-      Αν CCW(p, q, r) == Δεξιά Στροφή:
-         q ← r  // Το r είναι πιο "εξωτερικό" από το q
-   δ. p ← q
-3. Μέχρι p == αρχικό σημείο.</code></pre>
+                        <p style="margin-top: 15px;"><strong>Βήματα:</strong></p>
+                        <ol style="padding-left: 20px;">
+                            <li style="margin-bottom: 10px;">
+                                Αρχικοποίησε την τρέχουσα κορυφή $r=r_{0}$, όπου το σημείο $r_{0}$ έχει την ελάχιστη
+                                τετμημένη. Αν υπάρχουν περισσότερα από ένα τέτοια σημεία, επίλεξε το λεξικογραφικά
+                                μικρότερο.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Αρχικοποίησε την αλυσίδα κορυφών με το $r_{0}$.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Έστω $r$ η τρέχουσα κορυφή και $u \in S$ ένα οποιοδήποτε σημείο που δεν έχει επιλεγεί ως
+                                κορυφή.
+                                <br>
+                                Για κάθε σημείο $t \in S \setminus \{r, u\}$,
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li>αν ισχύει $CW(r, u, t)$,</li>
+                                    <li>ή αν τα $r, u, t$ είναι συνευθειακά και το $u$ είναι εσωτερικό σημείο του
+                                        ευθύγραμμου τμήματος $rt$,</li>
+                                    <li>τότε θέσε $u \leftarrow t$.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                $r \leftarrow u$, $S \leftarrow S \setminus \{r\}$, πρόσθεσε στην αλυσίδα κορυφών το $r$
+                                και συνέχισε στο Βήμα 3.
+                            </li>
+                        </ol>
+                    </div>
                     <div class="algorithm-note"> <strong>💡 Παρατηρήσεις:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li><strong>Πολυπλοκότητα:</strong> $\mathcal{O}(nh)$, όπου $h$ το πλήθος κορυφών του ΚΠ

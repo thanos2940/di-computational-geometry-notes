@@ -96,26 +96,42 @@
 
                 <div class="algorithm-box">
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Κατασκευή kd-δέντρου</h3>
-                    <pre><code>Αλγόριθμος BUILD-KD-TREE(P, βάθος d)
-Είσοδος: Σύνολο σημείων P, τρέχον βάθος d.
-Έξοδος: Ρίζα του (υπο)δέντρου.
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <p><strong>function BUILD-KD-TREE($P, \text{βάθος } d$)</strong></p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Σύνολο σημείων $P$, τρέχον βάθος $d$.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Ρίζα του (υπο)δέντρου.</li>
+                        </ul>
 
-1. Αν P περιέχει μόνο ένα σημείο:
-   Επίστρεψε φύλλο που αποθηκεύει αυτό το σημείο.
-
-2. Αν το d είναι άρτιο (d % 2 == 0):
-   // Διάσπαση καθέτως στον άξονα x
-   l ← διάμεσος των x-συντεταγμένων των σημείων P. 
-   Χώρισε το P σε P_left (x-coord ≤ l) και P_right (x-coord > l).
-αλλιώς (d περιττό):
-   // Διάσπαση οριζοντίως στον άξονα y
-   l ← διάμεσος των y-συντεταγμένων των σημείων P. 
-   Χώρισε το P σε P_below (y-coord ≤ l) και P_above (y-coord > l).
-
-3. v ← δημιούργησε κόμβο που αποθηκεύει την ευθεία l.
-4. v.left ← BUILD-KD-TREE(P_left (ή P_below), d + 1)
-5. v.right ← BUILD-KD-TREE(P_right (ή P_above), d + 1)
-6. Επίστρεψε v.</code></pre>
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 10px;">
+                                <strong>Αν</strong> $P$ περιέχει μόνο ένα σημείο:
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li>Επίστρεψε φύλλο που αποθηκεύει αυτό το σημείο.</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Αν</strong> το $d$ είναι άρτιο ($d \pmod 2 = 0$):
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li>$l \leftarrow$ διάμεσος των $x$-συντεταγμένων των σημείων $P$.</li>
+                                    <li>Χώρισε το $P$ σε $P_{left}$ ($x \le l$) και $P_{right}$ ($x > l$).</li>
+                                </ul>
+                                <strong>αλλιώς</strong> ($d$ περιττό):
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li>$l \leftarrow$ διάμεσος των $y$-συντεταγμένων των σημείων $P$.</li>
+                                    <li>Χώρισε το $P$ σε $P_{below}$ ($y \le l$) και $P_{above}$ ($y > l$).</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 5px;">$v \leftarrow$ δημιούργησε κόμβο που αποθηκεύει την ευθεία
+                                $l$.</li>
+                            <li style="margin-bottom: 5px;">$v.left \leftarrow$ BUILD-KD-TREE($P_{left}$ ή $P_{below}, d
+                                + 1$)</li>
+                            <li style="margin-bottom: 5px;">$v.right \leftarrow$ BUILD-KD-TREE($P_{right}$ ή $P_{above},
+                                d + 1$)</li>
+                            <li><strong>Επίστρεψε</strong> $v$.</li>
+                        </ol>
+                    </div>
                     <div class="algorithm-note">
                         <strong>💡 Παρατηρήσεις:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
@@ -140,21 +156,42 @@
             <section class="content-box">
                 <div class="algorithm-box">
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αλγόριθμος Διερεύνησης (Range Search)</h3>
-                    <pre><code>Αλγόριθμος SEARCH-KD-TREE(v, R)
-Είσοδος: Κόμβος v, Ορθογώνιο αναζήτησης R.
-Έξοδος: Σημεία μέσα στο R.
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <p><strong>function SEARCH-KD-TREE($v, R$)</strong></p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Κόμβος $v$, Ορθογώνιο αναζήτησης $R$.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Σημεία μέσα στο $R$.</li>
+                        </ul>
 
-1. Αν ο v είναι φύλλο:
-   Αν το σημείο που αποθηκεύει είναι μέσα στο R, ανάφερέ το.
-
-2. Αλλιώς (εσωτερικός κόμβος):
-   Έστω REGION(v) η περιοχή που αντιστοιχεί στον κόμβο v.
-   α. Αν REGION(v) ⊆ R (πλήρως μέσα):
-      Ανάφερε όλα τα σημεία στο υποδέντρο του v.
-   β. Αλλιώς, αν REGION(v) ∩ R ≠ ∅ (μερική επικάλυψη):
-      // Έλεγξε αναδρομικά τα παιδιά
-      SEARCH-KD-TREE(v.left, R)
-      SEARCH-KD-TREE(v.right, R)</code></pre>
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 10px;">
+                                <strong>Αν</strong> ο $v$ είναι φύλλο:
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li><strong>Αν</strong> το σημείο που αποθηκεύει είναι μέσα στο $R$, ανάφερέ το.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Αλλιώς</strong> (εσωτερικός κόμβος):
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li style="margin-bottom: 5px;">Έστω REGION($v$) η περιοχή που αντιστοιχεί στον
+                                        κόμβο $v$.</li>
+                                    <li style="margin-bottom: 5px;"><strong>Αν</strong> REGION($v$) $\subseteq R$
+                                        (πλήρως μέσα):
+                                        <br>Ανάφερε όλα τα σημεία στο υποδέντρο του $v$.
+                                    </li>
+                                    <li><strong>Αλλιώς, αν</strong> REGION($v$) $\cap R \neq \emptyset$ (μερική
+                                        επικάλυψη):
+                                        <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                                            <li>SEARCH-KD-TREE($v.left, R$)</li>
+                                            <li>SEARCH-KD-TREE($v.right, R$)</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </section>
 

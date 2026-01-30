@@ -60,7 +60,8 @@
                         </li>
                         <li>Σε κάθε κόμβο αυτού του δέντρου, αντί να έχετε απλά ένα όνομα, έχετε κρεμασμένο ένα ΟΛΟΚΛΗΡΟ
                             καινούργιο δέντρο που οργανώνει τους ανθρώπους εκείνης της ομάδας με βάση τον
-                            <strong>Μισθό</strong> (Άξονας Y).</li>
+                            <strong>Μισθό</strong> (Άξονας Y).
+                        </li>
                     </ol>
                     </p>
                     <p> Είναι πιο "βαρύ" στη μνήμη (γιατί αποθηκεύουμε τα δεδομένα πολλές φορές), αλλά είναι αστραπιαίο
@@ -81,40 +82,66 @@
                 </div>
                 <div class="algorithm-box">
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Κατασκευή 2D Range Tree</h3>
-                    <pre><code>Αλγόριθμος BUILD-2D-RANGE-TREE(P)
-Είσοδος: Σύνολο σημείων P.
-Έξοδος: Ρίζα 2D-Range-Tree.
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <p><strong>function BUILD-2D-RANGE-TREE($P$)</strong></p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Σύνολο σημείων $P$.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Ρίζα 2D-Range-Tree.</li>
+                        </ul>
 
-1. Κατασκεύασε ένα ισοζυγισμένο δυαδικό δέντρο T_assoc στο P με βάση τα y-coordinates.
-2. Αν |P| = 1:
-   Επίστρεψε φύλλο που αποθηκεύει το T_assoc.
-
-3. x_mid ← διάμεσος των x-συντεταγμένων.
-4. P_left ← σημεία με x_coord ≤ x_mid.
-5. P_right ← σημεία με x_coord > x_mid.
-
-6. v_left ← BUILD-2D-RANGE-TREE(P_left)
-7. v_right ← BUILD-2D-RANGE-TREE(P_right)
-
-8. Δημιούργησε κόμβο v με τιμή x_mid.
-9. v.left = v_left, v.right = v_right.
-10. v.assoc = T_assoc (βοηθητικό y-δέντρο).
-11. Επίστρεψε v.</code></pre>
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 5px;">Κατασκεύασε ένα ισοζυγισμένο δυαδικό δέντρο $T_{assoc}$ στο
+                                $P$ με βάση τα $y$-coordinates.</li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Αν</strong> $|P| = 1$:
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li>Επίστρεψε φύλλο που αποθηκεύει το $T_{assoc}$.</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 5px;">$x_{mid} \leftarrow$ διάμεσος των $x$-συντεταγμένων.</li>
+                            <li style="margin-bottom: 5px;">$P_{left} \leftarrow$ σημεία με $x_{coord} \le x_{mid}$.
+                            </li>
+                            <li style="margin-bottom: 5px;">$P_{right} \leftarrow$ σημεία με $x_{coord} > x_{mid}$.</li>
+                            <li style="margin-bottom: 5px;">$v_{left} \leftarrow$ BUILD-2D-RANGE-TREE($P_{left}$)</li>
+                            <li style="margin-bottom: 5px;">$v_{right} \leftarrow$ BUILD-2D-RANGE-TREE($P_{right}$)</li>
+                            <li style="margin-bottom: 5px;">Δημιούργησε κόμβο $v$ με τιμή $x_{mid}$.</li>
+                            <li style="margin-bottom: 5px;">$v.left = v_{left}$, $v.right = v_{right}$.</li>
+                            <li style="margin-bottom: 5px;">$v.assoc = T_{assoc}$ (βοηθητικό $y$-δέντρο).</li>
+                            <li><strong>Επίστρεψε</strong> $v$.</li>
+                        </ol>
+                    </div>
                 </div>
                 <div class="algorithm-box">
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αναζήτηση Εύρους (Range Query)</h3>
-                    <pre><code>Αλγόριθμος RECT-QUERY(v, [x1, x2] x [y1, y2])
-1. Βρες τον κόμβο διαχωρισμού v_split για το διάστημα [x1, x2].
-
-2. Για κάθε κόμβο u στο μονοπάτι από v_split προς x1:
-   α. Αν στρίψουμε αριστερά:
-      Κάνε 1D-RANGE-QUERY στο y-δέντρο του δεξιού παιδιού (u.right.assoc) με [y1, y2].
-
-3. Για κάθε κόμβο w στο μονοπάτι από v_split προς x2:
-   α. Αν στρίψουμε δεξιά:
-      Κάνε 1D-RANGE-QUERY στο y-δέντρο του αριστερού παιδιού (w.left.assoc) με [y1, y2].
-
-4. Έλεγξε τα φύλλα στα οποία καταλήγουν τα μονοπάτια αν ανήκουν στο ορθογώνιο.</code></pre>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <p><strong>function RECT-QUERY($v, [x_1, x_2] \times [y_1, y_2]$)</strong></p>
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 10px;">
+                                Βρες τον κόμβο διαχωρισμού $v_{split}$ για το διάστημα $[x_1, x_2]$.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Για κάθε</strong> κόμβο $u$ στο μονοπάτι από $v_{split}$ προς $x_1$:
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li><strong>Αν</strong> στρίψουμε αριστερά:
+                                        <br>Κάνε 1D-RANGE-QUERY στο $y$-δέντρο του δεξιού παιδιού ($u.right.assoc$) με
+                                        $[y_1, y_2]$.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Για κάθε</strong> κόμβο $w$ στο μονοπάτι από $v_{split}$ προς $x_2$:
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li><strong>Αν</strong> στρίψουμε δεξιά:
+                                        <br>Κάνε 1D-RANGE-QUERY στο $y$-δέντρο του αριστερού παιδιού ($w.left.assoc$) με
+                                        $[y_1, y_2]$.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>Έλεγξε τα φύλλα στα οποία καταλήγουν τα μονοπάτια αν ανήκουν στο ορθογώνιο.</li>
+                        </ol>
+                    </div>
                     <div class="algorithm-note"> <strong>💡 Πολυπλοκότητα:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li>Χρόνος: <strong>O(log² n + k)</strong></li>

@@ -87,8 +87,18 @@
                     <li>Ή κάνουμε <strong>Δεξιά Στροφή</strong> (Clockwise / CW);</li>
                     <li>Ή τα σημεία είναι <strong>Συνευθειακά</strong>;</li>
                 </ul>
-                <p>Αυτό υπολογίζεται μέσω της <strong>Ορίζουσας 2x2</strong>:</p>
-                <div class="math-block"> $$ \det(p, q, r) = (q_x - p_x)(r_y - p_y) - (q_y - p_y)(r_x - p_x) $$ </div>
+                <p>Αυτό υπολογίζεται ξεκινώντας από την <strong>Ορίζουσα 3x3</strong>:</p>
+                <div class="math-block"> $$ \det(p, q, r) = \begin{vmatrix} 1 & p_x & p_y \\ 1 & q_x & q_y \\ 1 & r_x &
+                    r_y \end{vmatrix} $$ </div>
+
+                <p>Για να καταλήξουμε στην απλούστερη μορφή, αφαιρούμε την 1η γραμμή από τη 2η και την 3η. Αυτό
+                    γεωμετρικά ισοδυναμεί με μεταφορά του συστήματος συντεταγμένων στο $p$ (ώστε $p \to (0,0)$):</p>
+                <div class="math-block"> $$ = \begin{vmatrix} 1 & p_x & p_y \\ 0 & q_x - p_x & q_y - p_y \\ 0 & r_x -
+                    p_x & r_y - p_y \end{vmatrix} $$ </div>
+
+                <p>Αναπτύσσοντας ως προς την 1η στήλη, καταλήγουμε στην <strong>Ορίζουσα 2x2</strong>:</p>
+                <div class="math-block"> $$ = 1 \cdot \begin{vmatrix} q_x - p_x & q_y - p_y \\ r_x - p_x & r_y - p_y
+                    \end{vmatrix} = (q_x - p_x)(r_y - p_y) - (q_y - p_y)(r_x - p_x) $$ </div>
                 <ul>
                     <li>Αν $\det> 0$: <strong>Αριστερή Στροφή (CCW)</strong></li>
                     <li>Αν $\det < 0$: <strong>Δεξιά Στροφή (CW)</strong></li>
@@ -96,6 +106,48 @@
                 </ul>
                 <div class="warning-box"> <strong>Σημαντικό:</strong> Η γεωμετρική ερμηνεία της ορίζουσας είναι το
                     <strong>προσημασμένο διπλάσιο εμβαδόν</strong> του τριγώνου $pqr$.
+                </div>
+            </section>
+            <section class="content-box">
+                <h2>3. Εξαντλητικός Αλγόριθμος (Brute Force)</h2>
+                <p>Ο πρώτος και πιο απλός αλγόριθμος που εξετάζουμε βασίζεται στην ιδιότητα των ακμών του κυρτού
+                    περιβλήματος: μια ακμή $pq$ ανήκει στο $K\Pi$ αν και μόνο αν όλα τα υπόλοιπα σημεία $r$ βρίσκονται
+                    στην ίδια πλευρά της ευθείας που ορίζουν.</p>
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Εξαντλητικός Αλγόριθμος</h3>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Ένα σύνολο $P$ από σημεία στο επίπεδο.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Ένας κατάλογος $L$ των κορυφών του
+                                $K\Pi(P)$ σε ωρολόγια διάταξη.</li>
+                        </ul>
+
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 5px;">$E \leftarrow \emptyset$ (σύνολο των ακμών)</li>
+                            <li style="margin-bottom: 5px;"><strong>για κάθε</strong> διατεταγμένο ζεύγος $(p, q) \in P
+                                \times P$ με $p \neq q$:
+                                <ol style="list-style-type: lower-alpha; padding-left: 20px; margin-top: 5px;">
+                                    <li style="margin-bottom: 5px;">έγκυρο $\leftarrow$ αληθές</li>
+                                    <li style="margin-bottom: 5px;"><strong>για κάθε</strong> σημείο $r \in P$ διάφορο
+                                        των $p$ και $q$:
+                                        <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                            <li><strong>αν</strong> το $r$ κείται αριστερά της κατευθυντής ευθείας από
+                                                το $p$ στο $q$: <strong>τότε</strong> έγκυρο $\leftarrow$ ψευδές</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>αν</strong> έγκυρο, <strong>τότε</strong> προσθέτουμε την κατευθυντή
+                                        ακμή $pq$ στο $E$.</li>
+                                </ol>
+                            </li>
+                            <li>Από το σύνολο $E$ των ακμών κατασκευάζουμε έναν κατάλογο $L$ των κορυφών του $K\Pi(P)$
+                                σε ωρολόγια διάταξη.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="algorithm-note">
+                    <p><strong>Πολυπλοκότητα:</strong> $O(n^3)$. Ελέγχουμε $O(n^2)$ ζεύγη και για κάθε ζεύγος εξετάζουμε
+                        $O(n)$ σημεία.</p>
                 </div>
             </section> <!-- Interactive Simulator -->
             <section class="simulator-container" id="ccw-simulator">

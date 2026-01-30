@@ -48,68 +48,173 @@
                     Γεωμετρία</a> <span>Gift Wrapping</span> </div>
             <h1>Gift Wrapping 3D (Περιτύλιγμα)</h1>
             <section class="content-box">
-                <h2>1. Η Ιδέα (Διαισθητικά)</h2>
+                <h2>1. Προσέγγιση Περιτύλιξης (Gift Wrapping)</h2>
+
                 <div class="intuition-box">
-                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
-                    <p> Φανταστείτε ότι το σύννεφο των σημείων είναι ένα ακανόνιστο αντικείμενο και θέλετε να το
-                        τυλίξετε με δώροχαρτο. </p>
-                    <p> Κολλάτε το χαρτί σε μια επίπεδη έδρα (την πρώτη). Μετά, για να προχωρήσετε, λυγίζετε
-                        ("τσακίζετε") το χαρτί γύρω από μια ακμή μέχρι να "βρει" το επόμενο σημείο που εξέχει. Αυτό
-                        μοιάζει με το να κυλάτε έναν κύβο στο τραπέζι, μόνο που οι έδρες δεν είναι τετράγωνες αλλά
-                        τρίγωνα. </p>
-                    <p> <strong>Το "Δίπλωμα" (Folding):</strong> Το κύριο βήμα είναι να περιστρέψετε μια πόρτα γύρω από
-                        τον μεντεσέ της (την ακμή), μέχρι να χτυπήσει κάτι. Το σημείο που θα χτυπήσει πρώτο ορίζει τη
-                        νέα έδρα. </p>
+                    <h3><i class="far fa-lightbulb"></i> Η Βασική Ιδέα</h3>
+                    <p>
+                        Ο αλγόριθμος <strong>Gift Wrapping</strong> (ή "Περιτύλιγμα") στις 3 διαστάσεις είναι η φυσική
+                        γενίκευση του αλγορίθμου <em>Jarvis March</em> από τις 2 διαστάσεις.
+                        Φανταστείτε ότι τα σημεία σας είναι καρφίτσε στον χώρο και θέλετε να τυλίξετε ένα δώρο (το Κυρτό
+                        Περίβλημα) γύρω τους.
+                    </p>
+                    <p>
+                        <strong>Πώς λειτουργεί διαισθητικά;</strong>
+                    </p>
+                    <ul>
+                        <li>Ξεκινάμε βρίσκοντας <strong>μία πρώτη έδρα</strong> (ένα τρίγωνο) που είμαστε σίγουροι ότι
+                            ανήκει στο περίβλημα (π.χ. την "πιο κάτω" έδρα).</li>
+                        <li>Κάθε έδρα έχει <strong>3 πλευρές</strong> (ακμές). Κάθε ακμή λειτουργεί σαν ένας "μεντεσές".
+                        </li>
+                        <li>Παίρνουμε μια ακμή (Ράχη) και "περιστρέφουμε" ένα επίπεδο γύρω της, ξεκινώντας από την
+                            υπάρχουσα έδρα, μέχρι να "χτυπήσουμε" το πρώτο σημείο που θα συναντήσουμε.</li>
+                        <li>Αυτό το νέο σημείο, μαζί με την ακμή, σχηματίζουν μια <strong>Νέα Έδρα</strong>.</li>
+                        <li>Επαναλαμβάνουμε τη διαδικασία για τις νέες ακμές που προέκυψαν, μέχρι να "κλείσει" το σχήμα
+                            (σαν να κολλάμε το δώροχαρτο γύρω-γύρω).</li>
+                    </ul>
                 </div>
-                <p> Ο αλγόριθμος μοιάζει με το να τυλίγουμε ένα δώρο με χαρτί. Ξεκινάμε από μια αρχική έδρα (π.χ. την
-                    πιο "κάτω"). Από κάθε ακμή της (Ράχη), "διπλώνουμε" το επίπεδο μέχρι να χτυπήσουμε το πρώτο σημείο.
-                    Αυτό ορίζει τη νέα έδρα. </p>
-                <div class="definition-box"> <strong>Pivoting:</strong> Για μια ακμή $e$, ψάχνουμε το σημείο $p$ που
-                    μεγιστοποιεί τη γωνία (ή ελαχιστοποιεί την "στροφή") σε σχέση με την τρέχουσα έδρα. </div>
-            </section>
-            <section class="content-box">
-                <h2>2. Ευρέση Πρώτης Έδρας</h2>
-                <p> Πρέπει να βρούμε μια έδρα που σίγουρα ανήκει στο κυρτό περίβλημα. Ένας τρόπος είναι να βρούμε το
-                    σημείο με το ελάχιστο $z$, και μετά να βρούμε την ακμή με τη μικρότερη κλίση ως προς το οριζόντιο
-                    επίπεδο. </p>
-                <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αλγόριθμος Περιτυλίγματος ΚΠ3</h3>
-                    <pre><code>Αλγόριθμος GiftWrapping3D(P)
-Είσοδος: Σύνολο σημείων P.
-Έξοδοσ: Οι έδρες (F) του Κυρτού Περιβλήματος.
 
-1. Q ← ουρά ακμών (ράχες προς επεξεργασία).
-2. F ← κενό σύνολο εδρών.
-3. Βρες την πρώτη έδρα f₀ (π.χ. με ελάχιστο z).
-4. Πρόσθεσε τις 3 ακμές της f₀ στην Q.
-
-5. Όσο το Q δεν είναι κενό:
-   α. e ← Q.pop() (αφαίρεση ακμής).
-   β. Αν η e έχει ήδη επεξεργαστεί (ανήκει σε 2 έδρες), συνέχισε.
-   γ. f_new ← ΑΛΛΗ-ΕΔΡΑ(e, P).
-   δ. Πρόσθεσε την f_new στο F.
-   ε. Για κάθε ακμή e' της f_new (εκτός της e):
-      Αν η e' δεν είναι στο Q, πρόσθεσέ την.
-
-6. Επίστρεψε F.</code></pre>
-                    <h3><i class="fas fa-code"></i> Συνάρτηση ΑΛΛΗ-ΕΔΡΑ</h3>
-                    <pre><code>Συνάρτηση ΑΛΛΗ-ΕΔΡΑ(e, P)
-Είσοδος: Μια ακμή e = (u, v) και το σύνολο P.
-Έξοδος: Η έδρα f που μοιράζεται την e με την προηγούμενη έδρα.
-
-1. Έστω f_prev η έδρα που γνωρίζουμε ότι περιέχει την e.
-2. Για κάθε σημείο p στο P (εκτός των u, v):
-   α. Υπολόγισε τη γωνία μεταξύ της f_prev και του επιπέδου (u, v, p).
-   β. Βρες το σημείο p_best που μεγιστοποιεί αυτή τη γωνία.
-3. Επίστρεψε το τρίγωνο (u, v, p_best).</code></pre>
-                    <div class="algorithm-note"> <strong>💡 Πολυπλοκότητα:</strong>
-                        <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
-                            <li>O(n) για κάθε βήμα ΑΛΛΗ-ΕΔΡΑ (σάρωση όλων των σημείων).</li>
-                            <li>Συνολικά: <strong>O(n·h)</strong>, όπου h είναι το πλήθος των εδρών του περιβλήματος.
-                            </li>
-                            <li>Είναι "output sensitive" (εξαρτάται από το μέγεθος εξόδου).</li>
-                        </ul>
+                <!-- Concept Visualizer -->
+                <div class="simulator-container"
+                    style="background: transparent; border: none; box-shadow: none; padding: 0; margin: 2rem 0;">
+                    <h4 style="text-align: center; color: #666; font-size: 0.9em; margin-bottom: 0.5rem;">Οπτικοποίηση:
+                        Σάρωση Ημιεπιπέδου</h4>
+                    <p
+                        style="font-size: 0.9em; color: #555; text-align: center; max-width: 600px; margin: 0 auto 1rem auto;">
+                        Παρατηρήστε πώς το μπλε <strong>ημιεπίπεδο</strong> περιστρέφεται γύρω από τη Μοβ Ράχη.
+                        Σαρώνει τον κενό χώρο μέχρι να βρει το πρώτο σημείο (Κόκκινο). Το σχήμα της νέας έδρας (τρίγωνο)
+                        "τεντώνεται" ανάλογα με το πόσο μακριά είναι το σημείο.
+                    </p>
+                    <div class="canvas-wrapper"
+                        style="height: 350px; border-radius: 8px; border: 1px solid #ddd; background: #fafafa;">
+                        <canvas id="ridge-canvas"></canvas>
                     </div>
+                </div>
+
+                <h3>2. Θεωρητικό Υπόβαθρο</h3>
+                <p>Για να κατανοήσουμε τον αλγόριθμο σε βάθος, πρέπει να ορίσουμε αυστηρά τα δομικά του στοιχεία:</p>
+
+                <div class="definition-box">
+                    <h4><i class="fas fa-cube"></i> Ράχη (Ridge) και Έδρα (Facet)</h4>
+                    <ul>
+                        <li><strong>Έδρα (Facet):</strong> Στις 3 διαστάσεις, είναι ένα τρίγωνο που ορίζεται από $d=3$
+                            σημεία.</li>
+                        <li><strong>Ράχη (Ridge):</strong> Είναι το σύνορο μιας έδρας. Στις 3 διαστάσεις, είναι μια
+                            <strong>ακμή</strong> που ορίζεται από $d-1=2$ σημεία.
+                        </li>
+                        <li><strong>Κανόνας Συνδεσιμότητας:</strong> Σε ένα κλειστό πολύεδρο, <strong>κάθε Ράχη ανήκει
+                                ακριβώς σε 2 Έδρες</strong>.</li>
+                    </ul>
+                </div>
+
+                <p>
+                    Αυτός ο κανόνας είναι το κλειδί του αλγορίθμου. Όταν βρούμε μια νέα έδρα, οι ακμές της είναι
+                    "ανοιχτές" (ξέρουμε τη μία τους πλευρά, αλλά ψάχνουμε την άλλη).
+                    Ο αλγόριθμος ουσιαστικά προσπαθεί να "παντρέψει" κάθε Ράχη με τη δεύτερη Έδρα της.
+                </p>
+
+                <h4>Η Δομή PAX (Potential Open Edges)</h4>
+                <p>
+                    Ο αλγόριθμος είναι <strong>αυξητικός</strong> (incremental). Διατηρεί μια λίστα με τις
+                    "εκκρεμότητες", δηλαδή τις Ράχες που έχουμε βρει αλλά δεν έχουμε καλύψει ακόμα και από τις δύο
+                    πλευρές.
+                </p>
+                <ul>
+                    <li>Η δομή <strong>ΡΑΧ</strong> (ή "Μέτωπο") περιέχει ζεύγη $(R, c)$, όπου $R$ είναι η Ράχη (ακμή)
+                        και $c$ είναι η απέναντι κορυφή της γνωστής έδρας.</li>
+                    <li>Κάθε φορά που δημιουργούμε μια νέα έδρα, προσθέτουμε τις νέες τις ακμές (Ράχες) στη δομή PAX.
+                    </li>
+                    <li>Αν μια ακμή υπάρχει ήδη στη PAX (από προηγούμενη έδρα), σημαίνει ότι τώρα βρήκαμε και τη δεύτερη
+                        πλευρά της, άρα "κλείνει" και την αφαιρούμε.</li>
+                </ul>
+
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Συνάρτηση: ΑΛΛΗ-ΕΔΡΑ</h3>
+                    <p>Βρίσκει την άλλη έδρα που μοιράζεται τη ράχη $R$ με την έδρα $R \cup \{c\}$.</p>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Ράχη $R$ και κορυφή $c \notin R$ (ώστε $R \cup \{c\}$ έδρα του
+                                ΚΠ3).</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Έδρα ΚΠ3 που περιέχει την $R$ και δεν
+                                είναι η $R \cup \{c\}$.</li>
+                        </ul>
+
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 10px;">
+                                Έστω υποψήφιο σημείο $u$ από τα σημεία εισόδου (εκτός των $R \cup \{c\}$).
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Για κάθε σημείο $t \notin R \cup \{c, u\}$:
+                                <br>
+                                Αν $c, t$ σε διαφορετικούς ημιχώρους ως προς το υπερεπίπεδο της υποψήφιας έδρας $R \cup
+                                \{u\} \Longrightarrow u \leftarrow t$.
+                            </li>
+                            <li>
+                                Επίστρεψε την έδρα $R \cup \{u\}$.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="algorithm-box" style="margin-top: 2rem;">
+                    <h3><i class="fas fa-code"></i> Αλγόριθμος περιτυλίγματος για ΚΠ3</h3>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> $n$ σημεία του $\mathbb{R}^{3}$ σε γενική θέση.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Το κυρτό τους περίβλημα.</li>
+                        </ul>
+
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 10px;">
+                                Υπολόγισε και τύπωσε μία πρώτη έδρα $F$ του ΚΠ3.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Αρχικοποίησε δομή ΡΑΧ με ράχες $(F \setminus \{x\}, x)$ για κάθε $x \in F$.
+                            </li>
+                            <li>
+                                Όσο η δομή ΡΑΧ έχει στοιχεία, έστω $(R, c) \in \text{ΡΑΧ}$:
+                                <ul style="list-style-type: lower-greek; padding-left: 20px; margin-top: 5px;">
+                                    <li style="margin-bottom: 5px;">Υπολόγισε $F_{new} \leftarrow$ ΑΛΛΗ-ΕΔΡΑ($R, c$).
+                                    </li>
+                                    <li>Για κάθε κορυφή $x \in F_{new}$:
+                                        <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                            <li>Αν υπάρχει σημείο $y$ ώστε η ράχη $(F_{new} \setminus \{x\}, y) \in
+                                                \text{ΡΑΧ}$:
+                                                <br>Διέγραψέ την από τη ΡΑΧ.
+                                            </li>
+                                            <li>Αλλιώς:
+                                                <br>Εισήγαγε τη ράχη $(F_{new} \setminus \{x\}, x)$ στη δομή ΡΑΧ.
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="algorithm-note">
+                    <p><strong>💡 Πολυπλοκότητα:</strong> $\mathcal{O}(nd^{3}) = \mathcal{O}(n)$ για $d$ σταθερό ανά
+                        έδρα. Συνολικά $\mathcal{O}(n \cdot h)$ όπου $h$ το πλήθος των εδρών.</p>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Αρχικοποίηση: Εύρεση Πρώτης Έδρας</h2>
+                <p>Η πρώτη έδρα μπορεί να βρεθεί επιλύοντας ένα πρόβλημα <strong>Γραμμικού Προγραμματισμού</strong>.
+                    Αναζητούμε το υπερεπίπεδο που αφήνει όλα τα σημεία από τη μία πλευρά και βρίσκεται όσο το δυνατόν
+                    "ψηλότερα".</p>
+
+                <div class="methodology-box">
+                    <p>Θέλουμε να προσδιορίσουμε τα $a_1, \dots, a_{d-1}, \lambda$ ώστε για κάθε σημείο $p_i$ να ισχύει:
+                    </p>
+                    <div class="math-block">$$ a_1 p_{i,1} + \dots + a_{d-1} p_{i,d-1} + \lambda \le p_{i,d} $$</div>
+                    <p>Με στόχο τη <strong>μεγιστοποίηση</strong> του $\lambda$ (ή ελαχιστοποίηση του $-\lambda$).</p>
+                    <p>Εφόσον το ΚΠ έχει μη-μηδενικό όγκο, θα υπάρχει τουλάχιστον μία έδρα που ικανοποιεί τις παραπάνω
+                        συνθήκες με ισότητα για τουλάχιστον $d$ σημεία.</p>
                 </div>
             </section> <!-- Simulator -->
             <section class="simulator-container" id="gift-3d-simulator">
@@ -137,9 +242,14 @@
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/viewer3d.js"></script>
     <script src="../../assets/js/simulators/gift-wrapping-3d.js"></script>
+    <script src="../../assets/js/simulators/ridge-concept.js"></script>
     <script>
         window.sim = new GiftWrapping3DSimulator('sim-canvas');
-        setTimeout(() => window.sim.reset(), 50);
+        window.conceptSim = new RidgeConceptSimulator('ridge-canvas');
+        setTimeout(() => {
+            window.sim.reset();
+            window.conceptSim.reset();
+        }, 50);
     </script>
 </body>
 

@@ -99,30 +99,38 @@
                     Περιβλήματος και το αριστερότερο του Δεξιού. Ανεβαίνουμε διαδοχικά (zig-zag) μέχρι να βρούμε την
                     εφαπτόμενη. </p>
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Προσδιορισμός Άνω Γέφυρας</h3>
-                    <pre><code>Αλγόριθμος FIND_UPPER_BRIDGE(A, B)
-Είσοδος: Πολύγωνο A (Αριστερό), Πολύγωνο B (Δεξιό).
-Έξοδος: Ζεύγος δεικτών (i, j) που ορίζουν την άνω γέφυρα.
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Προσδιορισμός άνω γέφυρας</h3>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Κυρτά περιβλήματα $K\Pi(A)$, $K\Pi(B)$ με κορυφές αριθμημένες
+                                με τη θετική φορά.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Η άνω γέφυρα του $K\Pi(A \cup B)$.
+                            </li>
+                        </ul>
 
-1. i ← δείκτης του δεξιότερου σημείου του A (max x).
-2. j ← δείκτης του αριστερότερου σημείου του B (min x).
-
-3. Επανάλαβε:
-   bool changed = false
-   
-   // Έλεγχος αν το A[i+1] είναι "πιο πάνω" από την ευθεία A[i]-B[j]
-   Όσο CCW(B[j], A[i], A[i+1]) είναι Αριστερόστροφη (>0):
-      i ← (i + 1) mod |A|
-      changed = true
-   
-   // Έλεγχος αν το B[j-1] είναι "πιο πάνω" από την ευθεία A[i]-B[j]
-   Όσο CCW(A[i], B[j], B[j-1]) είναι Δεξιόστροφη (<0):
-      j ← (j - 1) mod |B|
-      changed = true
-      
-4. Μέχρι changed == false.
-
-5. Επίστρεψε (i, j).</code></pre>
+                        <p style="margin-top: 15px;"><strong>Βήματα:</strong></p>
+                        <ol style="padding-left: 20px;">
+                            <li style="margin-bottom: 10px;">
+                                <strong>Αρχικοποίηση:</strong> $A_{i}$ δεξιότερη κορυφή του $K\Pi(A)$ και $B_{j}$
+                                αριστερότερη κορυφή του $K\Pi(B)$.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Αν η ευθεία των $A_{i}, A_{i+1}$ δεν αφήνει στο ίδιο ημιεπίπεδο τα σημεία του $A$ και το
+                                $B_{j}$, τότε το $i$ αυξάνεται κατά ένα.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Αν η ευθεία των $B_{j}, B_{j-1}$ δεν αφήνει στο ίδιο ημιεπίπεδο τα σημεία του $B$ και το
+                                $A_{i}$, τότε το $j$ μειώνεται κατά ένα.
+                            </li>
+                            <li>
+                                Αν στα προηγούμενα δύο βήματα μεταβλήθηκε το $i$, το $j$ ή και τα δύο, τότε επίστρεψε
+                                στο Βήμα 2.
+                                <br>
+                                <strong>Αλλιώς</strong>, τύπωσε την ακμή $A_{i}B_{j}$ ως άνω γέφυρα.
+                            </li>
+                        </ol>
+                    </div>
                     <div class="algorithm-note"> <strong>💡 Διαισθητική εξήγηση:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li>Φανταστείτε μια ευθεία να ακουμπάει στις κορυφές των δύο πολυγώνων.</li>

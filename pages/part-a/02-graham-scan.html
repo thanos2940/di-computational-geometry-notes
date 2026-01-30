@@ -78,28 +78,56 @@
                     </ol>
                 </div>
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας</h3>
-                    <pre><code>Αλγόριθμος: Αυξητικός αλγόριθμος (Graham Scan)
-Είσοδος: Σύνολο P σε γενική θέση.
-Έξοδος: Κατάλογος κορυφών L σε ωρολόγια διάταξη.
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητικός Αλγόριθμος (Graham Scan)</h3>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Ένα σύνολο $P$ από σημεία στο επίπεδο σε γενική θέση.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Ένας κατάλογος των κορυφών του
+                                $K\Pi(P)$ σε ωρολόγια διάταξη.</li>
+                        </ul>
 
-1. Ταξινόμηση p₁, …, pₙ λεξικογραφικά.
-
-2. L_άνω ← {p₁, p₂}
-3. για i ← 3 έως n:
-   α. Πρόσθεσε pᵢ στο L_άνω.
-   β. Όσο |L_άνω| > 2 και στροφή τελευταίων τριών όχι δεξιά:
-      Αφαίρεσε το μεσαίο από τα τρία τελευταία.
-
-4. L_κάτω ← {pₙ, pₙ₋₁}
-5. για i ← n-2 προς 1:
-   α. Πρόσθεσε pᵢ στο L_κάτω.
-   β.  Όσο |L_κάτω| > 2 και στροφή τελευταίων τριών όχι δεξιά:
-      Αφαίρεσε το μεσαίο από τα τρία τελευταία.
-
-6. Αφαίρεσε 1ο και τελευταίο του L_κάτω (αποφυγή διπλότυπων).
-7. L ← L_άνω ∪ L_κάτω.
-8. Επιστροφή L.</code></pre>
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 5px;">Διατάσσουμε τα σημεία κατά αύξουσα λεξικογραφική διάταξη.
+                                Έστω $p_1, \dots, p_n$ η ακολουθία των σημείων που προκύπτει.</li>
+                            <li style="margin-bottom: 5px;">Εισάγουμε τα σημεία $p_1$ και $p_2$, με αυτήν τη σειρά, σε
+                                έναν νέο κατάλογο $L_{upper}$.</li>
+                            <li style="margin-bottom: 5px;"><strong>για</strong> $i \leftarrow 3$ <strong>έως</strong>
+                                $n$:
+                                <ol style="list-style-type: lower-alpha; padding-left: 20px; margin-top: 5px;">
+                                    <li style="margin-bottom: 5px;">Προσθέτουμε το $p_i$ στον κατάλογο $L_{upper}$.</li>
+                                    <li><strong>Όσο</strong> ο $L_{upper}$ περιέχει περισσότερα από δύο σημεία και η
+                                        στροφή που ορίζουν τα τρία τελευταία από αυτά δεν είναι δεξιά:
+                                        <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                            <li>Αφαιρούμε από τον $L_{upper}$ το μεσαίο από τα τρία τελευταία σημεία
+                                                του.</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li style="margin-bottom: 5px;">Εισάγουμε τα σημεία $p_n$ και $p_{n-1}$, με αυτήν τη σειρά,
+                                σε έναν νέο κατάλογο $L_{lower}$.</li>
+                            <li style="margin-bottom: 5px;"><strong>για</strong> $i \leftarrow n-2$ <strong>έως</strong>
+                                1 (με βήμα -1):
+                                <ol style="list-style-type: lower-alpha; padding-left: 20px; margin-top: 5px;">
+                                    <li style="margin-bottom: 5px;">Προσθέτουμε το $p_i$ στον κατάλογο $L_{lower}$.</li>
+                                    <li><strong>Όσο</strong> ο $L_{lower}$ περιέχει περισσότερα από δύο σημεία και η
+                                        στροφή που ορίζουν τα τρία τελευταία από αυτά δεν είναι δεξιά:
+                                        <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                            <li>Αφαιρούμε από τον $L_{lower}$ το μεσαίο από τα τρία τελευταία σημεία
+                                                του.</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li style="margin-bottom: 5px;">Αφαιρούμε από τον $L_{lower}$ το πρώτο και το τελευταίο
+                                σημείο του, ώστε να αποφύγουμε τη διπλή καταχώριση των κορυφών στις οποίες συναρμόζονται
+                                το άνω και το κάτω περίβλημα.</li>
+                            <li style="margin-bottom: 5px;">Επισυνάπτουμε τον $L_{lower}$ στον $L_{upper}$. Έστω $L$ ο
+                                κατάλογος που προκύπτει.</li>
+                            <li><strong>Επιστροφή</strong> $L$.</li>
+                        </ol>
+                    </div>
                     <div class="algorithm-note"> <strong>💡 Βασικές Παρατηρήσεις:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li><strong>Στροφή "όχι δεξιά"</strong> = αριστερόστροφη ή ευθεία (CCW ≥ 0)</li>

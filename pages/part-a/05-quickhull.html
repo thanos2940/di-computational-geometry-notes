@@ -69,15 +69,28 @@
                     <li>Επαναλαμβάνουμε αναδρομικά για τις περιοχές έξω από τις ακμές του τριγώνου.</li>
                 </ol>
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας</h3>
-                    <pre><code>Αλγόριθμος QuickHull(A, B, S)
-αν S = {A, B} τότε:
-   επίστρεψε την ακμή AB
-αλλιώς:
-   C ← σημείο του S με μέγιστη απόσταση από την AB.
-   M ← σημεία δεξιά της κατευθυνόμενης ακμής AC.
-   N ← σημεία δεξιά της κατευθυνόμενης ακμής CB.
-   επίστρεψε { QuickHull(A, C, M) ∪ QuickHull(C, B, N) }</code></pre>
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: QuickHull</h3>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <p><strong>function QuickHull($A, B, S$)</strong></p>
+                        <ul style="list-style: none; padding-left: 20px;">
+                            <li>
+                                <strong>if</strong> ($S = \{A, B\}$) <strong>τότε return</strong> $AB$
+                            </li>
+                            <li style="margin-top: 10px;">
+                                <strong>else</strong>
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li>$\Gamma$ = σημείο του $S$ με τη μεγαλύτερη απόσταση από την ευθεία $AB$</li>
+                                    <li>$M$ = το σύνολο των σημείων του $S$ που είναι δεξιά της κατευθυντής ευθείας
+                                        $A\Gamma$</li>
+                                    <li>$N$ = το σύνολο των σημείων του $S$ που είναι δεξιά της κατευθυντής ευθείας
+                                        $\Gamma B$</li>
+                                    <li><strong>return</strong> QuickHull($A, \Gamma, M$) και QuickHull($\Gamma, B, N$)
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="algorithm-note"> <strong>💡 Βασικές Παρατηρήσεις:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li><strong>Βασική ιδέα:</strong> Απορρίπτουμε σημεία εντός τριγώνου ABC</li>

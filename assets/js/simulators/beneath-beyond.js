@@ -221,10 +221,11 @@ class BeneathBeyondInteractive {
         const w = this.canvas.width, h = this.canvas.height;
         const cx = w / 2, cy = h / 2, r = Math.min(w, h) * 0.3;
 
-        // Create hexagon
+        // Create hexagon in CCW order
         this.points = [];
         for (let i = 0; i < 6; i++) {
-            const angle = i * Math.PI * 2 / 6 - Math.PI / 2;
+            // Χρησιμοποιούμε αρνητικό πρόσημο στο i για CCW φορά (αφού το Y αυξάνεται προς τα κάτω)
+            const angle = -i * Math.PI * 2 / 6 - Math.PI / 2;
             this.points.push(new Point(cx + r * Math.cos(angle), cy + r * Math.sin(angle)));
         }
 
@@ -262,13 +263,33 @@ class BeneathBeyondInteractive {
         const ap = this.activePoint;
         const n = P.length;
 
-        // Draw edges with visibility coloring
+        // 1. Προ-υπολογισμός ορατότητας όλων των ακμών
+        const edgeVisibility = [];
         for (let i = 0; i < n; i++) {
             const u = P[i];
             const v = P[(i + 1) % n];
+            edgeVisibility.push(ccw(u, v, ap) < 0);
+        }
 
-            // CCW polygon: visible if p is RIGHT of edge (ccw < 0)
-            const isVisible = ccw(u, v, ap) < 0;
+        // 2. Σχεδίαση ακμών και γραμμών όρασης
+        for (let i = 0; i < n; i++) {
+            const u = P[i];
+            const v = P[(i + 1) % n];
+            const isVisible = edgeVisibility[i];
+
+            if (isVisible) {
+                this.ctx.save();
+                this.ctx.beginPath();
+                this.ctx.setLineDash([5, 5]);
+                this.ctx.moveTo(ap.x, ap.y);
+                this.ctx.lineTo(u.x, u.y);
+                this.ctx.moveTo(ap.x, ap.y);
+                this.ctx.lineTo(v.x, v.y);
+                this.ctx.strokeStyle = 'rgba(231, 76, 60, 0.3)';
+                this.ctx.lineWidth = 1;
+                this.ctx.stroke();
+                this.ctx.restore();
+            }
 
             this.ctx.beginPath();
             this.ctx.moveTo(u.x, u.y);
@@ -277,7 +298,6 @@ class BeneathBeyondInteractive {
             this.ctx.lineWidth = 4;
             this.ctx.stroke();
 
-            // Edge label
             const mx = (u.x + v.x) / 2;
             const my = (u.y + v.y) / 2;
             this.ctx.fillStyle = isVisible ? '#c0392b' : '#2980b9';
@@ -285,18 +305,47 @@ class BeneathBeyondInteractive {
             this.ctx.fillText(isVisible ? 'Ορατή' : 'Αόρατη', mx - 15, my - 8);
         }
 
-        // Vertices
+        // 3. Σχεδίαση κορυφών με βάση τον "Χρωματισμό" της θεωρίας
         P.forEach((p, i) => {
+            const prevEdgeVis = edgeVisibility[(i - 1 + n) % n];
+            const nextEdgeVis = edgeVisibility[i];
+
+            let vertexColor = '#2c3e50'; // Default
+            let isHorizon = false;
+
+            if (prevEdgeVis && nextEdgeVis) {
+                vertexColor = '#e74c3c'; // Κόκκινη κορυφή (2 κόκκινες ακμές)
+            } else if (!prevEdgeVis && !nextEdgeVis) {
+                vertexColor = '#3498db'; // Γαλάζια κορυφή (2 γαλάζιες ακμές)
+            } else {
+                vertexColor = '#8e44ad'; // Βυσσινί κορυφή (1 κόκκινη & 1 γαλάζια) -> ΟΡΙΖΟΝΤΑΣ
+                isHorizon = true;
+            }
+
             this.ctx.beginPath();
-            this.ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
-            this.ctx.fillStyle = '#2c3e50';
+            this.ctx.arc(p.x, p.y, isHorizon ? 7 : 5, 0, Math.PI * 2);
+            this.ctx.fillStyle = vertexColor;
             this.ctx.fill();
-            this.ctx.fillStyle = '#2c3e50';
+
+            // Halo for horizon
+            if (isHorizon) {
+                this.ctx.strokeStyle = '#fff';
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+            }
+
+            this.ctx.fillStyle = vertexColor;
             this.ctx.font = 'bold 11px Arial';
-            this.ctx.fillText(`V${i}`, p.x + 7, p.y - 7);
+            this.ctx.fillText(`V${i}`, p.x + 10, p.y - 10);
+
+            if (isHorizon) {
+                this.ctx.fillStyle = '#8e44ad';
+                this.ctx.font = 'italic bold 10px Arial';
+                this.ctx.fillText('Ορίζοντας', p.x + 10, p.y + 15);
+            }
         });
 
-        // Active Point
+        // 4. Active Point
         this.ctx.beginPath();
         this.ctx.arc(ap.x, ap.y, 10, 0, Math.PI * 2);
         this.ctx.fillStyle = '#9b59b6';

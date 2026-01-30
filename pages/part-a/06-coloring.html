@@ -132,18 +132,34 @@
                 </p>
 
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητικός Αλγόριθμος (Beneath-Beyond)</h3>
-                    <pre><code>Αλγόριθμος Beneath-Beyond
-Είσοδος: Σύνολο σημείων P.
-Έξοδος: Κυρτό περίβλημα CH.
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητικός αλγόριθμος (μέσω χρωματισμού)</h3>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> $n$ σημεία στο επίπεδο σε γενική θέση.</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Η αλυσίδα των ακμών και κορυφών του
+                                κυρτού περιβλήματος.</li>
+                        </ul>
 
-1. Δημιούργησε ένα αρχικό τρίγωνο (ή τετράεδρο στις 3D) από τα πρώτα σημεία.
-2. Για κάθε επόμενο σημείο p από το P:
-   α. Βρες τις "κόκκινες" (ορατές) έδρες του τρέχοντος πολυτόπου από το p.
-   β. Βρες τις ακμές του "ορίζοντα" (σύνορο μεταξύ ορατών και μη-ορατών εδρών).
-   γ. Διέγραψε τις ορατές έδρες.
-   δ. Δημιούργησε νέες έδρες συνδέοντας το p με τις ακμές του ορίζοντα.
-3. Επίστρεψε το τελικό πολύτοπο.</code></pre>
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 5px;">Ταξινόμησε τα σημεία λεξικογραφικά κατά φθίνουσα τετμημένη.
+                            </li>
+                            <li style="margin-bottom: 5px;">Αρχικοποίησε το τρέχον πολύγωνο ως το τρίγωνο που ορίζεται
+                                από τα τρία δεξιότερα σημεία.</li>
+                            <li style="margin-bottom: 5px;"><strong>Για</strong> το σημείο $p_{k}$, όπου $k=4, \dots,
+                                n$:
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li style="margin-bottom: 5px;">Εξέτασε μία ή δύο από τις ακμές που προσπίπτουν στην
+                                        $p_{k-1}$ για να βρεις μία κόκκινη ακμή.</li>
+                                    <li style="margin-bottom: 5px;">Ξεκινώντας από μία κόκκινη ακμή, βρες όλες τις
+                                        κόκκινες ακμές και τις δύο βυσσινί κορυφές.</li>
+                                    <li>Αντικατάστησε, στη δομή που αναπαριστά το τρέχον πολύγωνο, τις κόκκινες ακμές με
+                                        δύο νέες ακμές που ορίζονται από την $p_{k}$ και τις βυσσινί κορυφές.</li>
+                                </ul>
+                            </li>
+                            <li>Επίστρεψε το τρέχον πολύγωνο.</li>
+                        </ol>
+                    </div>
                     <div class="algorithm-note">
                         <strong>💡 Επεξήγηση Χρωματισμού:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
