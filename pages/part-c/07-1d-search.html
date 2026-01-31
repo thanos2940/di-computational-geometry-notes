@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1D Γεωμετρική Αναζήτηση | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../index.html">Αρχική</a>
+                <a href="../../index.html#part-c">Μέρος Γ</a>
+                <span>1D Αναζήτηση</span>
+            </div>
+
+            <h1>Μονοδιάστατη Γεωμετρική Αναζήτηση (1D Range Search)</h1>
+
+            <div class="exam-warning">
+                <strong>ΣΙΓΟΥΡΑ ΘΑ ΠΕΣΕΙ:</strong> Κατασκευή και διερεύνηση 1D ή 2D δέντρου αναζήτησης.
+                Η 1D αναζήτηση είναι η βάση για τα kd-trees και range trees!
+            </div>
+
+            <section class="content-box">
+                <h2>1. Εισαγωγή (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p>
+                        Φανταστείτε έναν <strong>τηλεφωνικό κατάλογο</strong> με ονόματα ταξινομημένα αλφαβητικά.
+                        Αν θέλετε να βρείτε όλα τα ονόματα από "Κώστας" έως "Νίκος", δεν χρειάζεται να διαβάσετε
+                        ολόκληρο τον κατάλογο!
+                    </p>
+                    <p>
+                        <strong>Η ιδέα:</strong> Βρίσκετε πρώτα το σημείο όπου "χωρίζεται" το διάστημα
+                        (π.χ. πού τελειώνουν οι λέξεις πριν το "Κ" και αρχίζουν αυτές μετά το "Ν"),
+                        και μετά συλλέγετε μόνο τα σχετικά στοιχεία.
+                    </p>
+                </div>
+
+                <div class="definition-box">
+                    <span class="definition-title">Ορισμός: 1D Range Query</span>
+                    Δεδομένου ενός συνόλου σημείων $P = \{p_1, p_2, ..., p_n\}$ στην ευθεία και ενός διαστήματος
+                    $[x, x']$, βρες όλα τα σημεία $p \in P$ τέτοια ώστε $x \le p \le x'$.
+                </div>
+
+                <p>
+                    Η <strong>naive λύση</strong> (έλεγχος κάθε σημείου) έχει πολυπλοκότητα $O(n)$.
+                    Με τη χρήση <strong>ισοζυγισμένου δυαδικού δέντρου αναζήτησης (ΔΔΑ)</strong>,
+                    μπορούμε να πετύχουμε $O(\log n + k)$, όπου $k$ τα σημεία στην απάντηση.
+                </p>
+            </section>
+
+            <section class="content-box">
+                <h2>2. Δομή: Ισοζυγισμένο ΔΔΑ με Δεδομένα στα Φύλλα</h2>
+
+                <div class="definition-box">
+                    <span class="definition-title">Βασική Ιδέα</span>
+                    <ul>
+                        <li><strong>Φύλλα:</strong> Αποθηκεύουν τα πραγματικά σημεία (ταξινομημένα αριστερά→δεξιά)</li>
+                        <li><strong>Εσωτερικοί κόμβοι:</strong> Αποθηκεύουν την <em>τιμή διαχωρισμού</em> (splitting
+                            value) -
+                            τη μέγιστη τιμή του αριστερού υποδέντρου</li>
+                        <li><strong>Ισορροπία:</strong> Το δέντρο είναι ισοζυγισμένο, άρα ύψος $O(\log n)$</li>
+                    </ul>
+                </div>
+
+                <p><strong>Παράδειγμα:</strong> Για τα σημεία $\{2, 5, 8, 12, 15, 19, 23, 27\}$:</p>
+                <pre><code>              [12]
+            /      \
+         [5]        [19]
+        /   \      /    \
+      [2]   [8]  [15]   [23]
+      / \   / \   / \    / \
+     2   5 8  12 15 19  23 27
+</code></pre>
+                <p>Κάθε εσωτερικός κόμβος περιέχει τη μέγιστη τιμή του αριστερού του υποδέντρου.</p>
+            </section>
+
+            <section class="content-box">
+                <h2>3. Κόμβος Διχασμού (Split Node)</h2>
+
+                <div class="definition-box">
+                    <span class="definition-title">Ορισμός: Split Node</span>
+                    Ο <strong>κόμβος διχασμού</strong> για ένα διάστημα $[x, x']$ είναι ο κόμβος $v$ τέτοιος ώστε:
+                    <ul>
+                        <li>Τα μονοπάτια προς $x$ και $x'$ χωρίζονται στον $v$</li>
+                        <li>Ισοδύναμα: $x \le v.value < x'$ (η τιμή του κόμβου είναι μεταξύ των ορίων)</li>
+                    </ul>
+                    Ο split node είναι ο "πρόγονος" που περιέχει όλα τα σχετικά σημεία.
+                </div>
+
+                <div class="algorithm-box">
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: FIND-SPLIT-NODE</h3>
+                    <div
+                        style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                        <p><strong>function FIND-SPLIT-NODE($T, x, x'$)</strong></p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>Είσοδος:</strong> Δέντρο $T$, διάστημα $[x, x']$</li>
+                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Κόμβος διχασμού $v$</li>
+                        </ul>
+
+                        <ol style="padding-left: 20px; margin-top: 15px;">
+                            <li style="margin-bottom: 10px;">$v \leftarrow T.root$</li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Όσο</strong> ο $v$ δεν είναι φύλλο <strong>και</strong>
+                                ($x' \le v.value$ <strong>ή</strong> $x > v.value$):
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li><strong>Αν</strong> $x' \le v.value$: $v \leftarrow v.left$</li>
+                                    <li><strong>Αλλιώς:</strong> $v \leftarrow v.right$</li>
+                                </ul>
+                            </li>
+                            <li><strong>Επίστρεψε</strong> $v$</li>
+                        </ol>
+                    </div>
+                    <div class="algorithm-note">
+                        <strong>💡 Διαίσθηση:</strong> Ακολουθούμε το δέντρο προς τα κάτω.
+                        Αν και τα δύο όρια πάνε αριστερά (ή δεξιά), συνεχίζουμε εκεί.
+                        Μόλις χωρίζονται, σταματάμε - βρήκαμε τον split node!
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>4. Αλγόριθμος 1D Range Query</h2>
+
+                <div class="warning-box">
+                    <strong>⚠️ ΠΡΟΣΟΧΗ - Σύμβαση Ορίων:</strong><br>
+                    Στις διαφάνειες και εξετάσεις: <strong>αριστερά → ≤</strong> (όχι &lt;).<br>
+                    Δηλαδή στο αριστερό υποδέντρο ακολουθούμε αν $x \le v.value$, όχι $x < v.value$. </div>
+
+                        <div class="algorithm-box">
+                            <h3><i class="fas fa-code"></i> Ψευδοκώδικας: 1D-RANGE-QUERY</h3>
+                            <div
+                                style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
+                                <p><strong>function 1D-RANGE-QUERY($T, x, x'$)</strong></p>
+
+                                <ol style="padding-left: 20px; margin-top: 15px;">
+                                    <li style="margin-bottom: 10px;">$v_{split} \leftarrow$ FIND-SPLIT-NODE($T, x, x'$)
+                                    </li>
+                                    <li style="margin-bottom: 10px;">
+                                        <strong>Αν</strong> ο $v_{split}$ είναι φύλλο:
+                                        <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                            <li>Έλεγξε αν το σημείο του είναι μέσα στο $[x, x']$</li>
+                                        </ul>
+                                    </li>
+                                    <li style="margin-bottom: 10px;">
+                                        <strong>Αλλιώς:</strong>
+                                        <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                            <li style="margin-bottom: 8px;">
+                                                <strong>// Αριστερό μονοπάτι</strong><br>
+                                                $v \leftarrow v_{split}.left$<br>
+                                                <strong>Όσο</strong> ο $v$ δεν είναι φύλλο:
+                                                <ul
+                                                    style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                                                    <li><strong>Αν</strong> $x \le v.value$:
+                                                        <br>&nbsp;&nbsp;&nbsp;Ανάφερε ΟΛΑ τα σημεία στο $v.right$
+                                                        <br>&nbsp;&nbsp;&nbsp;$v \leftarrow v.left$
+                                                    </li>
+                                                    <li><strong>Αλλιώς:</strong> $v \leftarrow v.right$</li>
+                                                </ul>
+                                                Έλεγξε το φύλλο $v$.
+                                            </li>
+                                            <li>
+                                                <strong>// Δεξί μονοπάτι (συμμετρικά)</strong><br>
+                                                $v \leftarrow v_{split}.right$<br>
+                                                <strong>Όσο</strong> ο $v$ δεν είναι φύλλο:
+                                                <ul
+                                                    style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
+                                                    <li><strong>Αν</strong> $x' > v.value$:
+                                                        <br>&nbsp;&nbsp;&nbsp;Ανάφερε ΟΛΑ τα σημεία στο $v.left$
+                                                        <br>&nbsp;&nbsp;&nbsp;$v \leftarrow v.right$
+                                                    </li>
+                                                    <li><strong>Αλλιώς:</strong> $v \leftarrow v.left$</li>
+                                                </ul>
+                                                Έλεγξε το φύλλο $v$.
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="definition-box">
+                            <span class="definition-title">Πολυπλοκότητα</span>
+                            <ul>
+                                <li><strong>Χρόνος:</strong> $O(\log n + k)$ όπου $k$ = αριθμός σημείων στην απάντηση
+                                </li>
+                                <li><strong>Χώρος:</strong> $O(n)$</li>
+                            </ul>
+                            Η $\log n$ αντιστοιχεί στο ύψος του δέντρου (εύρεση split node + 2 μονοπάτια).
+                        </div>
+            </section>
+
+            <section class="content-box">
+                <h2>5. Λυμένο Παράδειγμα</h2>
+
+                <div class="solved-example">
+                    <h4>Παράδειγμα: 1D Range Query [6, 20]</h4>
+
+                    <p><strong>Δεδομένα:</strong> $P = \{2, 5, 8, 12, 15, 19, 23, 27\}$, Query: $[6, 20]$</p>
+
+                    <h5>Βήμα 1: Κατασκευή Δέντρου</h5>
+                    <pre><code>              [12]          ← root
+            /      \
+         [5]        [19]
+        /   \      /    \
+      [2]   [8]  [15]   [23]
+      / \   / \   / \    / \
+     2   5 8  12 15 19  23 27</code></pre>
+
+                    <h5>Βήμα 2: Εύρεση Split Node</h5>
+                    <ul>
+                        <li>$v = [12]$ (root)</li>
+                        <li>Έλεγχος: $x' = 20 \le 12$? ΟΧΙ. $x = 6 > 12$? ΟΧΙ.</li>
+                        <li>Άρα <strong>$[12]$ είναι ο split node!</strong></li>
+                    </ul>
+
+                    <h5>Βήμα 3: Αριστερό Μονοπάτι (από [12] αριστερά)</h5>
+                    <ul>
+                        <li>$v = [5]$: $x=6 \le 5$? ΟΧΙ → πάμε δεξιά</li>
+                        <li>$v = [8]$: $x=6 \le 8$? ΝΑΙ →
+                            <ul>
+                                <li>Αναφέρουμε ΟΛΟ το δεξί υποδέντρο: <strong>$\{12\}$</strong></li>
+                                <li>Πάμε αριστερά στο φύλλο $8$</li>
+                            </ul>
+                        </li>
+                        <li>Φύλλο $8$: $6 \le 8 \le 20$? ΝΑΙ → <strong>$\{8\}$</strong></li>
+                    </ul>
+
+                    <h5>Βήμα 4: Δεξί Μονοπάτι (από [12] δεξιά)</h5>
+                    <ul>
+                        <li>$v = [19]$: $x'=20 > 19$? ΝΑΙ →
+                            <ul>
+                                <li>Αναφέρουμε ΟΛΟ το αριστερό υποδέντρο: <strong>$\{15, 19\}$</strong></li>
+                                <li>Πάμε δεξιά</li>
+                            </ul>
+                        </li>
+                        <li>$v = [23]$: $x'=20 > 23$? ΟΧΙ → πάμε αριστερά</li>
+                        <li>Φύλλο $23$: $6 \le 23 \le 20$? ΟΧΙ → αγνοούμε</li>
+                    </ul>
+
+                    <h5>Αποτέλεσμα</h5>
+                    <p><strong>Απάντηση:</strong> $\{8, 12, 15, 19\}$ ✓</p>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>6. Σύνδεση με 2D Αναζήτηση</h2>
+                <p>
+                    Η 1D αναζήτηση είναι το θεμέλιο για τις 2D δομές:
+                </p>
+                <ul>
+                    <li><strong>kd-tree:</strong> Εναλλάσσει 1D αναζητήσεις μεταξύ x και y άξονα</li>
+                    <li><strong>Range Tree:</strong> Χρησιμοποιεί 1D δέντρα ως "συνοδευτικές δομές" σε κάθε κόμβο</li>
+                </ul>
+            </section>
+
+            <div class="page-nav">
+                <a href="06-lifting.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Προηγούμενο</a>
+                <a href="08-kd-tree.html" class="btn">Επόμενο: kd-Trees <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/utils.js"></script>
+</body>
+
+</html>

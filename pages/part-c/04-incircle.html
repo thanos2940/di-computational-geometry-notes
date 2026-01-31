@@ -45,7 +45,8 @@
     <main class="main-content">
         <div class="container">
             <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-c">Μέρος Γ</a>
-                <span>Κατηγόρημα InCircle</span> </div>
+                <span>Κατηγόρημα InCircle</span>
+            </div>
             <h1>Κατηγόρημα InCircle (Κενός Κύκλος)</h1>
             <section class="content-box">
                 <h2>1. Το Πρόβλημα (Διαισθητικά)</h2>
@@ -65,7 +66,8 @@
                 <div class="definition-box"> <strong>Κατηγόρημα InCircle:</strong> Δοθέντων τριών σημείων $p_1, p_2,
                     p_3$ (που ορίζουν τρίγωνο) και ενός τέταρτου σημείου $q$, θέλουμε να ελέγξουμε αν το $q$ βρίσκεται
                     <strong>εντός</strong>, <strong>εκτός</strong> ή <strong>πάνω</strong> στον περιγεγραμμένο κύκλο του
-                    τριγώνου. </div>
+                    τριγώνου.
+                </div>
             </section>
             <section class="content-box">
                 <h2>2. Ο Αλγεβρικός Τύπος</h2>
@@ -98,12 +100,142 @@
                     </div>
                 </div>
             </section>
+
             <section class="content-box">
-                <h2>3. Εφαρμογή στο Edge Flip</h2>
+                <h2>3. Πώς Γράφω την Ορίζουσα στην Εξέταση</h2>
+
+                <div class="exam-warning">
+                    <strong>ΣΗΜΑΝΤΙΚΟ</strong>: Στην εξέταση αρκεί να γράψουμε την <strong>1η υποορίζουσα 3×3</strong>
+                    (ανάπτυγμα κατά Laplace ως προς την τελευταία στήλη). Δεν χρειάζεται πλήρης υπολογισμός!
+                </div>
+
+                <div class="methodology-box">
+                    <h4>Βήματα Υπολογισμού:</h4>
+                    <ol>
+                        <li>
+                            <strong>Γράψε τη μήτρα 4×4:</strong>
+                            <div class="math-block">
+                                $$ M = \begin{bmatrix} p_{1x} & p_{1y} & p_{1x}^2 + p_{1y}^2 & 1 \\ p_{2x} & p_{2y} &
+                                p_{2x}^2 + p_{2y}^2 & 1 \\ p_{3x} & p_{3y} & p_{3x}^2 + p_{3y}^2 & 1 \\ q_x & q_y &
+                                q_x^2 + q_y^2 & 1 \end{bmatrix} $$
+                            </div>
+                        </li>
+                        <li>
+                            <strong>Ανάπτυξη Laplace (τελευταία στήλη):</strong>
+                            <p>Επειδή η τελευταία στήλη έχει μόνο 1, η ορίζουσα είναι:</p>
+                            <div class="math-block">
+                                $$ \Delta = M_{14} - M_{24} + M_{34} - M_{44} $$
+                            </div>
+                            <p>Όπου $M_{ij}$ είναι η υποορίζουσα 3×3 (αφαιρώντας γραμμή $i$, στήλη $j$).</p>
+                        </li>
+                        <li>
+                            <strong>Στην πράξη:</strong> Αρκεί να υπολογίσουμε την <em>πρώτη υποορίζουσα</em> $M_{14}$
+                            και να ελέγξουμε το πρόσημο, αν θέλουμε μόνο να δούμε αν το $q$ είναι εντός/εκτός.
+                        </li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>4. Αριθμητικό Παράδειγμα "Στο Χαρτί"</h2>
+
+                <div class="solved-example">
+                    <h4>Παράδειγμα: Έλεγχος αν το Q είναι εντός του κύκλου</h4>
+
+                    <p><strong>Δεδομένα:</strong></p>
+                    <ul>
+                        <li>$p_1 = (0, 0)$</li>
+                        <li>$p_2 = (4, 0)$</li>
+                        <li>$p_3 = (2, 3)$</li>
+                        <li>$q = (2, 1)$ (σημείο ελέγχου)</li>
+                    </ul>
+
+                    <h5>Βήμα 1: Έλεγχος Φοράς (CCW/CW)</h5>
+                    <p>Υπολογίζουμε την ορίζουσα 3×3 για τη φορά:</p>
+                    <div class="math-block">
+                        $$ \det \begin{bmatrix} 1 & 0 & 0 \\ 1 & 4 & 0 \\ 1 & 2 & 3 \end{bmatrix} = 1 \cdot (4 \cdot 3 -
+                        0 \cdot 2) = 12 > 0 $$
+                    </div>
+                    <p>Άρα τα σημεία είναι <strong>CCW (αντιωρολογιακά)</strong>.</p>
+
+                    <h5>Βήμα 2: Κατασκευή Μήτρας InCircle</h5>
+                    <div class="math-block">
+                        $$ M = \begin{bmatrix} 0 & 0 & 0^2+0^2 & 1 \\ 4 & 0 & 4^2+0^2 & 1 \\ 2 & 3 & 2^2+3^2 & 1 \\ 2 &
+                        1 & 2^2+1^2 & 1 \end{bmatrix} = \begin{bmatrix} 0 & 0 & 0 & 1 \\ 4 & 0 & 16 & 1 \\ 2 & 3 & 13 &
+                        1 \\ 2 & 1 & 5 & 1 \end{bmatrix} $$
+                    </div>
+
+                    <h5>Βήμα 3: Υπολογισμός Ορίζουσας (Laplace, 1η στήλη)</h5>
+                    <p>Αναπτύσσουμε ως προς την <strong>1η στήλη</strong> (έχει 0 στην 1η θέση):</p>
+                    <div class="math-block">
+                        $$ \Delta = -4 \cdot \det \begin{bmatrix} 0 & 0 & 1 \\ 3 & 13 & 1 \\ 1 & 5 & 1 \end{bmatrix} + 2
+                        \cdot \det \begin{bmatrix} 0 & 0 & 1 \\ 0 & 16 & 1 \\ 1 & 5 & 1 \end{bmatrix} - 2 \cdot \det
+                        \begin{bmatrix} 0 & 0 & 1 \\ 0 & 16 & 1 \\ 3 & 13 & 1 \end{bmatrix} $$
+                    </div>
+
+                    <p>Υπολογίζουμε κάθε υποορίζουσα 3×3:</p>
+                    <ul>
+                        <li>$\det_1 = 0 \cdot (13-5) - 0 \cdot (3-1) + 1 \cdot (15-13) = 2$</li>
+                        <li>$\det_2 = 0 \cdot (16-5) - 0 \cdot (0-1) + 1 \cdot (0-16) = -16$</li>
+                        <li>$\det_3 = 0 \cdot (16-13) - 0 \cdot (0-3) + 1 \cdot (0-48) = -48$</li>
+                    </ul>
+
+                    <div class="math-block">
+                        $$ \Delta = -4 \cdot 2 + 2 \cdot (-16) - 2 \cdot (-48) = -8 - 32 + 96 = 56 $$
+                    </div>
+
+                    <h5>Βήμα 4: Ερμηνεία</h5>
+                    <p>Αφού $\Delta = 56 > 0$ και τα σημεία είναι CCW:</p>
+                    <p><strong>→ Το $q = (2,1)$ είναι ΕΝΤΟΣ του περιγεγραμμένου κύκλου!</strong> ✓</p>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>5. Σύμβαση CW/CCW - Κρίσιμη Προσοχή!</h2>
+
+                <div class="exam-warning">
+                    <strong>ΠΡΟΣΟΧΗ - Οι διαφάνειες χρησιμοποιούν ΔΕΞΙΟΣΤΡΟΦΗ (CW) φορά!</strong>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Φορά Σημείων</th>
+                            <th>Det > 0</th>
+                            <th>Det < 0</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CCW (Αντιωρολογιακά)</strong></td>
+                            <td>q ΕΝΤΟΣ κύκλου</td>
+                            <td>q ΕΚΤΟΣ κύκλου</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CW (Δεξιόστροφα)</strong></td>
+                            <td>q ΕΚΤΟΣ κύκλου</td>
+                            <td>q ΕΝΤΟΣ κύκλου</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="definition-box">
+                    <span class="definition-title">Πρακτικός Κανόνας</span>
+                    <ol>
+                        <li>Πάντα ελέγχουμε πρώτα τη φορά των $p_1, p_2, p_3$ (με ορίζουσα 3×3)</li>
+                        <li>Αν η φορά δεν ταιριάζει με τη σύμβαση της εκφώνησης, αντιστρέφουμε το αποτέλεσμα</li>
+                        <li>Στην αμφιβολία, σχεδιάζουμε το σχήμα και ελέγχουμε γεωμετρικά!</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>6. Εφαρμογή στο Edge Flip</h2>
                 <p> Αυτό το κατηγόρημα είναι η βάση για τον αλγόριθμο κατασκευής Delaunay. Αν έχουμε δύο γειτονικά
                     τρίγωνα που σχηματίζουν ένα κυρτό τετράπλευρο, ελέγχουμε την κοινή ακμή. Αν η τέταρτη κορυφή είναι
                     "μέσα" στον κύκλο του απέναντι τριγώνου, τότε η ακμή είναι "παράνομη" (illegal) και πρέπει να γίνει
-                    <strong>Edge Flip</strong>. </p>
+                    <strong>Edge Flip</strong>.
+                </p>
             </section>
             <div class="page-nav"> <a href="../part-b/01-3d-basics.html" class="btn btn-secondary"><i
                         class="fas fa-arrow-left"></i> Μέρος Β</a> <a href="05-legal-edge.html" class="btn">Επόμενο:

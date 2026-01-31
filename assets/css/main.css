@@ -389,3 +389,66 @@ pre {
         justify-content: center;
     }
 }
+
+/* Exam Warning Box */
+.exam-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffe9a0 100%);
+    border-left: 4px solid #ffc107;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+    font-weight: 500;
+}
+
+.exam-warning::before {
+    content: "⚠️ ";
+}
+
+[data-theme="dark"] .exam-warning {
+    background: linear-gradient(135deg, #3d3200 0%, #4a3d00 100%);
+    border-color: #ffc107;
+    color: #ffe9a0;
+}
+
+/* Solved Example Box */
+.solved-example {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    border-left: 4px solid #4caf50;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.solved-example h4 {
+    margin-bottom: 1rem;
+    color: #2e7d32;
+}
+
+.solved-example h4::before {
+    content: "✏️ ";
+}
+
+[data-theme="dark"] .solved-example {
+    background: linear-gradient(135deg, #1b3d1e 0%, #2a4c2d 100%);
+    border-color: #66bb6a;
+}
+
+[data-theme="dark"] .solved-example h4 {
+    color: #81c784;
+}
+
+/* Colored Face Labels for 3D Algorithms */
+.face-red {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.face-blue {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.face-purple {
+    color: #9b59b6;
+    font-weight: bold;
+}

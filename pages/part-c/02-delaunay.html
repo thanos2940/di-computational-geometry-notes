@@ -69,8 +69,72 @@
                     p_k$, ο κύκλος που διέρχεται από τις κορυφές του δεν περιέχει κανένα άλλο σημείο $p_m \in P$. </div>
                 <p>Είναι ο δυϊκός γράφος του Διαγράμματος Voronoi.</p>
             </section>
+
             <section class="content-box">
-                <h2>2. Αυξητικός Αλγόριθμος (Incremental)</h2>
+                <h2>2. Γεωμετρικές Ιδιότητες</h2>
+
+                <div class="theorem-box">
+                    <strong>Λήμμα 1:</strong> Η τριγωνοποίηση Delaunay είναι <strong>επίπεδος γράφος</strong>.
+                    Οι ακμές της δεν τέμνονται εκτός από τις κορυφές.
+                </div>
+
+                <div class="theorem-box">
+                    <strong>Λήμμα 2 (Αριθμός Στοιχείων):</strong> Έστω $n$ μη-συνευθειακές εστίες, εκ των οποίων
+                    $k$ βρίσκονται στο Κυρτό Περίβλημα. Τότε η τριγωνοποίηση έχει:
+                    <ul>
+                        <li><strong>$2n - k - 2$</strong> τρίγωνα</li>
+                        <li><strong>$3n - k - 3$</strong> ακμές</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <span class="definition-title">Ιδιότητα: Σύνδεση με Voronoi</span>
+                    <ul>
+                        <li>Κάθε τρίγωνο Delaunay αντιστοιχεί σε μια κορυφή του Voronoi (κέντρο περιγεγραμμένου κύκλου)
+                        </li>
+                        <li>Κάθε ακμή Delaunay αντιστοιχεί σε μια ακμή Voronoi (κάθετη στη μεσοκάθετο)</li>
+                        <li>Ο κύκλος κάθε τριγώνου Delaunay είναι <strong>κύκλος Voronoi</strong> (κενός από άλλες
+                            εστίες)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>3. Ποιότητα Τριγωνοποίησης</h2>
+
+                <div class="exam-warning">
+                    <strong>ΕΞΕΤΑΣΙΑΚΟ ΘΕΜΑ:</strong> Ορισμός ποιότητας μέσω διανύσματος γωνιών και Θεώρημα εγκυρότητας.
+                </div>
+
+                <div class="definition-box">
+                    <span class="definition-title">Ορισμός: Διάνυσμα Γωνιών</span>
+                    <p>Έστω τριγωνοποίηση $T$ με $m$ τρίγωνα. Κάθε τρίγωνο έχει 3 γωνίες.</p>
+                    <p>Το <strong>διάνυσμα γωνιών</strong> $A(T) = (a_1, a_2, ..., a_{3m})$ περιέχει όλες τις γωνίες
+                        ταξινομημένες σε <strong>αύξουσα σειρά</strong>.</p>
+                    <p>Η ποιότητα μετριέται με <strong>λεξικογραφική σύγκριση</strong>: η τριγωνοποίηση με το
+                        μεγαλύτερο διάνυσμα είναι η καλύτερη.</p>
+                </div>
+
+                <div class="theorem-box">
+                    <strong>Θεώρημα 3 (Εγκυρότητα ⟺ Delaunay):</strong><br>
+                    Μια τριγωνοποίηση είναι <strong>έγκυρη</strong> (valid) αν και μόνο αν είναι
+                    <strong>Delaunay</strong>.
+                    <ul>
+                        <li><strong>Έγκυρη:</strong> Κάθε ακμή ικανοποιεί το κατηγόρημα InCircle (Legal Edge)</li>
+                        <li><strong>Delaunay:</strong> Ικανοποιεί την ιδιότητα του κενού κύκλου</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <span class="definition-title">Πόρισμα: Βέλτιστο Διάνυσμα Γωνιών</span>
+                    <p>Η τριγωνοποίηση Delaunay έχει το <strong>λεξικογραφικά μέγιστο</strong> διάνυσμα γωνιών
+                        μεταξύ όλων των τριγωνοποιήσεων του ίδιου συνόλου σημείων.</p>
+                    <p>Με απλά λόγια: <em>Η Delaunay μεγιστοποιεί την ελάχιστη γωνία (MaxMin Angle Property)</em>.</p>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>4. Αυξητικός Αλγόριθμος (Incremental)</h2>
                 <p> Ο αλγόριθμος λειτουργεί προσθέτοντας σημεία ένα-ένα και διορθώνοντας τοπικά την τριγωνοποίηση. </p>
                 <div class="algorithm-box">
                     <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητική Τριγωνοποίηση Delaunay</h3>

@@ -62,6 +62,18 @@
                     </ul>
                     </p>
                 </div>
+                <!-- Rubber Band Animation -->
+                <div class="simulator-container" id="rubber-band-container"
+                    style="margin-top: 20px; border: 2px dashed var(--primary-color);">
+                    <div class="simulator-header">
+                        <h3 class="simulator-title" style="margin: 0; font-size: 1.1rem;"><i class="fas fa-magic"></i>
+                            Οπτικοποίηση: Το Λάστιχο και οι Πρόκες</h3>
+                    </div>
+                    <div class="canvas-wrapper" style="height: 300px;">
+                        <canvas id="rubber-band-canvas"></canvas>
+                    </div>
+                </div>
+
                 <p> Η Υπολογιστική Γεωμετρία μελετά αλγορίθμους για την επίλυση γεωμετρικών προβλημάτων. Ένα από τα πιο
                     θεμελιώδη προβλήματα είναι η εύρεση του <strong>Κυρτού Περιβλήματος</strong> (Convex Hull). </p>
                 <div class="definition-box"> <span class="definition-title">Ορισμός (Κυρτό Σύνολο):</span> Ένα υποσύνολο
@@ -176,9 +188,11 @@
     <script src="../../assets/js/utils.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/ccw-simulator.js"></script>
+    <script src="../../assets/js/simulators/rubber-band-animation.js"></script>
     <script>
         setTimeout(() => {
             window.sim = new CCWSimulator('sim-canvas');
+            window.rubberBand = new RubberBandAnimation('rubber-band-canvas');
         }, 50);
     </script>
 </body>
