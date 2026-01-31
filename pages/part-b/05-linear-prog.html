@@ -221,16 +221,80 @@
                 </div>
             </section>
 
+            <section class="content-box">
+                <h2>5. Λυμένο Παράδειγμα Αυξητικού Αλγορίθμου (2D)</h2>
+
+                <div class="exam-warning">
+                    <strong>ΕΞΕΤΑΣΙΑΚΟ ΘΕΜΑ:</strong> Βήμα-βήμα εκτέλεση του αυξητικού αλγορίθμου LP.
+                </div>
+
+                <div class="solved-example">
+                    <h4>Παράδειγμα: Μεγιστοποίηση $y$ με 3 περιορισμούς</h4>
+
+                    <p><strong>Πρόβλημα:</strong></p>
+                    <ul>
+                        <li>Μεγιστοποίησε $f(x,y) = y$</li>
+                        <li>$H_1: x \ge 0$ (y-άξονας)</li>
+                        <li>$H_2: y \ge 0$ (x-άξονας)</li>
+                        <li>$H_3: x + y \le 4$</li>
+                        <li>$H_4: 2x + y \le 5$</li>
+                    </ul>
+
+                    <h5>Βήμα 0: Αρχικοποίηση</h5>
+                    <p>Ξεκινάμε με ένα φραγμένο "κουτί" (πολύ μεγάλο ορθογώνιο).</p>
+                    <p>Βέλτιστη λύση αρχικά: $x_2^* = (0, +\infty)$ → πρακτικά το πιο ψηλό σημείο του κουτιού.</p>
+
+                    <h5>Βήμα 1: Προσθήκη $H_3: x + y \le 4$</h5>
+                    <p>Η τρέχουσα λύση $(0, +\infty)$ <strong>ΔΕΝ ικανοποιεί</strong> τον $H_3$.</p>
+                    <p>→ Πρέπει να βρούμε νέα λύση <strong>πάνω στο $H_3$</strong>: $x + y = 4$.</p>
+                    <p>Μεγιστοποιούμε $y$ στην ευθεία $x + y = 4$ → $y = 4 - x$, max όταν $x = 0$.</p>
+                    <p>→ $x_3^* = (0, 4)$</p>
+
+                    <h5>Βήμα 2: Προσθήκη $H_4: 2x + y \le 5$</h5>
+                    <p>Έλεγχος: $2(0) + 4 = 4 \le 5$ ✓</p>
+                    <p>H τρέχουσα λύση <strong>ικανοποιεί</strong> τον $H_4$!</p>
+                    <p>→ $x_4^* = x_3^* = (0, 4)$</p>
+
+                    <h5>Αποτέλεσμα</h5>
+                    <p><strong>Βέλτιστη λύση:</strong> $(x, y) = (0, 4)$ με $f^* = 4$</p>
+                </div>
+
+                <div class="algorithm-note">
+                    <strong>💡 Παρατήρηση:</strong>
+                    <p>Στο βήμα 1 είχαμε <strong>αποκοπή</strong> (η παλιά λύση δεν ικανοποιούσε τον νέο περιορισμό),
+                        οπότε η νέα λύση βρέθηκε πάνω στο σύνορο του νέου περιορισμού -
+                        αυτό είναι το "κλειδί" του αλγορίθμου!</p>
+                </div>
+            </section>
+
             <section class="simulator-container" id="lp-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-ruler-combined"></i> Προσομοιωτής LP (2D)</h3>
                 </div>
-                <div class="canvas-wrapper"> <canvas id="sim-canvas"></canvas> </div>
-                <div class="controls"> <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-sync"></i>
-                        Reset</button> <button class="sim-btn primary" onclick="sim.addConstraint()" id="btn-add"><i
+
+                <div class="sim-body" style="display: flex; gap: 1rem; height: 500px;">
+                    <div class="canvas-wrapper"
+                        style="flex: 2; position: relative; border: 1px solid #ddd; background: #fff;">
+                        <canvas id="sim-canvas"></canvas>
+                        <!-- Overlay for tooltip if needed -->
+                    </div>
+                    <div class="constraints-panel"
+                        style="flex: 1; overflow-y: auto; background: #f8f9fa; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        <h4 style="margin-top: 0; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px;">
+                            Περιορισμοί</h4>
+                        <ul id="constraint-list" style="list-style: none; padding: 0; margin: 0;">
+                            <!-- Items added dynamically -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="sim-btn" onclick="sim.reset()"><i class="fas fa-sync"></i> Reset</button>
+                    <button class="sim-btn primary" onclick="sim.addConstraint()" id="btn-add"><i
                             class="fas fa-plus"></i> Νέος Περιορισμός</button>
-                    <div style="flex-grow: 1; text-align: right;" class="status-bar" id="sim-status"> Στόχος: Maximize Y
-                        (Πάνω). </div>
+                    <div style="flex-grow: 1; text-align: right; font-size: 0.9rem;" class="status-bar" id="sim-status">
+                        Στόχος: Maximize Y (Πάνω).
+                    </div>
                 </div>
             </section>
 
@@ -245,6 +309,7 @@
         </div>
     </footer>
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/linear-prog.js"></script>
     <script>

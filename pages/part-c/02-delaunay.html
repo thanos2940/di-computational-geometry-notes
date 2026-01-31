@@ -205,7 +205,82 @@
                         </ul>
                     </div>
                 </div>
-            </section> <!-- Simulator -->
+            </section>
+
+            <section class="content-box">
+                <h2>5. Delaunay μέσω Κυρτού Περιβλήματος 3D (Lifting Method)</h2>
+
+                <div class="exam-warning">
+                    <strong>ΕΞΕΤΑΣΙΑΚΟ ΘΕΜΑ:</strong> Η σύνδεση μεταξύ Delaunay 2D και ΚΠ3 είναι συχνό θέμα θεωρίας!
+                </div>
+
+                <div class="intuition-box">
+                    <p><strong>👋 Βασική Ιδέα:</strong></p>
+                    <p>Η τριγωνοποίηση Delaunay 2D είναι ισοδύναμη με την <strong>προβολή του κάτω μέρους</strong>
+                        του κυρτού περιβλήματος 3D όταν "ανυψώσουμε" τα σημεία σε παραβολοειδή επιφάνεια!</p>
+                </div>
+
+                <div class="definition-box">
+                    <span class="definition-title">Μετασχηματισμός Ανύψωσης (Lifting Transform)</span>
+                    <p>Για κάθε σημείο $p = (x, y) \in \mathbb{R}^2$, ορίζουμε το ανυψωμένο σημείο:</p>
+                    <div class="math-block">
+                        $$ p^+ = \left( x, y, x^2 + y^2 \right) \in \mathbb{R}^3 $$
+                    </div>
+                    <p>Τα ανυψωμένα σημεία βρίσκονται πάνω στο παραβολοειδές $z = x^2 + y^2$.</p>
+                </div>
+
+                <div class="theorem-box">
+                    <span class="definition-title">Θεώρημα Σύνδεσης (Lifting Theorem)</span>
+                    <p>Έστω $P = \{p_1, \ldots, p_n\}$ σημεία στο επίπεδο και $P^+ = \{p_1^+, \ldots, p_n^+\}$
+                        τα ανυψωμένα σημεία. Τότε:</p>
+                    <ul>
+                        <li>Οι <strong>κάτω έδρες</strong> του $CH(P^+)$ (Κυρτό Περίβλημα 3D) αντιστοιχούν σε
+                            <strong>τρίγωνα Delaunay</strong> του $P$.
+                        </li>
+                        <li>Ένα σημείο $q$ είναι <strong>εντός</strong> του περιγεγραμμένου κύκλου του τριγώνου $(p_1,
+                            p_2, p_3)$
+                            αν και μόνο αν το $q^+$ είναι <strong>κάτω</strong> από το επίπεδο που ορίζουν τα $p_1^+,
+                            p_2^+, p_3^+$.</li>
+                    </ul>
+                </div>
+
+                <div class="solved-example">
+                    <h4>Παράδειγμα: InCircle μέσω Lifting</h4>
+                    <p><strong>Δεδομένα:</strong> $p_1=(0,0), p_2=(4,0), p_3=(2,3), q=(2,1)$</p>
+
+                    <h5>Βήμα 1: Ανύψωση</h5>
+                    <ul>
+                        <li>$p_1^+ = (0, 0, 0)$</li>
+                        <li>$p_2^+ = (4, 0, 16)$</li>
+                        <li>$p_3^+ = (2, 3, 13)$</li>
+                        <li>$q^+ = (2, 1, 5)$</li>
+                    </ul>
+
+                    <h5>Βήμα 2: Έλεγχος Θέσης</h5>
+                    <p>Το $q$ είναι <strong>εντός</strong> του κύκλου αν $q^+$ είναι <strong>κάτω</strong>
+                        από το επίπεδο $(p_1^+, p_2^+, p_3^+)$.</p>
+                    <p>Αυτό είναι ακριβώς η ορίζουσα InCircle:</p>
+                    <div class="math-block">
+                        $$ \text{orient3d}(p_1^+, p_2^+, p_3^+, q^+) > 0 \Leftrightarrow q \text{ ΕΝΤΟΣ}$$
+                    </div>
+
+                    <h5>Γεωμετρική Ερμηνεία</h5>
+                    <p>Η τομή του επιπέδου με το παραβολοειδές δίνει έναν κύκλο στο αρχικό επίπεδο,
+                        που είναι ακριβώς ο <strong>περιγεγραμμένος κύκλος</strong> του τριγώνου!</p>
+                </div>
+
+                <div class="algorithm-note">
+                    <strong>💡 Πρακτική Εφαρμογή:</strong>
+                    <ul>
+                        <li>Μπορούμε να υπολογίσουμε την τριγωνοποίηση Delaunay 2D χρησιμοποιώντας αλγόριθμο ΚΠ3.</li>
+                        <li>Πολυπλοκότητα: $O(n \log n)$ με γρήγορους αλγορίθμους ΚΠ3.</li>
+                        <li>Αποδεικνύει ότι η Delaunay είναι <strong>μοναδική</strong> (αν δεν υπάρχουν 4 ομόκυκλα
+                            σημεία).</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Simulator -->
             <section class="simulator-container" id="delaunay-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-project-diagram"></i> Προσομοιωτής Delaunay</h3>
@@ -228,6 +303,7 @@
         </div>
     </footer>
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/delaunay.js"></script>
     <script>

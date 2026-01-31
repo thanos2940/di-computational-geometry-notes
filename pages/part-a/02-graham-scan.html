@@ -155,8 +155,8 @@
                                 <li>Υπολογίστε την ορίζουσα $D = \det(A, B, C)$.</li>
                                 <li><strong>Κανόνας Διαγραφής:</strong> Αν $D \ge 0$ (Αριστερή στροφή ή ευθεία), τότε το
                                     μεσαίο σημείο $B$ <strong>διαγράφεται</strong>.</li>
-                                <li>Επαναλάβετε τον έλεγχο μέχρι τα 3 τελευταία να κάνουν Δεξιά στροφή ($D < 0$) ή να
-                                        μείνουν λιγότερα από 3 σημεία.</li>
+                                <li>Επαναλάβετε τον έλεγχο μέχρι τα 3 τελευταία να κάνουν Δεξιά στροφή ($D &lt; 0$) ή να
+                                    μείνουν λιγότερα από 3 σημεία.</li>
                             </ul>
                         </li>
                     </ul>
@@ -167,72 +167,160 @@
                 <h3>📝 Λυμένο Παράδειγμα</h3>
                 <p><strong>Δεδομένα:</strong> $P = \{ A(0,0), B(4,4), C(1,1), D(3,0), E(2,2) \}$</p>
                 <div class="example-execution">
-                    <h4>1. Ταξινόμηση</h4>
-                    <p> $p_1=A(0,0), \quad p_2=C(1,1), \quad p_3=E(2,2), \quad p_4=D(3,0), \quad p_5=B(4,4)$ </p>
-                    <h4>2. Άνω Περίβλημα ($L_{upper}$)</h4>
-                    <table class="comparison-table">
-                        <thead>
-                            <tr>
-                                <th>Βήμα</th>
-                                <th>Λίστα $L$</th>
-                                <th>Έλεγχος (3 τελευταία)</th>
-                                <th>Στροφή (Ορίζουσα)</th>
-                                <th>Δράση</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Αρχή</td>
-                                <td>$[A, C]$</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>Προσθήκη $E$</td>
-                                <td>$[A, C, E]$</td>
-                                <td>$A, C, E$</td>
-                                <td>$\det(A,C,E) = 0$ (Ευθεία)</td>
-                                <td><strong>Διαγραφή C</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Μετά τη διαγραφή</td>
-                                <td>$[A, E]$</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>Προσθήκη $D$</td>
-                                <td>$[A, E, D]$</td>
-                                <td>$A, E, D$</td>
-                                <td>$\det(A,E,D) < 0$ (Δεξιά)</td>
-                                <td>OK</td>
-                            </tr>
-                            <tr>
-                                <td>Προσθήκη $B$</td>
-                                <td>$[A, E, D, B]$</td>
-                                <td>$E, D, B$</td>
-                                <td>$\det(E,D,B)> 0$ (Αριστερή)</td>
-                                <td><strong>Διαγραφή D</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Έλεγχος πάλι</td>
-                                <td>$[A, E, B]$</td>
-                                <td>$A, E, B$</td>
-                                <td>$\det(A,E,B) = 0$ (Ευθεία)</td>
-                                <td><strong>Διαγραφή E</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Τελικό $L_{upper}$</td>
-                                <td>$[A, B]$</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <div class="example-execution">
+                        <h4>1. Ταξινόμηση (κατά $x$)</h4>
+                        <p>
+                            $p_1=A(0,0)$ (Start) <br>
+                            $p_2=B(1,4)$ <br>
+                            $p_3=C(2,3)$ <br>
+                            $p_4=D(3,-2)$ <br>
+                            $p_5=E(4,5)$ <br>
+                            $p_6=F(5,0)$ (End)
+                        </p>
+
+                        <h4>2. Άνω Περίβλημα ($L_{upper}$)</h4>
+                        <p>Στόχος: Μόνο <strong>Δεξιές Στροφές (CW, $\det < 0$)</strong>. Αν συναντήσουμε Αριστερή
+                                    ($\det > 0$), διαγράφουμε το μεσαίο σημείο.</p>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Βήμα</th>
+                                    <th>Λίστα $L$</th>
+                                    <th>Τριάδα Ελέγχου</th>
+                                    <th>Ορίζουσα (Turn)</th>
+                                    <th>Δράση</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Αρχή</td>
+                                    <td>$[A, B]$</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Προσθήκη $C$</td>
+                                    <td>$[A, B, C]$</td>
+                                    <td>$A, B, C$</td>
+                                    <td>$\det < 0$ (Δεξιά/CW)</td>
+                                    <td>OK</td>
+                                </tr>
+                                <tr>
+                                    <td>Προσθήκη $D$</td>
+                                    <td>$[A, B, C, D]$</td>
+                                    <td>$B, C, D$</td>
+                                    <td>$\det < 0$ (Δεξιά/CW)</td>
+                                    <td>OK (Το $D$ είναι πολύ χαμηλά)</td>
+                                </tr>
+                                <tr>
+                                    <td>Προσθήκη $E$</td>
+                                    <td>$[..., C, D, E]$</td>
+                                    <td>$C, D, E$</td>
+                                    <td>$\det > 0$ (<strong>Αριστερή/CCW</strong>)</td>
+                                    <td><strong>Διαγραφή D</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Backtrack</td>
+                                    <td>$[A, B, C, E]$</td>
+                                    <td>$B, C, E$</td>
+                                    <td>$\det > 0$ (<strong>Αριστερή/CCW</strong>)</td>
+                                    <td><strong>Διαγραφή C</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Backtrack</td>
+                                    <td>$[A, B, E]$</td>
+                                    <td>$A, B, E$</td>
+                                    <td>$\det < 0$ (Δεξιά/CW)</td>
+                                    <td>OK (Το $B \to E$ καλύπτει τα $C, D$)</td>
+                                </tr>
+                                <tr>
+                                    <td>Προσθήκη $F$</td>
+                                    <td>$[A, B, E, F]$</td>
+                                    <td>$B, E, F$</td>
+                                    <td>$\det < 0$ (Δεξιά/CW)</td>
+                                    <td>OK</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p><strong>Τελικό $L_{upper}$:</strong> $[A, B, E, F]$</p>
+
+                        <h4>3. Κάτω Περίβλημα ($L_{lower}$)</h4>
+                        <p>Ξεκινάμε από δεξιά ($p_6$) προς αριστερά ($p_1$). Στόχος πάλι: Μόνο <strong>Δεξιές Στροφές
+                                (CW)</strong>.</p>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Βήμα</th>
+                                    <th>Λίστα $L$</th>
+                                    <th>Τριάδα Ελέγχου</th>
+                                    <th>Ορίζουσα (Turn)</th>
+                                    <th>Δράση</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Αρχή</td>
+                                    <td>$[F, E]$</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Προσθήκη $D$</td>
+                                    <td>$[F, E, D]$</td>
+                                    <td>$F, E, D$</td>
+                                    <td>$\det > 0$ (<strong>Αριστερή/CCW</strong>)</td>
+                                    <td><strong>Διαγραφή E</strong> (Το $D$ είναι πιο εξωτερικό)</td>
+                                </tr>
+                                <tr>
+                                    <td>Backtrack</td>
+                                    <td>$[F, D]$</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Προσθήκη $C$</td>
+                                    <td>$[F, D, C]$</td>
+                                    <td>$F, D, C$</td>
+                                    <td>$\det < 0$ (Δεξιά/CW)</td>
+                                    <td>OK</td>
+                                </tr>
+                                <tr>
+                                    <td>Προσθήκη $B$</td>
+                                    <td>$[..., D, C, B]$</td>
+                                    <td>$D, C, B$</td>
+                                    <td>$\det > 0$ (<strong>Αριστερή/CCW</strong>)</td>
+                                    <td><strong>Διαγραφή C</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Backtrack</td>
+                                    <td>$[F, D, B]$</td>
+                                    <td>$F, D, B$</td>
+                                    <td>$\det < 0$ (Δεξιά/CW)</td>
+                                    <td>OK</td>
+                                </tr>
+                                <tr>
+                                    <td>Προσθήκη $A$</td>
+                                    <td>$[..., D, B, A]$</td>
+                                    <td>$D, B, A$</td>
+                                    <td>$\det > 0$ (<strong>Αριστερή/CCW</strong>)</td>
+                                    <td><strong>Διαγραφή B</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Backtrack</td>
+                                    <td>$[F, D, A]$</td>
+                                    <td>$F, D, A$</td>
+                                    <td>$\det < 0$ (Δεξιά/CW)</td>
+                                    <td>OK</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p><strong>Τελικό $L_{lower}$:</strong> $[F, D, A]$</p>
+                        <p><strong>Συνολικό ΚΠ:</strong> $A \to B \to E \to F \to D \to A$</p>
+                    </div>
+
             </section>
             <section class="simulator-container" id="graham-scan-simulator">
                 <div class="simulator-header">
@@ -276,6 +364,7 @@
         </div>
     </footer>
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/base.js"></script>
     <script src="../../assets/js/simulators/gift-wrap.js"></script>

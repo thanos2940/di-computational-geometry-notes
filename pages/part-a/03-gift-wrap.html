@@ -107,6 +107,7 @@
                                 </ul>
                             </li>
                             <li>
+                                Αν ισχύει u = r0 τερμάτισε, αλλιώς: <br>
                                 $r \leftarrow u$, $S \leftarrow S \setminus \{r\}$, πρόσθεσε στην αλυσίδα κορυφών το $r$
                                 και συνέχισε στο Βήμα 3.
                             </li>
@@ -148,7 +149,86 @@
                 </div>
             </section>
             <section class="content-box">
-                <h2>2. Ανάλυση Πολυπλοκότητας</h2>
+                <h2>2. Λυμένο Παράδειγμα "Στο Χαρτί"</h2>
+
+                <div class="exam-warning">
+                    <strong>ΕΞΕΤΑΣΙΑΚΟ ΘΕΜΑ:</strong> Εκτέλεση βήμα-βήμα του Gift Wrapping με έλεγχο CW.
+                </div>
+
+                <div class="solved-example">
+                    <h4>Παράδειγμα: Gift Wrapping για 5 σημεία</h4>
+
+                    <p><strong>Δεδομένα:</strong></p>
+                    <ul>
+                        <li>$P_0 = (0, 2)$</li>
+                        <li>$P_1 = (3, 4)$</li>
+                        <li>$P_2 = (5, 1)$</li>
+                        <li>$P_3 = (2, 0)$</li>
+                        <li>$P_4 = (2, 2)$ (εσωτερικό)</li>
+                    </ul>
+
+                    <h5>Βήμα 1: Εύρεση Αρχικού Σημείου</h5>
+                    <p>Βρίσκουμε το αριστερότερο σημείο: $r_0 = P_0(0, 2)$</p>
+
+                    <h5>Βήμα 2: Εκτέλεση Αλγορίθμου</h5>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Επανάληψη</th>
+                                <th>Τρέχον $r$</th>
+                                <th>Υποψήφιο $u$</th>
+                                <th>Έλεγχος $CW(r, u, t)$</th>
+                                <th>Νέο $u$</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>$P_0(0,2)$</td>
+                                <td>$P_1$</td>
+                                <td>$CW(P_0, P_1, P_2)$? → ΝΑΙ<br>$CW(P_0, P_2, P_3)$? → ΝΑΙ</td>
+                                <td>$P_3$</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>$P_3(2,0)$</td>
+                                <td>$P_1$</td>
+                                <td>$CW(P_3, P_1, P_2)$? → ΝΑΙ</td>
+                                <td>$P_2$</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>$P_2(5,1)$</td>
+                                <td>$P_1$</td>
+                                <td>Κανένα $t$ κάνει $CW$</td>
+                                <td>$P_1$</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>$P_1(3,4)$</td>
+                                <td>$P_0$</td>
+                                <td>Κανένα $t$ κάνει $CW$</td>
+                                <td>$P_0$ (κλείσιμο)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5>Έλεγχος CW με Ορίζουσα</h5>
+                    <p>Για τον πρώτο έλεγχο $CW(P_0, P_1, P_2)$:</p>
+                    <div class="math-block">
+                        $$ \det \begin{bmatrix} 1 & 0 & 2 \\ 1 & 3 & 4 \\ 1 & 5 & 1 \end{bmatrix} = 1(3-20) - 0 + 2(5-3)
+                        = -17 + 4 = -13 &lt; 0 $$ </div>
+                    <p>Αφού η ορίζουσα &lt; 0$ → <strong>CW (δεξιά στροφή)</strong> → το $P_2$ είναι "πιο δεξιά"
+                        από το $P_1$</p>
+
+                    <h5>Αποτέλεσμα</h5>
+                    <p><strong>Κυρτό Περίβλημα:</strong> $P_0 \to P_3 \to P_2 \to P_1 \to P_0$</p>
+                    <p>Το $P_4$ είναι εσωτερικό σημείο (δεν ανήκει στο ΚΠ).</p>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>3. Ανάλυση Πολυπλοκότητας</h2>
                 <p> Σε κάθε βήμα προσθέτουμε 1 κορυφή στο ΚΠ. Για να βρούμε την επόμενη, ελέγχουμε όλα τα $n$ σημεία. Αν
                     $h$ είναι το πλήθος των κορυφών του περιβλήματος, η πολυπλοκότητα είναι $\mathcal{O}(n \cdot h)$.
                     Στη χειρότερη περίπτωση ($h=n$), είναι $\mathcal{O}(n^2)$. </p>
@@ -164,6 +244,7 @@
         </div>
     </footer>
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/base.js"></script>
     <script src="../../assets/js/simulators/gift-wrapping.js"></script>

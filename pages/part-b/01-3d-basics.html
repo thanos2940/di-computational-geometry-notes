@@ -79,7 +79,94 @@
                 </p>
                 <p> Συνέπεια: Το πλήθος των εδρών είναι γραμμικό ως προς τις κορυφές ($\mathcal{O}(n)$). Αυτό σημαίνει
                     ότι μπορούμε να υπολογίσουμε το 3D Hull γρήγορα! </p>
-            </section> <!-- Simulator -->
+            </section>
+
+            <section class="content-box">
+                <h2>3. Κατηγόρημα Προσανατολισμού (Volume Test)</h2>
+                <div class="intuition-box">
+                    <p>Ο προσανατολισμός 4 σημείων $p_i = (x_i, y_i, z_i), \quad i=0,1,2,3$ ανάγεται στο πρόσημο της
+                        ορίζουσας:</p>
+                </div>
+
+                <h3>Μαθηματικός Τύπος</h3>
+                $$
+                det = \begin{vmatrix}
+                1 & x_0 & y_0 & z_0 \\
+                1 & x_1 & y_1 & z_1 \\
+                1 & x_2 & y_2 & z_2 \\
+                1 & x_3 & y_3 & z_3
+                \end{vmatrix}
+                $$
+
+                <p>Μηδενίζεται αν και μόνο αν τα 4 σημεία είναι συνεπίπεδα (coplanar). Αλλιώς, δηλώνει σε ποιον ημιχώρο
+                    (που ορίζεται από το επίπεδο των $p_{i_1}, p_{i_2}, p_{i_3}$) βρίσκεται το $p_{i_0}$.</p>
+
+                <div class="definition-box">
+                    <h3>Λήμμα 5 (Κατηγόρημα) - Ορατότητα Εδρών</h3>
+                    <p>Για κάθε έδρα του τρέχοντος πολυέδρου τα παρακάτω είναι ισοδύναμα:</p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
+                        <div
+                            style="background: rgba(52, 152, 219, 0.1); padding: 10px; border-radius: 8px; border: 2px solid #3498db;">
+                            <h4 style="color: #2980b9; margin: 0;">🔵 Έδρα Γαλάζια</h4>
+                            <p><strong>ΔΕΝ είναι ορατή</strong> από το νέο σημείο.</p>
+                            <p>Το νέο σημείο βρίσκεται στον <strong>ΙΔΙΟ</strong> ημιχώρο (εσωτερικά).</p>
+                            <p>Πρόσημο ορίζουσας: <strong>ΙΔΙΟ</strong> με αυτό των εσωτερικών σημείων.</p>
+                        </div>
+
+                        <div
+                            style="background: rgba(231, 76, 60, 0.1); padding: 10px; border-radius: 8px; border: 2px solid #e74c3c;">
+                            <h4 style="color: #c0392b; margin: 0;">🔴 Έδρα Κόκκινη</h4>
+                            <p><strong>ΕΙΝΑΙ ορατή</strong> από το νέο σημείο.</p>
+                            <p>Το νέο σημείο βρίσκεται σε <strong>ΔΙΑΦΟΡΕΤΙΚΟ</strong> ημιχώρο (εξωτερικά).</p>
+                            <p>Πρόσημο ορίζουσας: <strong>ΔΙΑΦΟΡΕΤΙΚΟ</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>📝 Παράδειγμα Υπολογισμού</h3>
+                <p>Έστω ότι θέλουμε να ελέγξουμε τη θέση του σημείου $p_0(2, 2, 5)$ ως προς την έδρα που ορίζουν τα
+                    $p_1(1, 1, 0), p_2(3, 1, 0), p_3(2, 3, 0)$.</p>
+
+                <p><strong>Βήμα 1:</strong> Στήνουμε την ορίζουσα 4x4:</p>
+                $$
+                det = \begin{vmatrix}
+                1 & 2 & 2 & 5 \\
+                1 & 1 & 1 & 0 \\
+                1 & 3 & 1 & 0 \\
+                1 & 2 & 3 & 0
+                \end{vmatrix}
+                \quad \begin{matrix} (p_0) \\ (p_1) \\ (p_2) \\ (p_3) \end{matrix}
+                $$
+
+                <p><strong>Βήμα 2 (Πρακτική Μέθοδος):</strong> Αντί να υπολογίσουμε την 4x4, αφαιρούμε τις συντεταγμένες
+                    του σημείου αναφοράς $p_0$ από τα υπόλοιπα. Αυτό μας δίνει την 3x3 ορίζουσα:</p>
+
+                $$
+                D \approx \begin{vmatrix}
+                (1-2) & (1-2) & (0-5) \\
+                (3-2) & (1-2) & (0-5) \\
+                (2-2) & (3-2) & (0-5)
+                \end{vmatrix} = \begin{vmatrix}
+                -1 & -1 & -5 \\
+                1 & -1 & -5 \\
+                0 & 1 & -5
+                \end{vmatrix}
+                $$
+
+                <p><strong>Βήμα 3:</strong> Υπολογισμός 3x3 (κανόνας Sarrus ή ανάπτυγμα):</p>
+                $$
+                = (-1)((-1)(-5) - (-5)(1)) - (-1)((1)(-5) - (-5)(0)) + (-5)((1)(1) - (-1)(0))
+                $$
+                $$
+                = (-1)(5 + 5) + (1)(-5) - 5(1) = -10 - 5 - 5 = -20
+                $$
+
+                <p><strong>Συμπέρασμα:</strong> Το πρόσημο είναι αρνητικό. Ανάλογα με τη φορά της βάσης (CW/CCW), αυτό
+                    μας λέει αν το $p_0$ είναι "πάνω" ή "κάτω".</p>
+            </section>
+
+            <!-- Simulator -->
             <section class="simulator-container" id="basics-3d-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-cube"></i> Προβολή 3D Πολυέδρου</h3>
@@ -102,6 +189,7 @@
         </div>
     </footer>
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/viewer3d.js"></script>
     <script>

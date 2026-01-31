@@ -3,273 +3,441 @@ class LPSimulator {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
         this.statusEl = document.getElementById('sim-status');
+        this.listEl = document.getElementById('constraint-list');
 
-        this.constraints = []; // Array of lines {a, b, c} => ax + by <= c?
-        // Represent lines as point + normal?
-        // Or segments for visualization.
-
+        this.constraints = [];
         this.optimalPoint = null;
-        this.objVector = { x: 0, y: -1 }; // Maximize Y (screen Y is down, so Minimize Y).
-        // Let's say we want to find Lowest Y (Top of screen).
-        // Maximize (-y).
+        this.hoveredIndex = -1;
+
+        // Coordinate System Configuration
+        this.scale = 1; // Pixels per unit? Let's treat pixel coords as units but shifted.
+        this.origin = { x: 0, y: 0 }; // Will be set on resize to center
 
         window.addEventListener('resize', () => this.resize());
+
+        // Mouse interaction
+        this.canvas.addEventListener('mousemove', (e) => {
+            const rect = this.canvas.getBoundingClientRect();
+            // Screen Coords
+            const sx = e.clientX - rect.left;
+            const sy = e.clientY - rect.top;
+
+            // Math Coords
+            const mx = this.toMathX(sx);
+            const my = this.toMathY(sy);
+
+            this.handleHover(mx, my);
+        });
+
+        this.canvas.addEventListener('mouseleave', () => {
+            this.hoveredIndex = -1;
+            this.render();
+            this.highlightListItem(-1);
+        });
+
         this.resize();
+        // Initial setup
+        this.reset();
     }
 
     resize() {
         this.canvas.width = this.canvas.parentElement.clientWidth;
         this.canvas.height = this.canvas.parentElement.clientHeight;
-        if (this.constraints.length > 0) this.render();
+
+        // Center Origin
+        this.origin = {
+            x: this.canvas.width / 2,
+            y: this.canvas.height / 2
+        };
+
+        this.render();
     }
+
+    // --- Coordinate Transformations (Cartesian <-> Canvas) ---
+    // Canvas: (0,0) Top-Left, Y down.
+    // Math: (0,0) Center, Y up.
+
+    toCanvasX(x) { return this.origin.x + x; }
+    toCanvasY(y) { return this.origin.y - y; } // Invert Y
+
+    toMathX(cx) { return cx - this.origin.x; }
+    toMathY(cy) { return this.origin.y - cy; }
 
     reset() {
         this.constraints = [];
-        // Init optimal point at "Infinity" or bounding box.
-        // Let's use a large bounding box.
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-        this.optimalPoint = { x: w / 2, y: 0 }; // Top middle
 
-        // Add bounding box constraints implicitly or explicitly?
-        // Explicitly is better for algo visualization.
-        // Box: x >= 0, x <= w, y >= 0, y <= h.
-        // LP form: ax + by <= c.
-        // x >= 0 => -x <= 0.
-        // x <= w => x <= w.
-        // y >= 0 => -y <= 0.
-        // y <= h => y <= h.
+        // Initial Optimal: Ideally +Infinity Y.
+        // But for visualization we start inside a "Large Box".
+        // Let's define a visible Math box region, say [-300, 300] x [-300, 300]
+        const range = 350;
 
-        this.addLine(-1, 0, 0); // x >= 0
-        this.addLine(1, 0, w);  // x <= w
-        this.addLine(0, -1, 0); // y >= 0
-        this.addLine(0, 1, h);  // y <= h
+        this.optimalPoint = { x: 0, y: range }; // Start at top center of box
 
+        // Add Bounding Box Constraints in Math Space
+        // x >= -range  => -1x + 0y <= range
+        this.addInternalConstraint(-1, 0, range, "x ≥ -350");
+        // x <= range   => 1x + 0y <= range
+        this.addInternalConstraint(1, 0, range, "x ≤ 350");
+        // y >= -range  => 0x - 1y <= range
+        this.addInternalConstraint(0, -1, range, "y ≥ -350");
+        // y <= range   => 0x + 1y <= range
+        this.addInternalConstraint(0, 1, range, "y ≤ 350");
+
+        this.updateList();
         this.render();
-        this.statusEl.innerHTML = "Αρχικοποίηση με Bounding Box.";
+        this.statusEl.innerHTML = "Αρχικοποίηση (Κέντρο 0,0).";
     }
 
-    addLine(a, b, c) {
-        this.constraints.push({ a, b, c });
-        // Re-evaluate optimal?
-        // For simulator, we do this incrementally on button press.
+    addInternalConstraint(a, b, c, label) {
+        this.constraints.push({ a, b, c, isBox: true, id: Math.random().toString(36).substr(2, 9), label });
     }
 
     addConstraint() {
-        // Generate random half-plane
-        // passing through canvas.
-        const w = this.canvas.width;
-        const h = this.canvas.height;
+        // Generate visible line passing through the visible area [-300, 300]
+        const range = 250;
 
-        // Random line: ax + by = c.
-        // Pick 2 points
-        const p1 = { x: Math.random() * w, y: Math.random() * h };
-        const p2 = { x: Math.random() * w, y: Math.random() * h };
+        const randCoord = () => (Math.random() - 0.5) * 2 * range;
 
-        // Normal vector (a, b) = (p1.y - p2.y, p2.x - p1.x)
+        // Pick two random points inside the area to define the line
+        // This ensures the line intersects the view
+        const p1 = { x: randCoord(), y: randCoord() };
+        const p2 = { x: randCoord(), y: randCoord() };
+
         let a = p1.y - p2.y;
         let b = p2.x - p1.x;
-        // Normalize
         const len = Math.sqrt(a * a + b * b);
         a /= len; b /= len;
 
-        // c = ax + by
-        const c = a * p1.x + b * p1.y;
+        let c = a * p1.x + b * p1.y;
 
-        // Decide side: We want the side that contains the CENTER?
-        // Or random? Random side can make feasibility 0 very fast.
-        // Let's try to keep center (w/2, h/2) valid often.
-        if (a * w / 2 + b * h / 2 > c) {
-            // Center violates. Flip normal.
-            a = -a; b = -b;
-            // c changes sign? No, ax+by<=c.
-            // -ax -by <= -c.
-            // new a, b, c.
-            // c = newA * p1.x + newB * p1.y = -c_old.
-            // Yes.
+        // Ensure (0,0) is usually valid to avoid instant infeasibility
+        // If 0,0 violates (0 > c), flip normal
+        if (0 > c) {
+            // Or maybe we WANT it to cut off 0,0?
+            // Let's just flip usually to keep it interesting but solvable.
+            // If c < -50 (far violation), flip.
+            if (c < -10) {
+                a = -a; b = -b; c = -c;
+            }
         }
-        // Actually, recompute c.
-        const cNew = a * p1.x + b * p1.y;
 
-        this.constraints.push({ a, b, c: cNew });
+        const id = Math.random().toString(36).substr(2, 9);
+        const label = this.formatEquation(a, b, c);
 
-        // Solve LP
+        this.constraints.push({ a, b, c, isBox: false, id, label });
+        this.updateList();
         this.solve();
     }
 
-    solve() {
-        // Re-run Seidel from scratch or incrementally?
-        // Incremental: check if current optimal violates last constraint.
-        // Since we are simulating, we can cheat and solve full GLP or do the incremental step.
-        // Let's do Full Re-solve to be robust (simpler code).
-        // Or better: Show the Seidel Logic.
-        // "Check last constraint".
+    formatEquation(a, b, c) {
+        // Format: ax + by <= c
+        // Map screen coords to "Math-like" coords for display if we wanted,
+        // but simple numbers are fine. Keep rounded.
+        const fa = a.toFixed(2);
+        const fb = (b >= 0 ? "+ " : "- ") + Math.abs(b).toFixed(2);
+        const fc = c.toFixed(0);
+        return `${fa}x ${fb}y ≤ ${fc}`;
+    }
 
+    solve() {
+        // Simple Seidel logic
         const last = this.constraints[this.constraints.length - 1];
 
-        // Check current optimal
         if (this.violates(this.optimalPoint, last)) {
-            this.statusEl.innerHTML = "Παραβίαση! Προβολή στο σύνορο...";
-            // Project optimal to line (1D LP).
-            // Actually, we must solve the LP subject to all Previous constraints AND new line equality.
+            this.statusEl.innerHTML = "Παραβίαση! Υπολογισμός νέου βέλτιστου...";
 
-            // 1D Problem on Line L: ax+by=c.
-            // Parametrize Line: P = P0 + t * V.
-            // V = (-b, a). P0 = projected origin?
-            // Range for t: [t_min, t_max].
-            // Find intersection of L with all previous half-planes.
+            let p0;
+            if (Math.abs(last.b) > 1e-5) p0 = { x: 0, y: last.c / last.b };
+            else p0 = { x: last.c / last.a, y: 0 };
 
-            // This is actually finding segment of L inside feasible polygon.
-            // Then picking point in segment minimizing objective (min Y).
+            const v = { x: -last.b, y: last.a };
 
-            // Parametrize line
-            // Need a point P0 on line.
-            // if b != 0, y = (c - ax)/b. set x=0, y=c/b.
-            // else x = c/a.
+            let tMin = -Infinity, tMax = Infinity;
 
-            let p0, v;
-            if (Math.abs(last.b) > 1e-5) {
-                p0 = { x: 0, y: last.c / last.b };
-            } else {
-                p0 = { x: last.c / last.a, y: 0 };
-            }
-            v = { x: -last.b, y: last.a }; // Direction vector along line
-
-            // 1D Constraints on t
-            let tMin = -Infinity;
-            let tMax = Infinity;
-
-            // Intersect with all previous
             for (let i = 0; i < this.constraints.length - 1; i++) {
                 const con = this.constraints[i];
-                // con.a * (p0.x + t*v.x) + con.b * (p0.y + t*v.y) <= con.c
-                // t * (con.a * v.x + con.b * v.y) <= con.c - (con.a*p0.x + con.b*p0.y)
-                // t * dot <= diff
-
                 const dot = con.a * v.x + con.b * v.y;
-                const diff = con.c - (con.a * p0.x + con.b * p0.y);
+                const val = con.c - (con.a * p0.x + con.b * p0.y);
 
                 if (Math.abs(dot) < 1e-9) {
-                    // Parallel. If diff < 0, line is completely infeasible.
-                    if (diff < -1e-9) {
-                        this.statusEl.innerHTML = "Ανέφικτο (Parallel Infeasible).";
-                        this.optimalPoint = null;
-                        this.render();
-                        return;
-                    }
+                    if (val < -1e-9) { this.makeInfeasible(); return; }
                 } else {
-                    const val = diff / dot;
-                    if (dot > 0) {
-                        // t <= val
-                        tMax = Math.min(tMax, val);
-                    } else {
-                        // t * neg <= diff => t >= diff/neg
-                        tMin = Math.max(tMin, val);
-                    }
+                    const t = val / dot;
+                    if (dot > 0) tMax = Math.min(tMax, t);
+                    else tMin = Math.max(tMin, t);
                 }
             }
 
-            if (tMin > tMax) {
-                this.statusEl.innerHTML = "Ανέφικτο (Empty Region).";
-                this.optimalPoint = null;
-                this.render();
-                return;
-            }
+            if (tMin > tMax + 1e-7) { this.makeInfeasible(); return; }
 
-            // We have segment [tMin, tMax].
-            // We want to Minimize Y (or Maximize -Y).
-            // y(t) = p0.y + t*v.y.
-            // If v.y > 0, minimize t -> tMin.
-            // If v.y < 0, minimize t -> tMax (y becomes smaller as t increases? no, t*neg is neg large).
-            // Wait. Minimize y.
-            // if v.y > 0: small t gives small y. Pick tMin.
-            // if v.y < 0: large t gives small y (large negative). Pick tMax.
-            // if v.y = 0: y is constant. Pick any.
+            let bestT;
+            // Maximize Y => v.y component
+            if (Math.abs(v.y) < 1e-9) bestT = (tMin + tMax) / 2;
+            else if (v.y > 0) bestT = tMax; // Moving along +V increases Y -> pick tMax
+            else bestT = tMin; // Moving along +V decreases Y -> pick tMin
 
-            let bestT = tMin;
-            if (Math.abs(tMin) === Infinity) bestT = tMax; // Unbounded?
-            // With bounding box, shouldn't be infinite.
-
-            // Check direction
-            if (v.y > 0) bestT = tMin;
-            else if (v.y < 0) bestT = tMax;
-            else bestT = (tMin + tMax) / 2;
+            if (bestT === -Infinity) bestT = -10000;
+            if (bestT === Infinity) bestT = 10000;
 
             this.optimalPoint = {
                 x: p0.x + bestT * v.x,
                 y: p0.y + bestT * v.y
             };
-            this.statusEl.innerHTML = "Nέο βέλτιστο βρέθηκε.";
+            this.statusEl.innerHTML = `<i class="fas fa-check-circle" style="color:green"></i> Νέα λύση βρέθηκε!`;
         } else {
-            this.statusEl.innerHTML = "Το βέλτιστο παραμένει ίδιο.";
+            this.statusEl.innerHTML = "Η λύση παραμένει αμετάβλητη.";
         }
 
         this.render();
     }
 
-    violates(p, line) {
-        if (!p) return true; // Treating null as violation needed solving
-        // ax + by <= c? allow small epsilon
-        return (line.a * p.x + line.b * p.y) > line.c + 1e-5;
+    makeInfeasible() {
+        this.optimalPoint = null;
+        this.statusEl.innerHTML = `<i class="fas fa-exclamation-triangle" style="color:red"></i> Ανέφικτο Πρόβλημα!`;
+        this.render();
     }
+
+    violates(p, line) {
+        if (!p) return true;
+        return (line.a * p.x + line.b * p.y) > line.c + 1e-4;
+    }
+
+    // --- Interaction ---
+
+    handleHover(mx, my) {
+        let minDist = 15;
+        let found = -1;
+
+        // Check distance to visible constraints
+        this.constraints.forEach((c, i) => {
+            if (c.isBox) return;
+            const dist = Math.abs(c.a * mx + c.b * my - c.c);
+            if (dist < minDist) {
+                minDist = dist;
+                found = i;
+            }
+        });
+
+        if (this.hoveredIndex !== found) {
+            this.hoveredIndex = found;
+            this.render();
+            this.highlightListItem(found);
+        }
+    }
+
+    updateList() {
+        this.listEl.innerHTML = '';
+        this.constraints.forEach((c, i) => {
+            if (c.isBox) return; // Don't list box constraints
+
+            const li = document.createElement('li');
+            li.style.padding = '8px';
+            li.style.borderBottom = '1px solid #eee';
+            li.style.cursor = 'pointer';
+            li.style.fontSize = '0.9rem';
+            li.style.display = 'flex';
+            li.style.justifyContent = 'space-between';
+            li.style.alignItems = 'center';
+            li.id = `con-item-${i}`;
+
+            li.innerHTML = `<span><strong style="color:var(--accent-color)">h<sub>${this.getVisibleIndex(i)}</sub></strong>: ${c.label}</span>`;
+            // Note: i-3 assuming first 4 are box. If box logic changes, this breaks.
+            // Better to count visible index.
+
+            li.addEventListener('mouseenter', () => {
+                this.hoveredIndex = i;
+                this.render();
+                li.style.background = '#e3f2fd';
+            });
+            li.addEventListener('mouseleave', () => {
+                if (this.hoveredIndex === i) {
+                    this.hoveredIndex = -1;
+                    this.render();
+                }
+                li.style.background = 'transparent';
+            });
+
+            this.listEl.appendChild(li);
+        });
+    }
+
+    getVisibleIndex(realIndex) {
+        // Count how many non-box constraints before this one
+        let count = 0;
+        for (let k = 0; k <= realIndex; k++) {
+            if (!this.constraints[k].isBox) count++;
+        }
+        return count;
+    }
+
+    highlightListItem(index) {
+        // Clear all
+        Array.from(this.listEl.children).forEach(li => li.style.background = 'transparent');
+        if (index !== -1) {
+            const li = document.getElementById(`con-item-${index}`);
+            if (li) {
+                li.style.background = '#e3f2fd';
+                li.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+    }
+
+    // --- Rendering ---
 
     render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        this.drawGrid();
+
         // Draw Constraints
         this.constraints.forEach((c, i) => {
-            this.drawHalfPlane(c, i === this.constraints.length - 1);
+            if (c.isBox) return;
+            const isLast = (i === this.constraints.length - 1);
+            const isHover = (i === this.hoveredIndex);
+            this.drawHalfPlane(c, isLast, isHover);
         });
 
-        // Draw Optimal
+        this.drawObjective();
+
         if (this.optimalPoint) {
+            const cx = this.toCanvasX(this.optimalPoint.x);
+            const cy = this.toCanvasY(this.optimalPoint.y);
+
             this.ctx.beginPath();
-            this.ctx.arc(this.optimalPoint.x, this.optimalPoint.y, 6, 0, Math.PI * 2);
-            this.ctx.fillStyle = '#27ae60';
+            this.ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+            this.ctx.fillStyle = '#2ecc71';
             this.ctx.fill();
+            this.ctx.lineWidth = 2;
             this.ctx.strokeStyle = '#fff';
             this.ctx.stroke();
 
-            this.ctx.fillStyle = '#000';
-            this.ctx.fillText("Opt", this.optimalPoint.x + 8, this.optimalPoint.y);
+            // Label
+            this.ctx.fillStyle = '#1e8449';
+            this.ctx.font = 'bold 12px sans-serif';
+            // Offset label slightly
+            this.ctx.fillText("Opt", cx + 10, cy + 4);
         }
     }
 
-    drawHalfPlane(line, isNew) {
-        // Draw the line ax+by=c
-        // Find intersection with canvas bounds
-        // Just draw a long line
-        // We know normal (a, b).
-        // Find a point on line P0.
-        // Tangent vector (-b, a).
+    drawGrid() {
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        const step = 50;
 
+        this.ctx.strokeStyle = '#f5f5f5';
+        this.ctx.lineWidth = 1;
+        this.ctx.beginPath();
+
+        // Vertical lines starting from Origin
+        for (let x = this.origin.x; x <= w; x += step) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, h); }
+        for (let x = this.origin.x; x >= 0; x -= step) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, h); }
+
+        // Horizontal lines starting from Origin
+        for (let y = this.origin.y; y <= h; y += step) { this.ctx.moveTo(0, y); this.ctx.lineTo(w, y); }
+        for (let y = this.origin.y; y >= 0; y -= step) { this.ctx.moveTo(0, y); this.ctx.lineTo(w, y); }
+        this.ctx.stroke();
+
+        // Axes (Black)
+        this.ctx.strokeStyle = '#333';
+        this.ctx.lineWidth = 1.5;
+        this.ctx.beginPath();
+        // X-Axis
+        this.ctx.moveTo(0, this.origin.y); this.ctx.lineTo(w, this.origin.y);
+        // Y-Axis
+        this.ctx.moveTo(this.origin.x, 0); this.ctx.lineTo(this.origin.x, h);
+        this.ctx.stroke();
+
+        // Origin Label
+        this.ctx.fillStyle = '#000';
+        this.ctx.font = '10px sans-serif';
+        this.ctx.fillText("(0,0)", this.origin.x + 4, this.origin.y + 12);
+    }
+
+    drawHalfPlane(line, isNew, isHover) {
+        // Robust Infinite Line Drawing using Rotation
+        // Line: ax + by = c.
+        // Normal vector (a, b).
+        // We want to fill the side where ax+by > c.
+
+        // Convert to canvas parameters?
+        // Let's use coordinate transform on Context for easy drawing.
+
+        this.ctx.save();
+
+        // We translate context to Origin first
+        this.ctx.translate(this.origin.x, this.origin.y);
+        // Scale Y by -1 to match Math system?
+        this.ctx.scale(1, -1);
+
+        // Now we are in Math Coords (almost, Y is up)
+
+        // Find a pivot point on the line
         let p0;
         if (Math.abs(line.b) > 1e-5) p0 = { x: 0, y: line.c / line.b };
         else p0 = { x: line.c / line.a, y: 0 };
 
-        const tan = { x: -line.b, y: line.a };
+        // Calculate angle of the line
+        // Normal angle
+        const normalAngle = Math.atan2(line.b, line.a);
+
+        // Translate to pivot
+        this.ctx.translate(p0.x, p0.y);
+        // Rotate
+        this.ctx.rotate(normalAngle);
+
+        // Draw Vertical line (perpendicular to normal) along Y axis
+        const huge = 4000;
 
         this.ctx.beginPath();
-        this.ctx.moveTo(p0.x - tan.x * 1000, p0.y - tan.y * 1000);
-        this.ctx.lineTo(p0.x + tan.x * 1000, p0.y + tan.y * 1000);
+        this.ctx.moveTo(0, -huge);
+        this.ctx.lineTo(0, huge);
 
-        this.ctx.strokeStyle = isNew ? '#e74c3c' : 'rgba(0,0,0,0.2)';
-        this.ctx.lineWidth = isNew ? 2 : 1;
+        let color = '#bdc3c7';
+        let width = 1; // 1 unit width in math coords? If scale is 1, yes.
+        // We scaled (1, -1), line width is affected? No, because non-uniform scale might
+        // mess up strokes if rotated. But 1,-1 is just flip.
+        // Actually, scale(1, -1) flips text too.
+
+        if (isNew) { color = '#e74c3c'; width = 2; }
+        if (isHover) { color = '#3498db'; width = 3; }
+
+        // We need to restore scale for constant pixel width?
+        // Or just accept it.
+        // this.ctx.vectorEffect = "non-scaling-stroke"; // Doesn't work in Canvas
+
+        this.ctx.strokeStyle = color;
+        this.ctx.lineWidth = width;
         this.ctx.stroke();
 
-        // Draw shade to indicate invalid side?
-        // Normal (a, b) points to Invalid side (since ax+by > c is invalid?)
-        // Wait, Seidel usually ax+by <= c. Yes.
-        // So Normal points to 'Higher values', which are invalid.
-        // Draw small ticks along normal.
-
-        const midX = p0.x;
-        const midY = p0.y; // Roughly
-        // Draw a tick
+        // Fill (+X side in rotated frame)
         this.ctx.beginPath();
-        this.ctx.moveTo(midX, midY);
-        this.ctx.lineTo(midX + line.a * 10, midY + line.b * 10);
-        this.ctx.strokeStyle = isNew ? '#e74c3c' : 'rgba(0,0,0,0.1)';
+        this.ctx.rect(0, -huge, huge, huge * 2);
+
+        let fillColor = 'rgba(149, 165, 166, 0.1)';
+        if (isNew) fillColor = 'rgba(231, 76, 60, 0.15)';
+        if (isHover) fillColor = 'rgba(52, 152, 219, 0.2)';
+
+        this.ctx.fillStyle = fillColor;
+        this.ctx.fill();
+
+        this.ctx.restore();
+    }
+
+    drawObjective() {
+        const w = this.canvas.width;
+        this.ctx.save();
+        this.ctx.translate(w - 40, 40);
+        this.ctx.beginPath();
+        // Arrow pointing UP (Canvas coords)
+        this.ctx.moveTo(0, 20); this.ctx.lineTo(0, -20);
+        this.ctx.lineTo(-5, -15); this.ctx.moveTo(0, -20); this.ctx.lineTo(5, -15);
+        this.ctx.strokeStyle = '#2980b9';
+        this.ctx.lineWidth = 2;
         this.ctx.stroke();
+        this.ctx.fillStyle = '#2980b9';
+        this.ctx.textAlign = 'center';
+        this.ctx.font = '10px sans-serif';
+        this.ctx.fillText("Max Y", 0, 32);
+        this.ctx.restore();
     }
 }

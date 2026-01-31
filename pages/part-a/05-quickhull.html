@@ -100,7 +100,65 @@
                         </ul>
                     </div>
                 </div>
-            </section> <!-- Simulator -->
+            </section>
+
+            <section class="content-box">
+                <h2>2. Λυμένο Παράδειγμα "Στο Χαρτί"</h2>
+
+                <div class="exam-warning">
+                    <strong>ΕΞΕΤΑΣΙΑΚΟ ΘΕΜΑ:</strong> Αναδρομική εκτέλεση QuickHull με εύρεση πιο απομακρυσμένου
+                    σημείου.
+                </div>
+
+                <div class="solved-example">
+                    <h4>Παράδειγμα: QuickHull για 6 σημεία</h4>
+
+                    <p><strong>Δεδομένα:</strong> $P = \{(0,2), (1,4), (3,3), (4,0), (5,4), (6,2)\}$</p>
+
+                    <h5>Βήμα 1: Αρχικοποίηση</h5>
+                    <ul>
+                        <li>$A = (0,2)$ (αριστερότερο)</li>
+                        <li>$B = (6,2)$ (δεξιότερο)</li>
+                        <li>$S_{πάνω} = \{(1,4), (3,3), (5,4)\}$ (πάνω από $AB$)</li>
+                        <li>$S_{κάτω} = \{(4,0)\}$ (κάτω από $AB$)</li>
+                    </ul>
+
+                    <h5>Βήμα 2: Αναδρομή για Άνω Τμήμα</h5>
+                    <p><strong>Κλήση:</strong> QuickHull($A(0,2)$, $B(6,2)$, $\{(1,4), (3,3), (5,4)\}$)</p>
+
+                    <p>Υπολογισμός απόστασης από ευθεία $AB$ (χρησιμοποιώντας CCW):</p>
+                    <ul>
+                        <li>$d(1,4) = |CCW(A,B,(1,4))| = |(6-0)(4-2) - (2-2)(1-0)| = 12$</li>
+                        <li>$d(3,3) = |CCW(A,B,(3,3))| = |6 \cdot 1 - 0| = 6$</li>
+                        <li>$d(5,4) = |CCW(A,B,(5,4))| = |6 \cdot 2 - 0| = 12$</li>
+                    </ul>
+                    <p>Επιλέγουμε $\Gamma = (1,4)$ ή $(5,4)$. Έστω $\Gamma = (5,4)$.</p>
+
+                    <p><strong>Υποκλήσεις:</strong></p>
+                    <ul>
+                        <li>QuickHull($A(0,2)$, $\Gamma(5,4)$, $\{(1,4), (3,3)\}$)</li>
+                        <li>QuickHull($\Gamma(5,4)$, $B(6,2)$, $\emptyset$) → επιστρέφει $\Gamma B$</li>
+                    </ul>
+
+                    <p><strong>Υπο-υποκλήση:</strong> QuickHull($A$, $\Gamma$, $\{(1,4), (3,3)\}$)</p>
+                    <ul>
+                        <li>Πιο μακρινό από $A\Gamma$: $(1,4)$</li>
+                        <li>QuickHull($A$, $(1,4)$, $\emptyset$) → $A(1,4)$</li>
+                        <li>QuickHull($(1,4)$, $\Gamma$, $\{(3,3)\}$) → αλυσίδα $(1,4) \to (3,3) \to \Gamma$</li>
+                    </ul>
+
+                    <h5>Βήμα 3: Αναδρομή για Κάτω Τμήμα</h5>
+                    <p>QuickHull($B(6,2)$, $A(0,2)$, $\{(4,0)\}$) → $B \to (4,0) \to A$</p>
+
+                    <h5>Αποτέλεσμα</h5>
+                    <p><strong>Κυρτό Περίβλημα (CCW):</strong></p>
+                    <div class="math-block">
+                        $$ (0,2) \to (1,4) \to (3,3) \to (5,4) \to (6,2) \to (4,0) \to (0,2) $$
+                    </div>
+                </div>
+            </section>
+
+            <!-- Simulator -->
             <section class="simulator-container" id="quickhull-simulator">
                 <div class="simulator-header">
                     <h3 class="simulator-title"><i class="fas fa-bolt"></i> Προσομοιωτής QuickHull</h3>
@@ -135,6 +193,7 @@
         </div>
     </footer>
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/base.js"></script>
     <script src="../../assets/js/simulators/quickhull.js"></script>

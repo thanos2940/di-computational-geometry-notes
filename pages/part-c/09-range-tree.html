@@ -151,8 +151,80 @@
                     </div>
                 </div>
             </section>
+
             <section class="content-box">
-                <h2>2. Fractional Cascading</h2>
+                <h2>2. Λυμένο Παράδειγμα</h2>
+
+                <div class="exam-warning">
+                    <strong>ΕΞΕΤΑΣΙΑΚΟ ΘΕΜΑ:</strong> Κατασκευή Range Tree και αναζήτηση σε ορθογώνιο παράθυρο.
+                </div>
+
+                <div class="solved-example">
+                    <h4>Παράδειγμα: Κατασκευή 2D Range Tree</h4>
+
+                    <p><strong>Δεδομένα:</strong> $P = \{A(1,3), B(2,1), C(4,5), D(5,2)\}$</p>
+
+                    <h5>Βήμα 1: Πρωτεύον Δέντρο (x-coordinates)</h5>
+                    <ul>
+                        <li>Διάμεσος-x: $2.5$</li>
+                        <li>$P_{left} = \{A(1,3), B(2,1)\}$ (x &le; 2.5)</li>
+                        <li>$P_{right} = \{C(4,5), D(5,2)\}$ (x &gt; 2.5)</li>
+                    </ul>
+                    <p>Αναδρομικά:</p>
+                    <ul>
+                        <li>$P_{left}$: διάμεσος-x = 1.5 → φύλλα A, B</li>
+                        <li>$P_{right}$: διάμεσος-x = 4.5 → φύλλα C, D</li>
+                    </ul>
+
+                    <h5>Βήμα 2: Βοηθητικά Δέντρα (y-coordinates)</h5>
+                    <p>Σε κάθε κόμβο, δημιουργούμε BST με βάση τα $y$:</p>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Κόμβος</th>
+                                <th>Σημεία Υποδέντρου</th>
+                                <th>Ταξινομημένα κατά y</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ρίζα (2.5)</td>
+                                <td>$\{A, B, C, D\}$</td>
+                                <td>B(1) → D(2) → A(3) → C(5)</td>
+                            </tr>
+                            <tr>
+                                <td>Αριστερό παιδί (1.5)</td>
+                                <td>$\{A, B\}$</td>
+                                <td>B(1) → A(3)</td>
+                            </tr>
+                            <tr>
+                                <td>Δεξιό παιδί (4.5)</td>
+                                <td>$\{C, D\}$</td>
+                                <td>D(2) → C(5)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5>Βήμα 3: Range Query $[2, 6] \times [1, 4]$</h5>
+                    <ol>
+                        <li>Split node στη ρίζα (2.5)</li>
+                        <li>Στο μονοπάτι προς x=2: φύλλο B(2,1) → ελέγχουμε αν $2 \ge 2$ ✓ και $1 \in [1,4]$ ✓ →
+                            <strong>B ∈ αποτέλεσμα</strong>
+                        </li>
+                        <li>Στο μονοπάτι προς x=6: δεξί υποδέντρο πλήρως εντός [2,6]
+                            <br>→ Query στον y-assoc του: $\{C, D\}$ με $[1,4]$
+                            <br>→ D(5,2): $y=2 \in [1,4]$ ✓ → <strong>D ∈ αποτέλεσμα</strong>
+                            <br>→ C(4,5): $y=5 \notin [1,4]$ ✗
+                        </li>
+                    </ol>
+
+                    <h5>Αποτέλεσμα</h5>
+                    <p><strong>Σημεία εντός $[2, 6] \times [1, 4]$:</strong> $\{B(2,1), D(5,2)\}$</p>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>3. Fractional Cascading</h2>
                 <p> Με την τεχνική του **Fractional Cascading**, μπορούμε να βελτιώσουμε τον χρόνο αναζήτησης σε
                     $\mathcal{O}(\log n + k)$, αποφεύγοντας τις επαναλαμβανόμενες δυαδικές αναζητήσεις στα δευτερεύοντα
                     δέντρα. </p>
@@ -167,6 +239,7 @@
         </div>
     </footer>
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
     <script> // No Simulator for Theory Page </script>
 </body>
 

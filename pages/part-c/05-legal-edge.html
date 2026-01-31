@@ -65,7 +65,8 @@
                     $bcd$ που μοιράζονται την ακμή $bd$. Η ακμή $bd$ είναι <strong>έγκυρη (legal)</strong> αν το $c$
                     βρίσκεται <em>έξω</em> από τον περιγεγραμμένο κύκλο του τριγώνου $abd$. Αν είναι μέσα (παραβιάζεται
                     η συνθήκη Delaunay), τότε η ακμή είναι <strong>μη-έγκυρη (illegal)</strong> και πρέπει να γίνει
-                    <strong>Edge Flip</strong>. </div>
+                    <strong>Edge Flip</strong>.
+                </div>
             </section>
             <section class="content-box">
                 <h2>2. Edge Flip</h2>
@@ -78,26 +79,74 @@
                 <div class="math-block"> $$ \text{Illegal}(bd) \iff InCircle(a, b, d, c)> 0 $$ </div>
             </section>
             <section class="content-box">
-                <h2>3. Παράδειγμα Υπολογισμού InCircle "Στο Χαρτί"</h2>
-                <div class="methodology-box">
-                    <p> Έστω τρίγωνο $T = \{A(0,0), B(2,0), C(1,2)\}$ και σημείο ελέγχου $D(1,1)$. Ελέγχουμε αν το $D$
-                        είναι μέσα στον περιγεγραμμένο κύκλο του $ABC$. </p>
-                    <ol>
-                        <li> Βεβαιωνόμαστε ότι τα $A, B, C$ είναι σε <strong>Anti-Clockwise (CCW)</strong> σειρά. <br>
-                            $A \to B \to C$: $(2-0)(2-0) - (0-0)(1-0) = 4> 0$ (CCW, OK). </li>
-                        <li> Υπολογίζουμε τα $x^2 + y^2$ (lifted values) για την 4η στήλη: <ul>
-                                <li>$A: 0^2+0^2 = 0$</li>
-                                <li>$B: 2^2+0^2 = 4$</li>
-                                <li>$C: 1^2+2^2 = 5$</li>
-                                <li>$D: 1^2+1^2 = 2$</li>
-                            </ul>
+                <h2>3. Πλήρες Αριθμητικό Παράδειγμα "Στο Χαρτί"</h2>
+
+                <div class="exam-warning">
+                    <strong>ΕΞΕΤΑΣΙΑΚΟ ΘΕΜΑ:</strong> Υπολογισμός InCircle για να αποφασιστεί αν μια ακμή είναι legal ή
+                    illegal.
+                </div>
+
+                <div class="solved-example">
+                    <h4>Παράδειγμα: Έλεγχος εγκυρότητας ακμής BD</h4>
+
+                    <p><strong>Δεδομένα:</strong></p>
+                    <ul>
+                        <li>Τρίγωνο 1: $A(0,0), B(2,0), D(1,2)$</li>
+                        <li>Τρίγωνο 2: $B(2,0), C(3,1), D(1,2)$</li>
+                        <li>Κοινή ακμή: $BD$</li>
+                        <li>Έλεγχος: Είναι το $C$ εντός του κύκλου του τριγώνου $ABD$;</li>
+                    </ul>
+
+                    <h5>Βήμα 1: Έλεγχος Φοράς (CCW/CW)</h5>
+                    <p>Ελέγχουμε αν τα $A, B, D$ είναι σε CCW:</p>
+                    <div class="math-block">
+                        $$ \det \begin{bmatrix} 1 & 0 & 0 \\ 1 & 2 & 0 \\ 1 & 1 & 2 \end{bmatrix} = 1(2 \cdot 2 - 0
+                        \cdot 1) = 4 > 0 \implies \text{CCW} ✓$$
+                    </div>
+
+                    <h5>Βήμα 2: Κατασκευή Μήτρας InCircle 4×4</h5>
+                    <p>Υπολογίζουμε τα lifted values ($x^2 + y^2$):</p>
+                    <ul>
+                        <li>$A$: $0^2 + 0^2 = 0$</li>
+                        <li>$B$: $2^2 + 0^2 = 4$</li>
+                        <li>$D$: $1^2 + 2^2 = 5$</li>
+                        <li>$C$: $3^2 + 1^2 = 10$</li>
+                    </ul>
+                    <div class="math-block">
+                        $$ M = \begin{bmatrix} 0 & 0 & 0 & 1 \\ 2 & 0 & 4 & 1 \\ 1 & 2 & 5 & 1 \\ 3 & 1 & 10 & 1
+                        \end{bmatrix} $$
+                    </div>
+
+                    <h5>Βήμα 3: Ανάπτυγμα Laplace (1η γραμμή)</h5>
+                    <p>Αφού η 1η γραμμή έχει μόνο ένα μη-μηδενικό στοιχείο (στη θέση 1,4):</p>
+                    <div class="math-block">
+                        $$ \Delta = 1 \cdot (-1)^{1+4} \cdot \det \begin{bmatrix} 2 & 0 & 4 \\ 1 & 2 & 5 \\ 3 & 1 & 10
+                        \end{bmatrix} = -\det \begin{bmatrix} 2 & 0 & 4 \\ 1 & 2 & 5 \\ 3 & 1 & 10 \end{bmatrix} $$
+                    </div>
+
+                    <h5>Βήμα 4: Υπολογισμός Ορίζουσας 3×3 (Κανόνας Sarrus)</h5>
+                    <div class="math-block">
+                        $$ \det = 2(2 \cdot 10 - 5 \cdot 1) - 0 + 4(1 \cdot 1 - 2 \cdot 3) $$
+                        $$ = 2(20 - 5) + 4(1 - 6) = 2 \cdot 15 + 4 \cdot (-5) = 30 - 20 = 10 $$
+                    </div>
+                    <p>Άρα: $\Delta = -10$</p>
+
+                    <h5>Βήμα 5: Ερμηνεία</h5>
+                    <p>Αφού τα $A, B, D$ είναι CCW και $\Delta = -10 &lt; 0$:</p>
+                    <ul>
+                        <li>Το $C$ είναι <strong>ΕΚΤΟΣ</strong> του περιγεγραμμένου κύκλου του τριγώνου $ABD$
                         </li>
-                        <li> Στήνουμε την ορίζουσα 4x4 (ή ανάγουμε σε 3x3): $$ \det \begin{bmatrix} 0 & 0 & 0 & 1 \\ 2 &
-                            0 & 4 & 1 \\ 1 & 2 & 5 & 1 \\ 1 & 1 & 2 & 1 \end{bmatrix} $$ Αναπτύσσοντας ως προς την 1η
-                            γραμμή: $$ 1 \cdot (-1)^ {1+4} \cdot \det \begin{bmatrix} 2 & 0 & 4 \\ 1 & 2 & 5 \\ 1 & 1 &
-                            2 \end{bmatrix} $$ <em>(Υπολογισμός 3x3...)</em> $\rightarrow$ Αν αποτέλεσμα $> 0$, τότε $D$
-                            ΕΝΤΟΣ $\rightarrow$ <strong>Illegal Edge</strong>. </li>
-                    </ol>
+                        <li>→ Η ακμή $BD$ είναι <strong>LEGAL (έγκυρη)</strong> ✓</li>
+                        <li>→ <strong>ΔΕΝ χρειάζεται Edge Flip</strong></li>
+                    </ul>
+
+                    <div class="algorithm-note">
+                        <strong>💡 Πότε χρειάζεται Flip:</strong>
+                        <p>Αν είχαμε $\Delta &gt; 0$ (με CCW σημεία), τότε το $C$ θα ήταν ΕΝΤΟΣ → η ακμή $BD$ θα
+                            ήταν
+                            <strong>ILLEGAL</strong> → θα έπρεπε να την αντικαταστήσουμε με την $AC$.
+                        </p>
+                    </div>
                 </div>
             </section>
             <section class="simulator-container" id="flip-simulator">
@@ -122,6 +171,7 @@
         </div>
     </footer>
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
     <script src="../../assets/js/geometry.js"></script>
     <script src="../../assets/js/simulators/legal-edge.js"></script>
     <script>

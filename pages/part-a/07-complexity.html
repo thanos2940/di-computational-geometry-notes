@@ -1,17 +1,165 @@
 <!DOCTYPE html>
 <html lang="el" data-theme="light">
 
-<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Σύγκριση Πολυπλοκότητας | Υπολογιστική Γεωμετρία</title> <link rel="stylesheet" href="../../assets/css/main.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"> <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Σύγκριση Πολυπλοκότητας | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
 </head>
 
-<body> <header class="main-header"> <div class="container header-content"> <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a> </div> <nav class="main-nav"> <ul> <li><a href="../../index.html#part-a">Μέρος Α</a></li> <li><a href="../../index.html#part-b">Μέρος Β</a></li> <li><a href="../../index.html#part-c">Μέρος Γ</a></li> <li>
-    <div class="theme-toggle-container">
-        <button id="theme-toggle">
-            <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-            <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-        </button>
-    </div>
-</li> </ul> </nav> </div> </header> <main class="main-content"> <div class="container"> <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-a">Μέρος Α: Κυρτό Περίβλημα</a> <span>Σύγκριση</span> </div> <h1>Σύγκριση Αλγορίθμων Κυρτού Περιβλήματος (2D)</h1> <section class="content-box"> <h2>Συγκεντρωτικός Πίνακας</h2> <div class="table-responsive"> <table class="comparison-table"> <thead> <tr> <th>Αλγόριθμος</th> <th>Μέση Πολυπλοκότητα</th> <th>Χειρότερη Περίπτωση</th> <th>Χαρακτηριστικά</th> </tr> </thead> <tbody> <tr> <td><strong>Εξαντλητικός</strong></td> <td>$\mathcal{O}(n^3)$</td> <td>$\mathcal{O}(n^3)$</td> <td>Πολύ αργός, εκπαιδευτική χρήση μόνο.</td> </tr> <tr> <td><strong>Jarvis March</strong> (Gift Wrapping)</td> <td>$\mathcal{O}(nh)$</td> <td>$\mathcal{O}(n^2)$</td> <td>Output-sensitive (γρήγορος αν το $h$ είναι μικρό).</td> </tr> <tr> <td><strong>Graham Scan</strong></td> <td>$\mathcal{O}(n \log n)$</td> <td>$\mathcal{O}(n \log n)$</td> <td>Βέλτιστος, σταθερός, βασίζεται στην ταξινόμηση.</td> </tr> <tr> <td><strong>Divide & Conquer</strong></td> <td>$\mathcal{O}(n \log n)$</td> <td>$\mathcal{O}(n \log n)$</td> <td>Παράλληλη επεξεργασία, 3D επέκταση.</td> </tr> <tr> <td><strong>QuickHull</strong></td> <td>$\mathcal{O}(n \log n)$</td> <td>$\mathcal{O}(n^2)$</td> <td>Γρήγορος στην πράξη, αλλά ευαίσθητος στην κατανομή.</td> </tr> </tbody> </table> </div> </section> <section class="content-box"> <h2>Κάτω Φράγμα (Διαισθητικά)</h2> <div class="intuition-box"> <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p> <p> Γιατί κολλήσαμε στο $O(N \log N)$; Γιατί δεν μπορούμε να πάμε πιο γρήγορα; </p> <p> Η απάντηση είναι ότι το Κυρτό Περίβλημα είναι ουσιαστικά <strong>Ταξινόμηση μεταμφιεσμένη</strong>. Αν είχατε έναν μαγικό αλγόριθμο που έβρισκε το περίβλημα σε γραμμικό χρόνο $O(N)$, θα μπορούσατε να τον χρησιμοποιήσετε για να ταξινομήσετε αριθμούς σε $O(N)$, σπάζοντας τους νόμους της πληροφορικής! </p> <p> <strong>Το Κόλπο:</strong> Αν βάλετε αριθμούς πάνω σε μια καμπύλη (π.χ. $y=x^2$), η σειρά που εμφανίζονται στο Κυρτό Περίβλημα είναι ακριβώς η ταξινομημένη τους σειρά. Άρα, Hull = Sort. </p> </div> <p> Αποδεικνύεται ότι το πρόβλημα του Κυρτού Περιβλήματος έχει κάτω φράγμα $\Omega(n \log n)$ στο αλγεβρικό μοντέλο υπολογισμού. </p> <div class="note-box"> <strong>Αναγωγή στην Ταξινόμηση:</strong> Αν μπορούσαμε να βρούμε το ΚΠ πιο γρήγορα από $\mathcal{O}(n \log n)$, θα μπορούσαμε να ταξινομήσουμε αριθμούς πιο γρήγορα από $\mathcal{O}(n \log n)$, πράγμα που είναι αδύνατο. </div> </section> <div class="page-nav"> <a href="06-coloring.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Beneath-Beyond</a> <a href="../../index.html#part-b" class="btn">Μέρος Β: 3D Γεωμετρία <i class="fas fa-arrow-right"></i></a> </div> </div> </main> <footer class="main-footer"> <div class="container"> <p>&copy; 2026 Υπολογιστική Γεωμετρία</p> </div> </footer> <script src="../../assets/js/utils.js"></script> <style> .comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; } .comparison-table th, .comparison-table td { text-align: left; padding: 12px 15px; border-bottom: 1px solid #ddd; } .comparison-table th { background-color: #f8f9fa; font-weight: 600; } .comparison-table tr:hover { background-color: #f1f1f1; } [data-theme="dark"] .comparison-table th { background-color: #2c3e50; color: white; border-bottom: 1px solid #34495e; } [data-theme="dark"] .comparison-table td { border-bottom: 1px solid #34495e; } [data-theme="dark"] .comparison-table tr:hover { background-color: #34495e; } </style>
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <a href="../../index.html#part-a">Μέρος Α:
+                    Κυρτό Περίβλημα</a> <span>Σύγκριση</span> </div>
+            <h1>Σύγκριση Αλγορίθμων Κυρτού Περιβλήματος (2D)</h1>
+            <section class="content-box">
+                <h2>Συγκεντρωτικός Πίνακας</h2>
+                <div class="table-responsive">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Αλγόριθμος</th>
+                                <th>Μέση Πολυπλοκότητα</th>
+                                <th>Χειρότερη Περίπτωση</th>
+                                <th>Χαρακτηριστικά</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Εξαντλητικός</strong></td>
+                                <td>$\mathcal{O}(n^3)$</td>
+                                <td>$\mathcal{O}(n^3)$</td>
+                                <td>Πολύ αργός, εκπαιδευτική χρήση μόνο.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Jarvis March</strong> (Gift Wrapping)</td>
+                                <td>$\mathcal{O}(nh)$</td>
+                                <td>$\mathcal{O}(n^2)$</td>
+                                <td>Output-sensitive (γρήγορος αν το $h$ είναι μικρό).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Graham Scan</strong></td>
+                                <td>$\mathcal{O}(n \log n)$</td>
+                                <td>$\mathcal{O}(n \log n)$</td>
+                                <td>Βέλτιστος, σταθερός, βασίζεται στην ταξινόμηση.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Divide & Conquer</strong></td>
+                                <td>$\mathcal{O}(n \log n)$</td>
+                                <td>$\mathcal{O}(n \log n)$</td>
+                                <td>Παράλληλη επεξεργασία, 3D επέκταση.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>QuickHull</strong></td>
+                                <td>$\mathcal{O}(n \log n)$</td>
+                                <td>$\mathcal{O}(n^2)$</td>
+                                <td>Γρήγορος στην πράξη, αλλά ευαίσθητος στην κατανομή.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="content-box">
+                <h2>Κάτω Φράγμα (Διαισθητικά)</h2>
+                <div class="intuition-box">
+                    <p><strong>👋 Εισαγωγή για Αρχάριους:</strong></p>
+                    <p> Γιατί κολλήσαμε στο $O(N \log N)$; Γιατί δεν μπορούμε να πάμε πιο γρήγορα; </p>
+                    <p> Η απάντηση είναι ότι το Κυρτό Περίβλημα είναι ουσιαστικά <strong>Ταξινόμηση
+                            μεταμφιεσμένη</strong>. Αν είχατε έναν μαγικό αλγόριθμο που έβρισκε το περίβλημα σε γραμμικό
+                        χρόνο $O(N)$, θα μπορούσατε να τον χρησιμοποιήσετε για να ταξινομήσετε αριθμούς σε $O(N)$,
+                        σπάζοντας τους νόμους της πληροφορικής! </p>
+                    <p> <strong>Το Κόλπο:</strong> Αν βάλετε αριθμούς πάνω σε μια καμπύλη (π.χ. $y=x^2$), η σειρά που
+                        εμφανίζονται στο Κυρτό Περίβλημα είναι ακριβώς η ταξινομημένη τους σειρά. Άρα, Hull = Sort. </p>
+                </div>
+                <p> Αποδεικνύεται ότι το πρόβλημα του Κυρτού Περιβλήματος έχει κάτω φράγμα $\Omega(n \log n)$ στο
+                    αλγεβρικό μοντέλο υπολογισμού. </p>
+                <div class="note-box"> <strong>Αναγωγή στην Ταξινόμηση:</strong> Αν μπορούσαμε να βρούμε το ΚΠ πιο
+                    γρήγορα από $\mathcal{O}(n \log n)$, θα μπορούσαμε να ταξινομήσουμε αριθμούς πιο γρήγορα από
+                    $\mathcal{O}(n \log n)$, πράγμα που είναι αδύνατο. </div>
+            </section>
+            <div class="page-nav"> <a href="06-coloring.html" class="btn btn-secondary"><i
+                        class="fas fa-arrow-left"></i> Beneath-Beyond</a> <a href="../../index.html#part-b"
+                    class="btn">Μέρος Β: 3D Γεωμετρία <i class="fas fa-arrow-right"></i></a> </div>
+        </div>
+    </main>
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
+    <style>
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        [data-theme="dark"] .comparison-table th {
+            background-color: #2c3e50;
+            color: white;
+            border-bottom: 1px solid #34495e;
+        }
+
+        [data-theme="dark"] .comparison-table td {
+            border-bottom: 1px solid #34495e;
+        }
+
+        [data-theme="dark"] .comparison-table tr:hover {
+            background-color: #34495e;
+        }
+    </style>
 </body>
 
 </html>

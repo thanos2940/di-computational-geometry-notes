@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="el" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Τυπολόγιο | Υπολογιστική Γεωμετρία</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+    <style>
+        .formula-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .formula-card h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--accent-color);
+        }
+
+        .formula-card .formula {
+            background: var(--bg-primary);
+            padding: 0.8rem;
+            border-radius: 4px;
+            text-align: center;
+            margin: 0.5rem 0;
+        }
+
+        .formula-card .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .formula-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo"> <a href="../../index.html"><i class="fas fa-shapes"></i> Υπολογιστική Γεωμετρία</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../../index.html#part-a">Μέρος Α</a></li>
+                    <li><a href="../../index.html#part-b">Μέρος Β</a></li>
+                    <li><a href="../../index.html#part-c">Μέρος Γ</a></li>
+                    <li>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle">
+                                <svg id="theme-toggle-light-icon" class="hidden" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707-.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg id="theme-toggle-dark-icon" class="hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="breadcrumb"> <a href="../../index.html">Αρχική</a> <span>Τυπολόγιο</span> </div>
+            <h1><i class="fas fa-scroll"></i> Τυπολόγιο Εξετάσεων</h1>
+
+            <section class="content-box">
+                <h2>1. Προσανατολισμός (Orientation)</h2>
+                <div class="formula-grid">
+                    <div class="formula-card">
+                        <h4>CCW / CW Test</h4>
+                        <div class="formula">
+                            $$ \det \begin{bmatrix} 1 & x_0 & y_0 \\ 1 & x_1 & y_1 \\ 1 & x_2 & y_2 \end{bmatrix} $$
+                        </div>
+                        <div class="note">
+                            <strong>&gt;0:</strong> CCW (αριστερόστροφα) &nbsp;|&nbsp;
+                            <strong>&lt;0:</strong> CW (δεξιόστροφα) &nbsp;|&nbsp;
+                            <strong>=0:</strong> Συνευθειακά
+                        </div>
+                    </div>
+                    <div class="formula-card">
+                        <h4>Cross Product Form</h4>
+                        <div class="formula">
+                            $$ (x_1 - x_0)(y_2 - y_0) - (y_1 - y_0)(x_2 - x_0) $$
+                        </div>
+                        <div class="note">Ισοδύναμος υπολογισμός (ταχύτερος).</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>2. InCircle Test</h2>
+                <div class="formula-card">
+                    <h4>Ορίζουσα 4×4</h4>
+                    <div class="formula">
+                        $$ \det \begin{bmatrix} x_1 & y_1 & x_1^2+y_1^2 & 1 \\ x_2 & y_2 & x_2^2+y_2^2 & 1 \\ x_3 & y_3
+                        & x_3^2+y_3^2 & 1 \\ x_q & y_q & x_q^2+y_q^2 & 1 \end{bmatrix} $$
+                    </div>
+                    <div class="note" style="background: #ffe6e6; padding: 0.5rem; border-radius: 4px;">
+                        ⚠️ <strong>ΠΡΟΣΟΧΗ:</strong> Αν $p_1, p_2, p_3$ είναι <strong>CCW</strong>: >0 → ΕΝΤΟΣ.
+                        Αν είναι <strong>CW</strong>: >0 → ΕΚΤΟΣ!
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>3. Πολυπλοκότητες Αλγορίθμων</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Αλγόριθμος</th>
+                            <th>Χρόνος</th>
+                            <th>Χώρος</th>
+                            <th>Σημείωση</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Graham Scan</td>
+                            <td>$O(n \log n)$</td>
+                            <td>$O(n)$</td>
+                            <td>Ταξινόμηση κυριαρχεί</td>
+                        </tr>
+                        <tr>
+                            <td>Gift Wrapping</td>
+                            <td>$O(nh)$</td>
+                            <td>$O(n)$</td>
+                            <td>$h$ = πλήθος σημείων ΚΠ</td>
+                        </tr>
+                        <tr>
+                            <td>QuickHull</td>
+                            <td>$O(n \log n)$ μέσος</td>
+                            <td>$O(n)$</td>
+                            <td>Χειρότερη: $O(n^2)$</td>
+                        </tr>
+                        <tr>
+                            <td>Divide & Conquer</td>
+                            <td>$O(n \log n)$</td>
+                            <td>$O(n)$</td>
+                            <td>Σταθερά καλός</td>
+                        </tr>
+                        <tr>
+                            <td>kd-tree Query</td>
+                            <td>$O(\sqrt{n} + k)$</td>
+                            <td>$O(n)$</td>
+                            <td>2D ορθογώνια αναζήτηση</td>
+                        </tr>
+                        <tr>
+                            <td>Range Tree Query</td>
+                            <td>$O(\log^2 n + k)$</td>
+                            <td>$O(n \log n)$</td>
+                            <td>Ταχύτερο, περισσότερη μνήμη</td>
+                        </tr>
+                        <tr>
+                            <td>Delaunay (Incremental)</td>
+                            <td>$O(n \log n)$ αναμ.</td>
+                            <td>$O(n)$</td>
+                            <td>Με τυχαία σειρά εισαγωγής</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="content-box">
+                <h2>4. Ιδιότητες Delaunay</h2>
+                <div class="formula-grid">
+                    <div class="formula-card">
+                        <h4>Πλήθος Τριγώνων</h4>
+                        <div class="formula">$$ t = 2n - k - 2 $$</div>
+                        <div class="note">$n$ = σημεία, $k$ = σημεία στο ΚΠ</div>
+                    </div>
+                    <div class="formula-card">
+                        <h4>Πλήθος Ακμών</h4>
+                        <div class="formula">$$ e = 3n - k - 3 $$</div>
+                        <div class="note">Από τύπο Euler: $v - e + f = 2$</div>
+                    </div>
+                    <div class="formula-card">
+                        <h4>Lifting Transform</h4>
+                        <div class="formula">$$ p^+ = (x, y, x^2 + y^2) $$</div>
+                        <div class="note">Ανύψωση σε παραβολοειδές για σύνδεση με ΚΠ3</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-box">
+                <h2>5. Γραμμικός Προγραμματισμός</h2>
+                <div class="formula-card">
+                    <h4>Κανονική Μορφή</h4>
+                    <div class="formula">
+                        $\max c^T x$ &nbsp; υπό: &nbsp; $Ax = b$, &nbsp; $x \ge 0$
+                    </div>
+                    <div class="note">
+                        <strong>Μετατροπές:</strong><br>
+                        • $\le$ → προσθήκη $+s$ (slack)<br>
+                        • $\ge$ → αφαίρεση $-s$ (surplus)<br>
+                        • $b_i < 0$ → πολλαπλασιασμός με $-1$ </div>
+                    </div>
+            </section>
+
+            <div class="page-nav">
+                <a href="../../index.html" class="btn btn-secondary"><i class="fas fa-home"></i> Αρχική</a>
+            </div>
+        </div>
+    </main>
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Υπολογιστική Γεωμετρία</p>
+        </div>
+    </footer>
+    <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/glossary.js"></script>
+</body>
+
+</html>
