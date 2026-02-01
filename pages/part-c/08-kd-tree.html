@@ -9,6 +9,154 @@
     <link rel="stylesheet" href="../../assets/css/simulator.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <style>
+        /* Tree Diagram Styles */
+        .tree-diagram-container {
+            width: 100%;
+            overflow-x: auto;
+            padding: 20px 0;
+            background: var(--background-secondary);
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .tree {
+            display: flex;
+            justify-content: center;
+        }
+
+        .tree ul {
+            padding-top: 20px;
+            position: relative;
+            transition: all 0.5s;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tree li {
+            float: left;
+            text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+        }
+
+        /* Connectors */
+        .tree li::before,
+        .tree li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid var(--border);
+            width: 50%;
+            height: 20px;
+        }
+
+        .tree li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid var(--border);
+        }
+
+        .tree li:only-child::after,
+        .tree li:only-child::before {
+            display: none;
+        }
+
+        .tree li:only-child {
+            padding-top: 0;
+        }
+
+        .tree li:first-child::before,
+        .tree li:last-child::after {
+            border: 0 none;
+        }
+
+        .tree li:last-child::before {
+            border-right: 2px solid var(--border);
+            border-radius: 0 5px 0 0;
+        }
+
+        .tree li:first-child::after {
+            border-radius: 5px 0 0 0;
+        }
+
+        .tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid var(--border);
+            width: 0;
+            height: 20px;
+        }
+
+        /* Node Styles */
+        .node {
+            border: 2px solid var(--border);
+            padding: 8px 12px;
+            text-decoration: none;
+            color: var(--text);
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            display: inline-block;
+            border-radius: 5px;
+            transition: all 0.5s;
+            background: var(--card-bg);
+            min-width: 80px;
+            position: relative;
+        }
+
+        .split-x {
+            border-color: var(--primary-blue);
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .split-x .axis-label {
+            background: var(--primary-blue);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+        .split-y {
+            border-color: var(--primary-purple);
+            background: rgba(155, 89, 182, 0.1);
+        }
+
+        .split-y .axis-label {
+            background: var(--primary-purple);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+        .leaf {
+            border: 1px solid var(--border);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: var(--background);
+            color: var(--text-secondary);
+            display: inline-block;
+        }
+
+        [data-theme="dark"] .split-x {
+            background: rgba(52, 152, 219, 0.2);
+        }
+
+        [data-theme="dark"] .split-y {
+            background: rgba(155, 89, 182, 0.2);
+        }
+    </style>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
 </head>
@@ -135,9 +283,12 @@
                     <div class="algorithm-note">
                         <strong>💡 Παρατηρήσεις:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
-                            <li>Η <strong>διάμεσος</strong> επιλέγεται ώστε το δέντρο να είναι ισορροπημένο (περίπου
-                                μισά
-                                σημεία αριστερά, μισά δεξιά).</li>
+                            <li>Η <strong>διάμεσος</strong> επιλέγεται ως το <strong>μεσαίο στοιχείο</strong> της
+                                ταξινομημένης λίστας των σημείων (median element), ώστε το δέντρο να είναι ισορροπημένο.
+                                <strong>Προσοχή:</strong> Δεν χρησιμοποιούμε τη μέση τιμή (average), αλλά ένα υπαρκτό
+                                στοιχείο της λίστας που χωρίζει το πλήθος των σημείων στη μέση.
+                            </li>
+                            <li>Αν έχουμε $n$ σημεία, επιλέγουμε το $\lceil n/2 \rceil$-οστό στοιχείο ως διάμεσο.</li>
                             <li>Ο χρόνος κατασκευής είναι <strong>O(n log n)</strong> αν χρησιμοποιηθεί αλγόριθμος
                                 επιλογής διαμέσου σε O(n).</li>
                         </ul>
@@ -202,11 +353,12 @@
                     <h3>Βήμα 1: Ρίζα (Βάθος 0 - Άξονας X)</h3>
                     <ul>
                         <li>Ταξινομούμε κατά X: $\{ (2,3), (4,7), (5,4), (7,2), (8,1), (9,6) \}$</li>
-                        <li>Διάμεσος (μέση): Το σημείο $(7,2)$ (ή $(5,4)$ ανάλογα την υλοποίηση). Έστω επιλέγουμε $l=7$.
+                        <li>Διάμεσος (διαμεσο στοιχείο): Το 3ο σημείο της ταξινομημένης λίστας, δηλαδή το $(5,4)$.
+                            Επιλέγουμε $l: x=5$.
                         </li>
-                        <li><strong>Κόμβος Ρίζας:</strong> Ευθεία $x=7$.</li>
-                        <li><em>Αριστερά (x < 7):</em> $\{ (2,3), (5,4), (4,7) \}$</li>
-                        <li><em>Δεξιά (x > 7):</em> $\{ (8,1), (9,6) \}$</li>
+                        <li><strong>Κόμβος Ρίζας:</strong> Ευθεία $x=5$.</li>
+                        <li><em>Αριστερά ($x \le 5$):</em> $\{ (2,3), (4,7), (5,4) \}$ (3 σημεία)</li>
+                        <li><em>Δεξιά ($x > 5$):</em> $\{ (7,2), (8,1), (9,6) \}$ (3 σημεία)</li>
                     </ul>
 
                     <h3>Βήμα 2: Αριστερό Υποδέντρο (Βάθος 1 - Άξονας Y)</h3>
@@ -222,11 +374,12 @@
                     <h3>Βήμα 3: Δεξί Υποδέντρο (Βάθος 1 - Άξονας Y)</h3>
                     <p>Σημεία: $\{ (8,1), (9,6) \}$</p>
                     <ul>
-                        <li>Ταξινομούμε κατά Y: $\{ (8,1), (9,6) \}$</li>
-                        <li>Διάμεσος: $y=6$ (Σημείο $(9,6)$).</li>
-                        <li><strong>Κόμβος:</strong> Ευθεία $y=6$.</li>
-                        <li><em>Κάτω:</em> $\{ (8,1) \}$ $\rightarrow$ Φύλλο.</li>
-                        <li><em>Πάνω:</em> $\emptyset$.</li>
+                        <li>Ταξινομούμε κατά Y: $\{ (8,1), (7,2), (9,6) \}$</li>
+                        <li>Διάμεσος: Το 2ο στοιχείο, δηλαδή το $(7,2)$. Επιλέγουμε $l: y=2$.</li>
+                        <li><strong>Κόμβος:</strong> Ευθεία $y=2$.</li>
+                        <li><em>Κάτω ($y \le 2$):</em> $\{ (8,1), (7,2) \}$ $\rightarrow$ Περαιτέρω διαχωρισμός (X).
+                        </li>
+                        <li><em>Πάνω ($y > 2$):</em> $\{ (9,6) \}$ $\rightarrow$ Φύλλο.</li>
                     </ul>
                 </div>
             </section>
@@ -281,7 +434,7 @@
                     <h5>Βήμα 1: Ρίζα (Βάθος 0 - Διαχωρισμός κατά X)</h5>
                     <ul>
                         <li>Ταξινομούμε κατά X: $\{10, 20, 35, 50, 60, 70, 80, 90\}$</li>
-                        <li>Διάμεσος: μεταξύ $50$ και $60$, επιλέγουμε $l_x = 50$</li>
+                        <li>Διάμεσος (4ο στοιχείο): $l_x = 50$ (To σημείο $(50, 30)$)</li>
                         <li><strong>Κόμβος ρίζας:</strong> Ευθεία $x = 50$</li>
                         <li><em>Αριστερά (x ≤ 50):</em> $\{(10,80), (20,45), (35,60), (50,30)\}$</li>
                         <li><em>Δεξιά (x > 50):</em> $\{(60,75), (70,20), (80,65), (90,35)\}$</li>
@@ -290,37 +443,134 @@
                     <h5>Βήμα 2: Αριστερό υποδέντρο (Βάθος 1 - Διαχωρισμός κατά Y)</h5>
                     <p>Σημεία: $\{(10,80), (20,45), (35,60), (50,30)\}$</p>
                     <ul>
-                        <li>Ταξινομούμε κατά Y: $\{30, 45, 60, 80\}$</li>
-                        <li>Διάμεσος: $l_y = 52.5$ (μεταξύ 45 και 60)</li>
-                        <li><strong>Κόμβος:</strong> Ευθεία $y = 52.5$</li>
-                        <li><em>Κάτω (y ≤ 52.5):</em> $\{(20,45), (50,30)\}$</li>
-                        <li><em>Πάνω (y > 52.5):</em> $\{(10,80), (35,60)\}$</li>
+                        <li>Ταξινομούμε κατά Y: $\{(50,30), (20,45), (35,60), (10,80)\}$</li>
+                        <li>Διάμεσος (2ο στοιχείο): $l_y = 45$ (Το σημείο $(20, 45)$)</li>
+                        <li><strong>Κόμβος:</strong> Ευθεία $y = 45$</li>
+                        <li><em>Κάτω (y ≤ 45):</em> $\{(50,30), (20,45)\}$</li>
+                        <li><em>Πάνω (y > 45):</em> $\{(35,60), (10,80)\}$</li>
                     </ul>
 
                     <h5>Βήμα 3: Δεξί υποδέντρο (Βάθος 1 - Διαχωρισμός κατά Y)</h5>
                     <p>Σημεία: $\{(60,75), (70,20), (80,65), (90,35)\}$</p>
                     <ul>
-                        <li>Ταξινομούμε κατά Y: $\{20, 35, 65, 75\}$</li>
-                        <li>Διάμεσος: $l_y = 50$ (μεταξύ 35 και 65)</li>
-                        <li><strong>Κόμβος:</strong> Ευθεία $y = 50$</li>
+                        <li>Ταξινομούμε κατά Y: $\{(70,20), (90,35), (80,65), (60,75)\}$</li>
+                        <li>Διάμεσος (2ο στοιχείο): $l_y = 35$ (Το σημείο $(90, 35)$)</li>
+                        <li><strong>Κόμβος:</strong> Ευθεία $y = 35$</li>
                         <li><em>Κάτω:</em> $\{(70,20), (90,35)\}$</li>
-                        <li><em>Πάνω:</em> $\{(60,75), (80,65)\}$</li>
+                        <li><em>Πάνω:</em> $\{(80,65), (60,75)\}$</li>
                     </ul>
 
                     <h5>Βήμα 4: Επίπεδο 2 (Βάθος 2 - Διαχωρισμός κατά X ξανά)</h5>
                     <p>Κάθε ομάδα των 2 σημείων διαχωρίζεται με ευθεία κατά X → φύλλα.</p>
 
-                    <h5>Τελικό Δέντρο:</h5>
-                    <pre><code>                    [x=50]
-                   /      \
-             [y=52.5]     [y=50]
-              /    \       /    \
-         [x=35] [x=22.5] [x=80] [x=85]
-          / \     / \     / \     / \
-       (10,80)(35,60)(20,45)(50,30)(70,20)(90,35)(60,75)(80,65)
-    </code></pre>
+                    <div class="tree-diagram-container">
+                        <div class="tree">
+                            <ul>
+                                <li>
+                                    <div class="node split-x" title="Root: Split by X">
+                                        <span class="axis-label">X</span>
+                                        <span class="value">x = 50</span>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <div class="node split-y" title="Depth 1: Split by Y">
+                                                <span class="axis-label">Y</span>
+                                                <span class="value">y = 45</span>
+                                            </div>
+                                            <ul>
+                                                <li>
+                                                    <div class="node split-x">
+                                                        <span class="axis-label">X</span>
+                                                        <span class="value">x = 20</span>
+                                                    </div>
+                                                    <ul>
+                                                        <li>
+                                                            <div class="leaf">(20,45)</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="leaf">(50,30)</div>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <div class="node split-x">
+                                                        <span class="axis-label">X</span>
+                                                        <span class="value">x = 10</span>
+                                                    </div>
+                                                    <ul>
+                                                        <li>
+                                                            <div class="leaf">(10,80)</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="leaf">(35,60)</div>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <div class="node split-y" title="Depth 1: Split by Y">
+                                                <span class="axis-label">Y</span>
+                                                <span class="value">y = 35</span>
+                                            </div>
+                                            <ul>
+                                                <li>
+                                                    <div class="node split-x">
+                                                        <span class="axis-label">X</span>
+                                                        <span class="value">x = 70</span>
+                                                    </div>
+                                                    <ul>
+                                                        <li>
+                                                            <div class="leaf">(70,20)</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="leaf">(90,35)</div>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <div class="node split-x">
+                                                        <span class="axis-label">X</span>
+                                                        <span class="value">x = 60</span>
+                                                    </div>
+                                                    <ul>
+                                                        <li>
+                                                            <div class="leaf">(60,75)</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="leaf">(80,65)</div>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-                    <p><strong>Σημείωση:</strong> Τα φύλλα περιέχουν τα σημεία, οι εσωτερικοί κόμβοι τις ευθείες
+                    <div class="legend"
+                        style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem; font-size: 0.9rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span
+                                style="width: 15px; height: 15px; background: var(--primary-blue); border-radius: 3px;"></span>
+                            <span>X-Split (Άρτιο βάθος)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span
+                                style="width: 15px; height: 15px; background: var(--primary-purple); border-radius: 3px;"></span>
+                            <span>Y-Split (Περιττό βάθος)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span
+                                style="width: 15px; height: 15px; border: 1px solid var(--border); background: var(--background); border-radius: 3px;"></span>
+                            <span>Φύλλο (Σημείο)</span>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1.5rem;"><strong>Σημείωση:</strong> Τα φύλλα περιέχουν τα σημεία, οι
+                        εσωτερικοί κόμβοι τις ευθείες
                         διαχωρισμού.</p>
                 </div>
             </section>
