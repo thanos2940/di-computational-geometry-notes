@@ -9,6 +9,79 @@
     <link rel="stylesheet" href="../../assets/css/simulator.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <style>
+        .delaunay-diagram-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 2rem 0;
+            background: var(--background-secondary);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .diagram-step {
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+            background: var(--card-bg);
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .diagram-step h5 {
+            margin-bottom: 10px;
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+        }
+
+        .diagram-step svg {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+        }
+
+        .pt-new {
+            fill: #e74c3c;
+        }
+
+        .pt-old {
+            fill: #2c3e50;
+        }
+
+        .edge-delaunay {
+            stroke: var(--primary-blue);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .edge-illegal {
+            stroke: #e74c3c;
+            stroke-width: 2;
+            /* stroke-dasharray: 4; */
+            fill: none;
+        }
+
+        .edge-new {
+            stroke: #2ecc71;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .circle-incircle {
+            stroke: rgba(231, 76, 60, 0.3);
+            stroke-width: 1;
+            fill: rgba(231, 76, 60, 0.05);
+            stroke-dasharray: 2;
+        }
+
+        [data-theme="dark"] .pt-old {
+            fill: #ecf0f1;
+        }
+    </style>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
 </head>
@@ -199,6 +272,143 @@
                             <li><strong>Τέλος αν</strong></li>
                         </ol>
                     </div>
+
+                    <div class="intuition-box" style="margin-top: 1.5rem;">
+                        <h3><i class="fas fa-search-plus"></i> Πώς λειτουργεί ο αλγόριθμος (Ανάλυση "Βήμα-Βήμα")</h3>
+                        <p>Ο αυξητικός αλγόριθμος είναι η πιο κοινή μέθοδος κατασκευής. Φανταστείτε τον σαν μια ζωντανή
+                            δομή που αναδιοργανώνεται κάθε φορά που πέφτει μέσα ένα νέο σημείο.</p>
+
+                        <div style="margin-top: 1rem;">
+                            <h4>1. Το "Υπερ-τρίγωνο" (Αρχικοποίηση)</h4>
+                            <ul>
+                                <li><strong>Τι είναι:</strong> Ένα τεράστιο τρίγωνο ($p_{-1}, p_{-2}, p_{-3}$) που
+                                    κλείνει μέσα του όλα τα σημεία που πρόκειται να επεξεργαστούμε.</li>
+                                <li><strong>Γιατί το χρειαζόμαστε:</strong> Χωρίς αυτό, το πρώτο σημείο δεν θα είχε πού
+                                    να "κάτσει". Το υπερ-τρίγωνο μας δίνει μια αρχική τριγωνοποίηση (έστω και με
+                                    ψεύτικες κορυφές) ώστε κάθε επόμενο σημείο να βρίσκει πάντα ένα περιβάλλον τρίγωνο.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-top: 1rem;">
+                            <h4>2. Εντόπιση και Προσθήκη (Point Location)</h4>
+                            <ul>
+                                <li><strong>Εντόπιση:</strong> Για κάθε νέο σημείο $p_r$, ψάχνουμε σε ποιο τρίγωνο $T$ ή
+                                    σε ποια ακμή $e$ πέφτει.</li>
+                                <li><strong>Προσθήκη Ακμών:</strong>
+                                    <ul>
+                                        <li>Αν πέσει <strong>μέσα</strong> στο τρίγωνο: Το ενώνουμε με τις 3 κορυφές του
+                                            (δημιουργία 3 νέων ακμών).</li>
+                                        <li>Αν πέσει <strong>πάνω σε μια ακμή</strong>: Το ενώνουμε με τις απέναντι
+                                            κορυφές των δύο γειτονικών τριγώνων (δημιουργία 2 νέων ακμών).</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-top: 1rem;">
+                            <h4>3. Ο έλεγχος Εγκυρότητας (EdgeFlip)</h4>
+                            <ul>
+                                <li>Μόλις προσθέσουμε το $p_r$, οι ακμές που το περιβάλλουν μπορεί να μην είναι πλέον
+                                    Delaunay.</li>
+                                <li><strong>Το τεστ:</strong> Κοιτάμε μια ακμή $(p_i, p_j)$ που χωρίζει το νέο σημείο
+                                    $p_r$ από ένα γειτονικό σημείο $p_l$. Αν το $p_l$ βρίσκεται <strong>μέσα</strong>
+                                    στον κύκλο $C(p_i, p_j, p_r)$, τότε η ακμή είναι "μη έγκυρη".</li>
+                                <li><strong>Η διόρθωση (Flip):</strong> Αν είναι μη έγκυρη, την αντικαθιστούμε με τη
+                                    διαγώνιο $(p_r, p_l)$.</li>
+                                <li><strong>Αναδρομή:</strong> Το flip μιας ακμής μπορεί να επηρεάσει τις γειτονικές.
+                                    Συνεχίζουμε αναδρομικά μέχρι όλες οι ακμές γύρω από το $p_r$ να είναι "έγκυρες".
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-top: 1rem;">
+                            <h4>4. Καθαρισμός</h4>
+                            <ul>
+                                <li>Στο τέλος, αφαιρούμε τις κορυφές του υπερ-τριγώνου και όσες ακμές συνδέονται με
+                                    αυτές, αφήνοντας μόνο την τελική τριγωνοποίηση Delaunay.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="delaunay-diagram-container">
+                        <!-- Step 1: Point Insertion -->
+                        <div class="diagram-step">
+                            <h5>1. Εισαγωγή $p_r$ & Σπάσιμο</h5>
+                            <svg viewBox="0 0 200 200">
+                                <polygon points="20,180 180,180 100,20" class="edge-delaunay" />
+                                <line x1="100" y1="110" x2="20" y2="180" class="edge-new" />
+                                <line x1="100" y1="110" x2="180" y2="180" class="edge-new" />
+                                <line x1="100" y1="110" x2="100" y2="20" class="edge-new" />
+                                <circle cx="20" cy="180" r="4" class="pt-old" />
+                                <circle cx="180" cy="180" r="4" class="pt-old" />
+                                <circle cx="100" cy="20" r="4" class="pt-old" />
+                                <circle cx="100" cy="110" r="5" class="pt-new" />
+                                <text x="105" y="115" class="pt-new"
+                                    style="font-size: 14px; font-weight: bold; fill: #e74c3c;">pᵣ</text>
+                            </svg>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">Η νέα εστία
+                                $p_r$ συνδέεται με τις κορυφές του τριγώνου $T$ που την περιέχει.</p>
+                        </div>
+
+                        <!-- Step 2: Illegal Edge -->
+                        <div class="diagram-step">
+                            <h5>2. Έλεγχος Έγκυρης Ακμής</h5>
+                            <svg viewBox="0 0 200 200">
+                                <!-- Peripheral edges (Visible Triangles) -->
+                                <line x1="40" y1="100" x2="100" y2="60" class="edge-delaunay" />
+                                <line x1="160" y1="100" x2="100" y2="60" class="edge-delaunay" />
+                                <line x1="40" y1="100" x2="100" y2="160" class="edge-delaunay" />
+                                <line x1="160" y1="100" x2="100" y2="160" class="edge-delaunay" />
+
+                                <!-- Common edge pi, pj -->
+                                <line x1="40" y1="100" x2="160" y2="100" class="edge-illegal" />
+                                <!-- Neighbor point pl -->
+                                <circle cx="100" cy="60" r="4" class="pt-old" />
+                                <text x="95" y="45" style="font-size: 12px; fill: var(--text-main);">pₗ</text>
+                                <!-- Circle C(pi, pj, pr) | Center 100,100, Radius 60 -->
+                                <circle cx="100" cy="100" r="60" class="circle-incircle" />
+                                <!-- Points pi, pj -->
+                                <circle cx="40" cy="100" r="4" class="pt-old" />
+                                <text x="25" y="105" style="font-size: 12px; fill: var(--text-main);">pᵢ</text>
+                                <circle cx="160" cy="100" r="4" class="pt-old" />
+                                <text x="165" y="105" style="font-size: 12px; fill: var(--text-main);">pⱼ</text>
+                                <!-- New point pr -->
+                                <circle cx="100" cy="160" r="5" class="pt-new" />
+                                <text x="105" y="175" class="pt-new"
+                                    style="font-size: 12px; font-weight: bold; fill: #e74c3c;">pᵣ</text>
+
+                                <text x="10" y="20" style="font-size: 10px; fill: #e74c3c; font-family: sans-serif;">pₗ
+                                    ∈ C(pᵢ, pⱼ, pᵣ)!</text>
+                            </svg>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">Η ακμή $(p_i,
+                                p_j)$ είναι μη έγκυρη γιατί το $p_l$ βρίσκεται εντός του κύκλου $C(p_i, p_j, p_r)$.</p>
+                        </div>
+
+                        <!-- Step 3: Edge Flip -->
+                        <div class="diagram-step">
+                            <h5>3. Edge Flip (Διόρθωση)</h5>
+                            <svg viewBox="0 0 200 200">
+                                <!-- Peripheral edges -->
+                                <line x1="40" y1="100" x2="100" y2="60" class="edge-delaunay" />
+                                <line x1="160" y1="100" x2="100" y2="60" class="edge-delaunay" />
+                                <line x1="40" y1="100" x2="100" y2="160" class="edge-delaunay" />
+                                <line x1="160" y1="100" x2="100" y2="160" class="edge-delaunay" />
+                                <!-- Flapped edge pr, pl -->
+                                <line x1="100" y1="160" x2="100" y2="60" class="edge-new" style="stroke-width: 3;" />
+
+                                <circle cx="40" cy="100" r="4" class="pt-old" />
+                                <circle cx="160" cy="100" r="4" class="pt-old" />
+                                <circle cx="100" cy="60" r="4" class="pt-old" />
+                                <text x="95" y="45" style="font-size: 12px; fill: var(--text-main);">pₗ</text>
+                                <circle cx="100" cy="160" r="5" class="pt-new" />
+                                <text x="105" y="175" class="pt-new"
+                                    style="font-size: 12px; font-weight: bold; fill: #e74c3c;">pᵣ</text>
+                            </svg>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">Η ακμή $(p_i,
+                                p_j)$ αντικαθίσταται από την $(p_r, p_l)$ η οποία είναι πλέον έγκυρη.</p>
+                        </div>
+                    </div>
                     <div class="algorithm-note"> <strong>💡 Σημασία Edge Flip:</strong>
                         <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
                             <li>Η διαδικασία Edge Flip διορθώνει τοπικά την τριγωνοποίηση ώστε να ικανοποιεί την
@@ -249,22 +459,25 @@
 
                 <div class="solved-example">
                     <h4>Παράδειγμα: InCircle μέσω Lifting</h4>
-                    <p><strong>Δεδομένα:</strong> $p_1=(0,0), p_2=(4,0), p_3=(2,3), q=(2,1)$</p>
+                    <p><strong>Δεδομένα:</strong> $p_1=(0,0), p_2=(2,3), p_3=(4,0), q=(2,1)$</p>
 
-                    <h5>Βήμα 1: Ανύψωση</h5>
+                    <h5>Βήμα 1: Ανύψωση & Φορά</h5>
+                    <p>Ελέγχουμε τη φορά των $p_1, p_2, p_3$: Είναι <strong>CW (Δεξιόστροφα)</strong>.</p>
                     <ul>
                         <li>$p_1^+ = (0, 0, 0)$</li>
-                        <li>$p_2^+ = (4, 0, 16)$</li>
-                        <li>$p_3^+ = (2, 3, 13)$</li>
+                        <li>$p_2^+ = (2, 3, 13)$</li>
+                        <li>$p_3^+ = (4, 0, 16)$</li>
                         <li>$q^+ = (2, 1, 5)$</li>
                     </ul>
 
                     <h5>Βήμα 2: Έλεγχος Θέσης</h5>
-                    <p>Το $q$ είναι <strong>εντός</strong> του κύκλου αν $q^+$ είναι <strong>κάτω</strong>
-                        από το επίπεδο $(p_1^+, p_2^+, p_3^+)$.</p>
-                    <p>Αυτό είναι ακριβώς η ορίζουσα InCircle:</p>
+                    <p>Το $q$ είναι <strong>εντός</strong> του κύκλου αν $q^+$ είναι <strong>κάτω</strong> από το
+                        επίπεδο $(p_1^+, p_2^+, p_3^+)$.</p>
+                    <p>Ανάλογα με τη φορά των σημείων $p_1, p_2, p_3$, η ορίζουσα InCircle (Orient3D) μας δίνει:</p>
                     <div class="math-block">
-                        $$ \text{orient3d}(p_1^+, p_2^+, p_3^+, q^+) > 0 \Leftrightarrow q \text{ ΕΝΤΟΣ}$$
+                        $$ \text{Αν } p_1, p_2, p_3 \text{ είναι \textbf{CW}}: \quad \Delta < 0 \Leftrightarrow q \text{
+                            ΕΝΤΟΣ} $$ $$ \text{Αν } p_1, p_2, p_3 \text{ είναι \textbf{CCW}}: \quad \Delta> 0
+                            \Leftrightarrow q \text{ ΕΝΤΟΣ} $$
                     </div>
 
                     <h5>Γεωμετρική Ερμηνεία</h5>
