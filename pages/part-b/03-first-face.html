@@ -156,6 +156,24 @@
                             </li>
                         </ol>
                     </div>
+
+                    <div class="intuition-box" style="margin-top: 15px; border-left: 4px solid #17a2b8;">
+                        <h4 style="color: #138496; margin-top: 0;"><i class="fas fa-search"></i> Ανάλυση Βήμα-Προς-Βήμα
+                        </h4>
+                        <p>Αυτή είναι η <strong>καρδιά</strong> του αλγορίθμου. Σκεφτείτε το απλά:</p>
+                        <ul style="margin-bottom: 0;">
+                            <li><strong>Ο "Μεντεσές" (Ράχη):</strong> Η ακμή $R$ (που αποτελείται από 2 σημεία)
+                                λειτουργεί σαν άξονας περιστροφής.</li>
+                            <li><strong>Το Loop (Σάρωση):</strong> Δοκιμάζουμε <em>κάθε</em> άλλο σημείο $t$ ως υποψήφιο
+                                τρίτο σημείο της έδρας.</li>
+                            <li><strong>Η Συνθήκη (Το Κλειδί):</strong> Ελέγχουμε αν το $t$ βρίσκεται "πιο εξωτερικά"
+                                από την τρέχουσα επιλογή μας $u$.
+                                <br>Αν το $c$ (το σημείο της ήδη γνωστής έδρας - το "μέσα") και το $t$ είναι σε
+                                <strong>διαφορετικούς ημιχώρους</strong> ως προς το επίπεδο που φτιάχνουμε, τότε το $t$
+                                είναι καλύτερη επιλογή γιατί "ανοίγει" περισσότερο τη γωνία.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="algorithm-box" style="margin-top: 2rem;">
@@ -175,14 +193,14 @@
                                 Αρχικοποίησε δομή ΡΑΧ με ράχες $(F \setminus \{x\}, x)$ για κάθε $x \in F$.
                             </li>
                             <li>
-                                Όσο η δομή ΡΑΧ έχει στοιχεία, έστω $(R, c) \in \text{ΡΑΧ}$:
+                                Όσο η δομή ΡΑΧ έχει στοιχεία, έστω $(R, c) \in \text{PAX}$:
                                 <ul style="list-style-type: lower-greek; padding-left: 20px; margin-top: 5px;">
                                     <li style="margin-bottom: 5px;">Υπολόγισε $F_{new} \leftarrow$ ΑΛΛΗ-ΕΔΡΑ($R, c$).
                                     </li>
                                     <li>Για κάθε κορυφή $x \in F_{new}$:
                                         <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
                                             <li>Αν υπάρχει σημείο $y$ ώστε η ράχη $(F_{new} \setminus \{x\}, y) \in
-                                                \text{ΡΑΧ}$:
+                                                \text{PAX}$:
                                                 <br>Διέγραψέ την από τη ΡΑΧ.
                                             </li>
                                             <li>Αλλιώς:
@@ -208,13 +226,61 @@
                     Αναζητούμε το υπερεπίπεδο που αφήνει όλα τα σημεία από τη μία πλευρά και βρίσκεται όσο το δυνατόν
                     "ψηλότερα".</p>
 
+                <div class="intuition-box" style="margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-question-circle"></i> Το πρόβλημα "Αυγό ή Κότα";</h3>
+                    <p>
+                        Για να ξεκινήσει ο αλγόριθμος Gift Wrapping (βήμα 2), χρειαζόμαστε <strong>ήδη</strong> μια έδρα
+                        και τις ράχες της.
+                        Πώς όμως βρίσκουμε την <em>πρώτη-πρώτη</em> έδρα αν δεν έχουμε τίποτα;
+                    </p>
+                    <p>
+                        <strong>Διαισθητική Λύση (Το Σεντόνι):</strong><br>
+                        Φανταστείτε ότι ρίχνουμε ένα τεράστιο επίπεδο (σαν σεντόνι) από το άπειρο (ψηλά στον άξονα $z$)
+                        προς τα σημεία μας.
+                        Το σεντόνι θα ακουμπήσει πρώτα σε ένα σημείο, μετά θα γείρει και θα ακουμπήσει σε δεύτερο
+                        (ακμή), και τελικά θα σταθεροποιηθεί σε τρίτο (έδρα).
+                        Αυτή η "πρώτη επαφή" είναι η λύση του προβλήματος Γραμμικού Προγραμματισμού.
+                    </p>
+                    <div class="simulator-container"
+                        style="background: transparent; border: none; box-shadow: none; padding: 0; margin: 1.5rem 0;">
+                        <h4 style="text-align: center; color: #666; font-size: 0.9em; margin-bottom: 0.5rem;">
+                            Οπτικοποίηση: Το Επίπεδο "Πέφτει"</h4>
+                        <div class="canvas-wrapper"
+                            style="height: 300px; border-radius: 8px; border: 1px solid #ddd; background: #fafafa;">
+                            <canvas id="sheet-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="methodology-box">
+                    <h4 style="border-bottom: 2px solid #e9ecef; padding-bottom: 10px; margin-bottom: 15px;">Μαθηματική
+                        Διατύπωση (Εξήγηση)</h4>
                     <p>Θέλουμε να προσδιορίσουμε τα $a_1, \dots, a_{d-1}, \lambda$ ώστε για κάθε σημείο $p_i$ να ισχύει:
                     </p>
-                    <div class="math-block">$$ a_1 p_{i,1} + \dots + a_{d-1} p_{i,d-1} + \lambda \le p_{i,d} $$</div>
-                    <p>Με στόχο τη <strong>μεγιστοποίηση</strong> του $\lambda$ (ή ελαχιστοποίηση του $-\lambda$).</p>
-                    <p>Εφόσον το ΚΠ έχει μη-μηδενικό όγκο, θα υπάρχει τουλάχιστον μία έδρα που ικανοποιεί τις παραπάνω
-                        συνθήκες με ισότητα για τουλάχιστον $d$ σημεία.</p>
+                    <div class="math-block"
+                        style="background: #fff; border: 2px solid #eee; padding: 15px; border-radius: 8px;">
+                        $$ \underbrace{a_1 p_{i,1} + \dots + a_{d-1} p_{i,d-1} + \lambda}_{\text{Ύψος του Επιπέδου}} \le
+                        \underbrace{p_{i,d}}_{\text{Ύψος του Σημείου}} $$
+                    </div>
+
+                    <div style="background: #eefbfb; border-left: 4px solid #17a2b8; padding: 15px; margin: 15px 0;">
+                        <strong>Τι σημαίνει αυτό;</strong>
+                        <ul style="margin-bottom: 0;">
+                            <li>Η εξίσωση ενός υπερεπιπέδου είναι $x_d = a_1 x_1 + \dots + \lambda$.</li>
+                            <li>Η ανισότητα λέει ότι για κάθε σημείο του συνόλου μας, η τιμή του στο $z$ ($p_{i,d}$)
+                                πρέπει να είναι <strong>μεγαλύτερη ή ίση</strong> από την τιμή του επιπέδου στο ίδιο
+                                $(x,y)$.</li>
+                            <li>Άρα, το επίπεδο βρίσκεται <strong>κάτω</strong> από όλα τα σημεία (Lower Hull).</li>
+                        </ul>
+                    </div>
+
+                    <p><strong>Στόχος:</strong> Μεγιστοποίηση του $\lambda$.</p>
+                    <p>
+                        Αυξάνοντας το $\lambda$, σπρώχνουμε το επίπεδο προς τα πάνω (παράλληλη μετατόπιση).
+                        Το Γραμμικό Πρόγραμμα (LP) θα σταματήσει όταν το επίπεδο "χτυπήσει" στα πρώτα σημεία και δεν
+                        μπορεί να ανέβει άλλο χωρίς να παραβιάσει κάποια ανισότητα.
+                        Αυτά τα σημεία επαφής ορίζουν την Πρώτη Έδρα.
+                    </p>
                 </div>
             </section> <!-- Simulator -->
             <section class="simulator-container" id="gift-3d-simulator">
@@ -244,12 +310,15 @@
     <script src="../../assets/js/simulators/viewer3d.js"></script>
     <script src="../../assets/js/simulators/gift-wrapping-3d.js"></script>
     <script src="../../assets/js/simulators/ridge-concept.js"></script>
+    <script src="../../assets/js/simulators/falling-sheet.js"></script>
     <script>
         window.sim = new GiftWrapping3DSimulator('sim-canvas');
         window.conceptSim = new RidgeConceptSimulator('ridge-canvas');
+        window.sheetSim = new FallingSheetSimulator('sheet-canvas');
         setTimeout(() => {
             window.sim.reset();
             window.conceptSim.reset();
+            window.sheetSim.reset();
         }, 50);
     </script>
 </body>

@@ -317,27 +317,40 @@
 
                         <ol style="padding-left: 20px; margin-top: 15px;">
                             <li style="margin-bottom: 10px;">
-                                <strong>Αν</strong> ο $v$ είναι φύλλο:
-                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
-                                    <li><strong>Αν</strong> το σημείο που αποθηκεύει είναι μέσα στο $R$, ανάφερέ το.
+                                <strong>Αν</strong> ο $v$ είναι φύλλο <strong>τότε</strong>:
+                                <ul
+                                    style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd; margin-top: 5px;">
+                                    <li>
+                                        <strong>Αν</strong> το αποθηκευμένο σημείο στον $v$ περιέχεται εντός της $R$
+                                        <strong>τότε</strong>:
+                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;Ανάφερε το σημείο
                                     </li>
                                 </ul>
                             </li>
                             <li>
-                                <strong>Αλλιώς</strong> (εσωτερικός κόμβος):
-                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
-                                    <li style="margin-bottom: 5px;">Έστω REGION($v$) η περιοχή που αντιστοιχεί στον
-                                        κόμβο $v$.</li>
-                                    <li style="margin-bottom: 5px;"><strong>Αν</strong> REGION($v$) $\subseteq R$
-                                        (πλήρως μέσα):
-                                        <br>Ανάφερε όλα τα σημεία στο υποδέντρο του $v$.
+                                <strong>Αλλιώς</strong>:
+                                <ul
+                                    style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd; margin-top: 5px;">
+                                    <li style="margin-top: 5px; color: #666; font-style: italic;">// Έλεγχος Αριστερού
+                                        Παιδιού ($\alpha\theta$)</li>
+                                    <li><strong>Αν</strong> η περιοχή($\alpha\theta(v)$) εμπεριέχεται εξ ολοκλήρου στην
+                                        $R$ <strong>τότε</strong>:
+                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;ΑΝΑΦΟΡΑ ΥΠΟΔΕΝΤΡΟΥ($\alpha\theta(v)$)
                                     </li>
-                                    <li><strong>Αλλιώς, αν</strong> REGION($v$) $\cap R \neq \emptyset$ (μερική
-                                        επικάλυψη):
-                                        <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
-                                            <li>SEARCH-KD-TREE($v.left, R$)</li>
-                                            <li>SEARCH-KD-TREE($v.right, R$)</li>
-                                        </ul>
+                                    <li><strong>Αλλιώς αν</strong> η περιοχή($\alpha\theta(v)$) τέμνει την $R$
+                                        <strong>τότε</strong>:
+                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;ΔΙΕΡΕΥΝΗΣΗ KD-ΔΕΝΤΡΟΥ($\alpha\theta(v), R$)
+                                    </li>
+
+                                    <li style="margin-top: 15px; color: #666; font-style: italic;">// Έλεγχος Δεξιού
+                                        Παιδιού ($\delta\theta$)</li>
+                                    <li><strong>Αν</strong> η περιοχή($\delta\theta(v)$) εμπεριέχεται εξ ολοκλήρου στην
+                                        $R$ <strong>τότε</strong>:
+                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;ΑΝΑΦΟΡΑ ΥΠΟΔΕΝΤΡΟΥ($\delta\theta(v)$)
+                                    </li>
+                                    <li><strong>Αλλιώς αν</strong> η περιοχή($\delta\theta(v)$) τέμνει την $R$
+                                        <strong>τότε</strong>:
+                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;ΔΙΕΡΕΥΝΗΣΗ KD-ΔΕΝΤΡΟΥ($\delta\theta(v), R$)
                                     </li>
                                 </ul>
                             </li>

@@ -18,7 +18,7 @@ class RidgeConceptSimulator extends Viewer3D {
             { x: 0, y: 30, z: 70, label: 'p3' },
             { x: 100, y: -20, z: 120, label: 'A' },  // Far and low (Large face)
             { x: -40, y: -90, z: 40, label: 'B' },   // Deep and narrow (Narrow face)
-            { x: -90, y: -10, z: 60, label: 'C' }
+            { x: -20, y: 10, z: 20, label: 'C' }
         ];
 
         this.state = 'SCAN_1';
