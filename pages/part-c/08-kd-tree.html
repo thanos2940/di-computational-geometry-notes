@@ -243,41 +243,47 @@
                 <p>Ο αλγόριθμος είναι αναδρομικός και χωρίζει τα σημεία βάσει της διαμέσου, εναλλάξ στους άξονες.</p>
 
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Κατασκευή kd-δέντρου</h3>
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Κατασκευή KD-Δέντρου($P, \text{βάθος } d$)</h3>
                     <div
                         style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
-                        <p><strong>function BUILD-KD-TREE($P, \text{βάθος } d$)</strong></p>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li><strong>Είσοδος:</strong> Σύνολο σημείων $P$, τρέχον βάθος $d$.</li>
-                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Ρίζα του (υπο)δέντρου.</li>
-                        </ul>
+                        <p><strong>Είσοδος:</strong> Ένα σύνολο σημείων $P$ και το τρέχον βάθος $d$.</p>
+                        <p><strong>Έξοδος:</strong> Η ρίζα ενός kd-δέντρου που περιέχει το $P$.</p>
 
                         <ol style="padding-left: 20px; margin-top: 15px;">
                             <li style="margin-bottom: 10px;">
-                                <strong>Αν</strong> $P$ περιέχει μόνο ένα σημείο:
-                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
-                                    <li>Επίστρεψε φύλλο που αποθηκεύει αυτό το σημείο.</li>
+                                <strong>Εάν</strong> το $P$ περιέχει μόνο ένα σημείο <strong>τότε:</strong>
+                                <ul
+                                    style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd; margin-top: 5px;">
+                                    <li><strong>Επιστροφή</strong> ενός φύλλου που περιέχει αυτό το σημείο.</li>
                                 </ul>
                             </li>
                             <li style="margin-bottom: 10px;">
-                                <strong>Αν</strong> το $d$ είναι άρτιο ($d \pmod 2 = 0$):
-                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
-                                    <li>$l \leftarrow$ διάμεσος των $x$-συντεταγμένων των σημείων $P$.</li>
-                                    <li>Χώρισε το $P$ σε $P_{left}$ ($x \le l$) και $P_{right}$ ($x > l$).</li>
-                                </ul>
-                                <strong>αλλιώς</strong> ($d$ περιττό):
-                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
-                                    <li>$l \leftarrow$ διάμεσος των $y$-συντεταγμένων των σημείων $P$.</li>
-                                    <li>Χώρισε το $P$ σε $P_{below}$ ($y \le l$) και $P_{above}$ ($y > l$).</li>
+                                <strong>Αλλιώς εάν</strong> το $d$ είναι άρτιο <strong>τότε:</strong>
+                                <ul
+                                    style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd; margin-top: 5px;">
+                                    <li>Χωρίζουμε το $P$ σε δύο υποσύνολα με μια <strong>κατακόρυφη ευθεία</strong>
+                                        $\ell$ που διέρχεται από τη διάμεση τετμημένη ($x$) των σημείων του $P$.</li>
+                                    <li>Έστω $P_1$ το σύνολο των σημείων αριστερά ή επί της $\ell$, και $P_2$ το σύνολο
+                                        των σημείων δεξιά της $\ell$.</li>
                                 </ul>
                             </li>
-                            <li style="margin-bottom: 5px;">$v \leftarrow$ δημιούργησε κόμβο που αποθηκεύει την ευθεία
-                                $l$.</li>
-                            <li style="margin-bottom: 5px;">$v.left \leftarrow$ BUILD-KD-TREE($P_{left}$ ή $P_{below}, d
-                                + 1$)</li>
-                            <li style="margin-bottom: 5px;">$v.right \leftarrow$ BUILD-KD-TREE($P_{right}$ ή $P_{above},
-                                d + 1$)</li>
-                            <li><strong>Επίστρεψε</strong> $v$.</li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Αλλιώς (εάν το βάθος είναι περιττό):</strong>
+                                <ul
+                                    style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd; margin-top: 5px;">
+                                    <li>Χωρίζουμε το $P$ σε δύο υποσύνολα με μια <strong>οριζόντια ευθεία</strong>
+                                        $\ell$ που διέρχεται από τη διάμεση τεταγμένη ($y$) των σημείων του $P$.</li>
+                                    <li>Έστω $P_1$ το σύνολο των σημείων κάτω από την $\ell$ ή επ' αυτής, και $P_2$ το
+                                        σύνολο των σημείων πάνω από την $\ell$.</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 5px;">$v_{left} \leftarrow$ ΚΑΤΑΣΚΕΥΗ KD-ΔΕΝΤΡΟΥ($P_1, d+1$)</li>
+                            <li style="margin-bottom: 5px;">$v_{right} \leftarrow$ ΚΑΤΑΣΚΕΥΗ KD-ΔΕΝΤΡΟΥ($P_2, d+1$)</li>
+                            <li style="margin-bottom: 5px;">Δημιουργούμε έναν κόμβο $v$ στον οποίο αποθηκεύουμε την
+                                ευθεία $\ell$.</li>
+                            <li style="margin-bottom: 5px;">Θέτουμε τους $v_{left}$ και $v_{right}$ ως αριστερό και
+                                δεξιό θυγατρικό του $v$, αντίστοιχα.</li>
+                            <li><strong>Επιστροφή</strong> $v$.</li>
                         </ol>
                     </div>
                     <div class="algorithm-note">
@@ -306,55 +312,48 @@
 
             <section class="content-box">
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αλγόριθμος Διερεύνησης (Range Search)</h3>
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Διερεύνηση KD-Δέντρου (Εκτασιασκό Ερώτημα)</h3>
                     <div
                         style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
-                        <p><strong>function SEARCH-KD-TREE($v, R$)</strong></p>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li><strong>Είσοδος:</strong> Κόμβος $v$, Ορθογώνιο αναζήτησης $R$.</li>
-                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Σημεία μέσα στο $R$.</li>
-                        </ul>
+                        <p><strong>Είσοδος:</strong> Η ρίζα $v$ ενός (υπο)δέντρου και μια έκταση (περιοχή) $R$.</p>
+                        <p><strong>Έξοδος:</strong> Όλα τα σημεία των φύλλων κάτω από τον κόμβο $v$ που περιέχονται
+                            εντός της $R$.</p>
 
-                        <ol style="padding-left: 20px; margin-top: 15px;">
-                            <li style="margin-bottom: 10px;">
-                                <strong>Αν</strong> ο $v$ είναι φύλλο <strong>τότε</strong>:
-                                <ul
-                                    style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd; margin-top: 5px;">
-                                    <li>
-                                        <strong>Αν</strong> το αποθηκευμένο σημείο στον $v$ περιέχεται εντός της $R$
-                                        <strong>τότε</strong>:
-                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;Ανάφερε το σημείο
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <strong>Αλλιώς</strong>:
-                                <ul
-                                    style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd; margin-top: 5px;">
-                                    <li style="margin-top: 5px; color: #666; font-style: italic;">// Έλεγχος Αριστερού
-                                        Παιδιού ($\alpha\theta$)</li>
-                                    <li><strong>Αν</strong> η περιοχή($\alpha\theta(v)$) εμπεριέχεται εξ ολοκλήρου στην
-                                        $R$ <strong>τότε</strong>:
-                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;ΑΝΑΦΟΡΑ ΥΠΟΔΕΝΤΡΟΥ($\alpha\theta(v)$)
-                                    </li>
-                                    <li><strong>Αλλιώς αν</strong> η περιοχή($\alpha\theta(v)$) τέμνει την $R$
-                                        <strong>τότε</strong>:
-                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;ΔΙΕΡΕΥΝΗΣΗ KD-ΔΕΝΤΡΟΥ($\alpha\theta(v), R$)
-                                    </li>
+                        <div style="padding-left: 20px; margin-top: 15px;">
+                            <p><strong>Αν</strong> ο $v$ είναι φύλλο <strong>τότε:</strong></p>
+                            <ul
+                                style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd; margin-bottom: 15px;">
+                                <li><strong>Αν</strong> το αποθηκευμένο σημείο στον $v$ περιέχεται εντός της $R$
+                                    <strong>τότε:</strong>
+                                </li>
+                                <li style="padding-left: 20px;">Ανάφερε το σημείο</li>
+                            </ul>
 
-                                    <li style="margin-top: 15px; color: #666; font-style: italic;">// Έλεγχος Δεξιού
-                                        Παιδιού ($\delta\theta$)</li>
-                                    <li><strong>Αν</strong> η περιοχή($\delta\theta(v)$) εμπεριέχεται εξ ολοκλήρου στην
-                                        $R$ <strong>τότε</strong>:
-                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;ΑΝΑΦΟΡΑ ΥΠΟΔΕΝΤΡΟΥ($\delta\theta(v)$)
-                                    </li>
-                                    <li><strong>Αλλιώς αν</strong> η περιοχή($\delta\theta(v)$) τέμνει την $R$
-                                        <strong>τότε</strong>:
-                                        <br>&nbsp;&nbsp;&nbsp;&nbsp;ΔΙΕΡΕΥΝΗΣΗ KD-ΔΕΝΤΡΟΥ($\delta\theta(v), R$)
-                                    </li>
-                                </ul>
-                            </li>
-                        </ol>
+                            <p><strong>Αλλιώς:</strong></p>
+                            <ul style="list-style-type: none; padding-left: 20px; border-left: 3px solid #ddd;">
+                                <li style="color: #666; font-style: italic; margin-top: 5px;">// Έλεγχος Αριστερού
+                                    Παιδιού ($\alpha\theta$)</li>
+                                <li><strong>Αν</strong> η περιοχή($\alpha\theta(v)$) εμπεριέχεται εξ ολοκλήρου στην $R$
+                                    <strong>τότε:</strong>
+                                </li>
+                                <li style="padding-left: 20px;">ΑΝΑΦΟΡΑ ΥΠΟΔΕΝΤΡΟΥ($\alpha\theta(v)$)</li>
+                                <li><strong>Αλλιώς αν</strong> η περιοχή($\alpha\theta(v)$) τέμνει την $R$
+                                    <strong>τότε:</strong>
+                                </li>
+                                <li style="padding-left: 20px;">ΔΙΕΡΕΥΝΗΣΗ KD-ΔΕΝΤΡΟΥ($\alpha\theta(v), R$)</li>
+
+                                <li style="color: #666; font-style: italic; margin-top: 15px;">// Έλεγχος Δεξιού Παιδιού
+                                    ($\delta\theta$)</li>
+                                <li><strong>Αν</strong> η περιοχή($\delta\theta(v)$) εμπεριέχεται εξ ολοκλήρου στην $R$
+                                    <strong>τότε:</strong>
+                                </li>
+                                <li style="padding-left: 20px;">ΑΝΑΦΟΡΑ ΥΠΟΔΕΝΤΡΟΥ($\delta\theta(v)$)</li>
+                                <li><strong>Αλλιώς αν</strong> η περιοχή($\delta\theta(v)$) τέμνει την $R$
+                                    <strong>τότε:</strong>
+                                </li>
+                                <li style="padding-left: 20px;">ΔΙΕΡΕΥΝΗΣΗ KD-ΔΕΝΤΡΟΥ($\delta\theta(v), R$)</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>
