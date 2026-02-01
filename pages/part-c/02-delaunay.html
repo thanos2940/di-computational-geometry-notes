@@ -78,10 +78,12 @@
                     <ol>
                         <li><strong>Τρίγωνα Delaunay:</strong> Τρεις εστίες ορίζουν τρίγωνο Delaunay αν και μόνο αν ο
                             <strong>περιγεγραμμένος ανοικτός κύκλος</strong> τους είναι κενός, δηλαδή δεν περιέχει άλλες
-                            εστίες στο εσωτερικό του.</li>
+                            εστίες στο εσωτερικό του.
+                        </li>
                         <li><strong>Ακμές Delaunay:</strong> Δύο κορυφές ορίζουν ακμή Delaunay αν και μόνο αν υπάρχει
                             <strong>κενός κύκλος</strong> με τις εστίες στην περιφέρειά του, δηλαδή υπάρχει κλειστός
-                            κύκλος με χορδή που ορίζεται από τις δύο κορυφές και δεν περιέχει κάποια άλλη εστία.</li>
+                            κύκλος με χορδή που ορίζεται από τις δύο κορυφές και δεν περιέχει κάποια άλλη εστία.
+                        </li>
                     </ol>
                 </div>
 
@@ -149,63 +151,52 @@
                 <h2>4. Αυξητικός Αλγόριθμος (Incremental)</h2>
                 <p> Ο αλγόριθμος λειτουργεί προσθέτοντας σημεία ένα-ένα και διορθώνοντας τοπικά την τριγωνοποίηση. </p>
                 <div class="algorithm-box">
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αυξητική Τριγωνοποίηση Delaunay</h3>
+                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Τριγωνοποίηση Delaunay με αυξητικό αλγόριθμο</h3>
                     <div
                         style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6;">
-                        <p><strong>function DelaunayIncremental($P$)</strong></p>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li><strong>Είσοδος:</strong> Εστίες $P = \{p_1, \dots, p_n\}$.</li>
-                            <li style="margin-top: 10px;"><strong>Έξοδος:</strong> Τριγωνοποίηση Delaunay.</li>
-                        </ul>
+                        <p><strong>Είσοδος:</strong> Εστίες $P$</p>
+                        <p><strong>Έξοδος:</strong> Τριγωνοποίηση Delaunay των εστιών $P$</p>
 
                         <ol style="padding-left: 20px; margin-top: 15px;">
-                            <li style="margin-bottom: 5px;">Εισήγαγε ένα μεγάλο "υπερ-τρίγωνο" που περιέχει όλα τα
-                                σημεία $P$.</li>
-                            <li style="margin-bottom: 5px;">$T \leftarrow \{\text{υπερ-τρίγωνο}\}$.</li>
-                            <li style="margin-bottom: 5px;"><strong>Για κάθε</strong> σημείο $p_r$ από το $P$:
+                            <li style="margin-bottom: 5px;">Εισήγαγε κατάλληλες εστίες $p_{-1}, p_{-2}, p_{-3}$ ώστε το
+                                περιβάλλον τρίγωνο που ορίζουν να περιλαμβάνει όλες τις εστίες $P$.</li>
+                            <li style="margin-bottom: 5px;">Έστω πως έχει υπολογιστεί η τριγωνοποίηση ενός υποσυνόλου
+                                εστιών.</li>
+                            <li style="margin-bottom: 5px;"><strong>Για κάθε νέα εστία $p_r$:</strong>
                                 <ul style="list-style-type: lower-greek; padding-left: 20px; margin-top: 5px;">
-                                    <li style="margin-bottom: 5px;">Εντόπισε το τρίγωνο $(p_i, p_j, p_k)$ που περιέχει
-                                        το $p_r$.</li>
-                                    <li style="margin-bottom: 5px;">Διαίρεσε το τρίγωνο σε 3 νέα:
-                                        <br>$(p_i, p_j, p_r), (p_j, p_k, p_r), (p_k, p_i, p_r)$.
-                                    </li>
-                                    <li>Για κάθε νέα ακμή του $p_r$ (που ήταν πλευρά του αρχικού τριγώνου):
-                                        <br>Κάλεσε την LEGAL_EDGE($p_r, \text{ακμή}, T$).
-                                    </li>
+                                    <li style="margin-bottom: 5px;">Εντόπισε το τρίγωνο $T$ ή την ακμή $e$ όπου ανήκει η
+                                        $p_r$.</li>
+                                    <li style="margin-bottom: 5px;">Πρόσθεσε τρεις ή δύο νέες ακμές προς τις κορυφές του
+                                        απλόκου που περιέχει την $p_r$, ανάλογα με το αν η $p_r$ ανήκει σε τρίγωνο ή
+                                        ακμή.</li>
+                                    <li>Με τον EdgeFlip, κατέστησε έγκυρες, ως προς την εστία $p_r$, τις τρεις ακμές του
+                                        τριγώνου $T$ ή τις 4 ακμές των τριγώνων $T_1$ και $T_2$.</li>
                                 </ul>
                             </li>
-                            <li style="margin-bottom: 5px;">Αφαίρεσε το υπερ-τρίγωνο και τις ακμές που συνδέονται με
-                                αυτό.</li>
-                            <li><strong>Επίστρεψε</strong> $T$.</li>
                         </ol>
                     </div>
-                    <h3><i class="fas fa-code"></i> Ψευδοκώδικας: Αλγόριθμος Έγκυρης Ακμής (Edge Flip)</h3>
+                    <h3><i class="fas fa-code"></i> Αλγόριθμος: EdgeFlip</h3>
                     <div
                         style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #2c3e50; font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; margin-top: 20px;">
-                        <p><strong>function LEGAL_EDGE($p_r, \text{ακμή } e=(p_i, p_j), T$)</strong></p>
+                        <p><strong>Είσοδος:</strong> Μία τριγωνοποίηση στο επίπεδο, ακμή $(p_i, p_j)$ της τριγωνοποίησης
+                            και εστία $p_r$</p>
+                        <p><strong>Έξοδος:</strong> Νέα τριγωνοποίηση, πιθανώς τροποποιημένη, ώστε να είναι έγκυρη</p>
+
                         <ol style="padding-left: 20px; margin-top: 15px;">
                             <li style="margin-bottom: 10px;">
-                                Έστω ότι η ακμή $e$ ανήκει στο τρίγωνο $(p_i, p_j, p_r)$ και στο γειτονικό $(p_i, p_j,
-                                p_l)$.
+                                Έστω τρίγωνο $(p_i, p_j, p_l)$ γειτονικό του $(p_i, p_j, p_r)$.
                             </li>
                             <li style="margin-bottom: 10px;">
-                                Ελέγχουμε αν το $p_l$ είναι μέσα στον περιγεγραμμένο κύκλο του $(p_i, p_j, p_r)$
-                                (InCircle).
-                            </li>
-                            <li style="margin-bottom: 10px;">
-                                <strong>Αν</strong> είναι μέσα (Illegal Edge):
-                                <ul style="list-style-type: disk; padding-left: 20px; margin-top: 5px;">
-                                    <li style="margin-bottom: 5px;">Αντέστρεψε την ακμή (Flip): Αντικατάστησε την
-                                        $e=(p_i, p_j)$ με την $(p_r, p_l)$.</li>
-                                    <li>Αναδρομικά ελέγξτε τις νέες γειτονικές ακμές:
-                                        <ul style="list-style-type: circle; padding-left: 20px; margin-top: 5px;">
-                                            <li>LEGAL_EDGE($p_r, (p_i, p_l), T$)</li>
-                                            <li>LEGAL_EDGE($p_r, (p_j, p_l), T$)</li>
-                                        </ul>
-                                    </li>
+                                <strong>Αν</strong> η ακμή $(p_i, p_j)$ είναι μη έγκυρη (δηλαδή το $p_l$ είναι εντός του
+                                κύκλου $C(p_i, p_j, p_r)$) <strong>τότε:</strong>
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 5px;">
+                                    <li style="margin-bottom: 5px;">Αντέστρεψε την $(p_i, p_j)$ αντικαθιστώντας την με
+                                        την $(p_r, p_l)$.</li>
+                                    <li>Να γίνει έγκυρη η $(p_i, p_l)$ και $(p_j, p_l)$ ως προς $p_r$ (αναδρομικά με
+                                        EdgeFlip).</li>
                                 </ul>
                             </li>
-                            <li><strong>Αλλιώς:</strong> Η ακμή είναι έγκυρη (Legal).</li>
+                            <li><strong>Τέλος αν</strong></li>
                         </ol>
                     </div>
                     <div class="algorithm-note"> <strong>💡 Σημασία Edge Flip:</strong>
